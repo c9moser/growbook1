@@ -108,7 +108,7 @@ am_growbook_OBJECTS = main.$(OBJEXT) application.$(OBJEXT) \
 	database.$(OBJEXT) database-sqlite3.$(OBJEXT) \
 	database-postgresql.$(OBJEXT) databasesettingsdialog.$(OBJEXT) \
 	settingsdialog.$(OBJEXT) refclass.$(OBJEXT) \
-	aboutdialog.$(OBJEXT)
+	aboutdialog.$(OBJEXT) datatypes.$(OBJEXT)
 growbook_OBJECTS = $(am_growbook_OBJECTS)
 am__DEPENDENCIES_1 =
 growbook_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
@@ -138,9 +138,10 @@ am__depfiles_remade = ./$(DEPDIR)/aboutdialog.Po \
 	./$(DEPDIR)/application.Po ./$(DEPDIR)/appwindow.Po \
 	./$(DEPDIR)/database-postgresql.Po \
 	./$(DEPDIR)/database-sqlite3.Po ./$(DEPDIR)/database.Po \
-	./$(DEPDIR)/databasesettingsdialog.Po ./$(DEPDIR)/error.Po \
-	./$(DEPDIR)/main.Po ./$(DEPDIR)/refclass.Po \
-	./$(DEPDIR)/settings.Po ./$(DEPDIR)/settingsdialog.Po
+	./$(DEPDIR)/databasesettingsdialog.Po ./$(DEPDIR)/datatypes.Po \
+	./$(DEPDIR)/error.Po ./$(DEPDIR)/main.Po \
+	./$(DEPDIR)/refclass.Po ./$(DEPDIR)/settings.Po \
+	./$(DEPDIR)/settingsdialog.Po
 am__mv = mv -f
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -432,7 +433,9 @@ growbook_SOURCES = \
 	settingsdialog.h \
 	refclass.cc \
 	aboutdialog.cc \
-	aboutdialog.h
+	aboutdialog.h \
+	datatypes.cc \
+	datatypes.h
 
 growbook_LDFLAGS = $(am__append_1)
 growbook_LDADD = $(GROWBOOK_LIBS) $(PGSQL_LIBS)
@@ -537,6 +540,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/database-sqlite3.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/database.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/databasesettingsdialog.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/datatypes.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/error.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/refclass.Po@am__quote@ # am--include-marker
@@ -731,6 +735,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/database-sqlite3.Po
 	-rm -f ./$(DEPDIR)/database.Po
 	-rm -f ./$(DEPDIR)/databasesettingsdialog.Po
+	-rm -f ./$(DEPDIR)/datatypes.Po
 	-rm -f ./$(DEPDIR)/error.Po
 	-rm -f ./$(DEPDIR)/main.Po
 	-rm -f ./$(DEPDIR)/refclass.Po
@@ -788,6 +793,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/database-sqlite3.Po
 	-rm -f ./$(DEPDIR)/database.Po
 	-rm -f ./$(DEPDIR)/databasesettingsdialog.Po
+	-rm -f ./$(DEPDIR)/datatypes.Po
 	-rm -f ./$(DEPDIR)/error.Po
 	-rm -f ./$(DEPDIR)/main.Po
 	-rm -f ./$(DEPDIR)/refclass.Po

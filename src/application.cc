@@ -29,8 +29,10 @@
 #endif
 
 #include <glibmm/i18n.h>
+#include <gtkmm/messagedialog.h>
 #include <cstdlib>
 #include <cstdio>
+#include <cassert>
 
 #include "appwindow.h"
 #include "databasesettingsdialog.h"
@@ -70,6 +72,9 @@ void
 Application::on_activate()
 {
 	if (m_settings_->get_first_run()) {
+		DatabaseSettingsDialog dialog{m_settings_->get_database_settings()};
+		dialog.run();
+		dialog.hide();
 	}
 
 	Glib::RefPtr<DatabaseSettings> dbsettings = m_settings_->get_database_settings();
@@ -107,10 +112,29 @@ Application::on_activate()
 			fprintf(stderr, _("Could not connect to database!"));
 			exit(EXIT_FAILURE);
 		}
+	}  else {
+		Glib::RefPtr<DatabaseModule> module = db_get_module(m_settings_->get_database_settings()->get_engine());
+
+		assert(module);
+
+		m_database_ = module->create_database(m_settings_->get_database_settings());
+		try {
+			m_database_->connect();
+		} catch (DatabaseError ex) {
+			Gtk::MessageDialog dialog(_("Unable to connect to database!"),
+			                          false,
+			                          Gtk::MESSAGE_ERROR,
+			                          Gtk::BUTTONS_OK,
+			                          false);
+			dialog.set_secondary_text (ex.get_message());
+			dialog.run();
+			dialog.hide();
+			exit(EXIT_FAILURE);
+		}
 	}
 		
 	if (!m_appwindow_) {
-		m_appwindow_ = new AppWindow(m_settings_);
+		m_appwindow_ = new AppWindow(m_settings_,m_database_);
 		m_appwindow_->signal_hide().connect(sigc::bind<AppWindow*>(sigc::mem_fun(*this,&Application::on_hide_window),
 		                                                          m_appwindow_));
 		add_window(*m_appwindow_);
@@ -148,4 +172,16 @@ Glib::RefPtr<const Settings>
 Application::get_settings() const
 {
 	return Glib::RefPtr<const Settings>::cast_const(m_settings_);
+}
+
+Glib::RefPtr<Database>
+Application::get_database()
+{
+	return m_database_;
+}
+
+Glib::RefPtr<const Database>
+Application::get_database() const
+{
+	return Glib::RefPtr<const Database>::cast_const(m_database_);
 }

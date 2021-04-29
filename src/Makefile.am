@@ -45,7 +45,9 @@ growbook_SOURCES = \
 	settingsdialog.h \
 	refclass.cc \
 	aboutdialog.cc \
-	aboutdialog.h
+	aboutdialog.h \
+	datatypes.cc \
+	datatypes.h
 
 growbook_LDFLAGS = 
 

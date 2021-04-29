@@ -33,6 +33,8 @@
 #include <string>
 #include <list>
 
+#include "datatypes.h"
+
 /*******************************************************************************
  * Database
  ******************************************************************************/
@@ -78,6 +80,13 @@ class Database:
 		 /*! Close database connection.
 		  */
 		 void close();
+
+		 /*! Get a list with all Breeders
+		  */
+		 std::list<Glib::RefPtr<Breeder> > get_breeders() const;
+		 Glib::RefPtr<Breeder> get_breeder(uint64_t id) const;
+		 Glib::RefPtr<Breeder> get_breeder(const Glib::ustring &name) const;
+		 void add_breeder(const Glib::RefPtr<Breeder> &breeder);
 		 
 	protected:
 		 virtual bool is_connected_vfunc() const = 0;
@@ -85,8 +94,12 @@ class Database:
 		 virtual void create_database_vfunc() = 0;
 		 virtual void connect_vfunc() = 0;
 		 virtual void close_vfunc() = 0;
-		 
-			 
+
+		 virtual std::list<Glib::RefPtr<Breeder> > get_breeders_vfunc() const = 0;
+		 virtual Glib::RefPtr<Breeder> get_breeder_vfunc(uint64_t id) const = 0;
+		 virtual Glib::RefPtr<Breeder> get_breeder_vfunc(const Glib::ustring &name) const = 0;
+		 virtual void add_breeder_vfunc(const Glib::RefPtr<Breeder> &breeder) = 0;
+		 	 
 }; // Database class
 
 /*******************************************************************************

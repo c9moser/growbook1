@@ -131,6 +131,30 @@ Database::close()
 	this->close_vfunc();
 }
 
+std::list<Glib::RefPtr<Breeder > >
+Database::get_breeders() const
+{
+	return this->get_breeders_vfunc();
+}
+
+Glib::RefPtr<Breeder>
+Database::get_breeder(uint64_t id) const
+{
+	return this->get_breeder_vfunc (id);
+}
+
+Glib::RefPtr<Breeder>
+Database::get_breeder(const Glib::ustring &name) const
+{
+	return this->get_breeder_vfunc(name);
+}
+
+void
+Database::add_breeder(const Glib::RefPtr<Breeder> &breeder)
+{
+	return this->add_breeder_vfunc(breeder);
+}
+		 
 /*******************************************************************************
  * DatabaseModule
  ******************************************************************************/

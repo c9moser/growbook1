@@ -28,20 +28,38 @@
 #include <gtkmm/box.h>
 #include <gtkmm/menu.h>
 #include <gtkmm/messagedialog.h>
+#include <gtkmm/paned.h>
+
+#include <cassert>
 
 #include "databasesettingsdialog.h"
 #include "settingsdialog.h"
 #include "aboutdialog.h"
 
-AppWindow::AppWindow(const Glib::RefPtr<Settings> &settings):
+AppWindow::AppWindow(const Glib::RefPtr<Settings> &settings,
+                     const Glib::RefPtr<Database> &database):
 	Gtk::ApplicationWindow{},
 	m_settings_{settings},
-	m_menubar_{}
+	m_database_{database},
+	m_menubar_{},
+	m_selector_notebook_{},
+	m_browser_notebook_{}
 {
-	Gtk::Box *box = Gtk::manage(new Gtk::Box());
+	assert(settings);
+	assert(database);
+
+	set_default_size(800,600);
+	Gtk::Box *box = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
 	_add_menu();
 	box->pack_start(m_menubar_,false,false,0);
 
+
+	Gtk::Paned *paned = Gtk::manage(new Gtk::Paned(Gtk::ORIENTATION_HORIZONTAL));
+
+	paned->add1(m_selector_notebook_);
+	paned->add2(m_browser_notebook_);	
+	box->pack_start(*paned,true,true,0);
+	
 	add(*box);
 	set_title(_("GrowBook"));
 	show_all();
@@ -136,4 +154,28 @@ AppWindow::on_about()
 	AboutDialog dialog{};
 	dialog.run();
 	dialog.hide();
+}
+
+Gtk::Notebook*
+AppWindow::get_selector_notebook()
+{
+	return &m_selector_notebook_;
+}
+
+const Gtk::Notebook*
+AppWindow::get_selector_notebook() const
+{
+	return &m_selector_notebook_;
+}
+
+Gtk::Notebook*
+AppWindow::get_browser_notebook()
+{
+	return &m_browser_notebook_;
+}
+
+const Gtk::Notebook*
+AppWindow::get_browser_notebook() const
+{
+	return &m_browser_notebook_;
 }

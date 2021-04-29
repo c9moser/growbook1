@@ -279,13 +279,14 @@ Settings::Settings(int argc, char **argv) noexcept:
 	
 	if (sqlite3_open(cfg_db.c_str(), &m_db_) != SQLITE_OK) {
 		fprintf(stderr,_("Unable to open config-database!\nYour settings wont be saved!\n"));
+		exit(EXIT_FAILURE);
 	}
 	
-	if (m_first_run_ && m_db_) {
+	if (m_first_run_) {
 		try {
 			create_database();
 		} catch (DatabaseError ex) {
-		fprintf(stderr,"%s\n",ex.what());
+			fprintf(stderr,"%s\n",ex.what());
 		}
 		try {
 			this->save();
@@ -407,8 +408,6 @@ Settings::create_database()
 			err=sqlite3_exec(m_db_,sql.c_str(),0,0,&errmsg);
 			if (err != SQLITE_OK) {
 				fprintf(stderr, "Unable to execute sql (%s)!\n%s",errmsg,sql.c_str());
-				//sqlite3_close(m_db_);
-				//m_db_=nullptr;
 				sqlite3_free(errmsg);
 				exit(EXIT_FAILURE);
 			}

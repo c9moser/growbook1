@@ -26,8 +26,14 @@
 #ifdef HAVE_LIBPQ
 # include "database-postgresql.h"
 
-#include "error.h"
 #include <glibmm/i18n.h>
+#include <glibmm.h>
+#include <string>
+#include <fstream>
+#include <cassert>
+
+#include "error.h"
+#include "application.h"
 
 /*******************************************************************************
  * DatabaseModulePostgresql
@@ -152,6 +158,74 @@ DatabasePostgresql::close_vfunc()
 
 void
 DatabasePostgresql::create_database_vfunc()
+{
+	std::string sql_file = Glib::build_filename(app->get_settings()->get_sql_dir (),
+	                                            "growbook.postgresql.sql");
+	std::string sql,text;
+	std::fstream file;
+	
+	file.open(sql_file,std::ios::in);
+	while (getline(file,text)) {
+		if (text.empty())
+			continue;
+		if (!sql.empty())
+			sql+="\n";
+
+		sql+=text;
+		if (sql[sql.size() - 1] == ';') {
+			PGresult *result = PQexec(m_db_,sql.c_str());
+			if (PQresultStatus(result) != PGRES_COMMAND_OK) {
+				//rollback();
+				Glib::ustring msg = "Unable to create GrowBook database!";
+				msg += "\n(";
+				msg += PQerrorMessage(m_db_);
+				msg += ")";
+				PQclear(result);
+				throw DatabaseError(msg);
+			}
+			PQclear(result);
+			sql = "";
+		}
+	}
+	
+}
+
+std::list<Glib::RefPtr<Breeder> >
+DatabasePostgresql::get_breeders_vfunc() const
+{
+	assert(m_db_);
+	
+	const char *sql="SELECT id,name,homepage FROM breeder ORDER BY name";
+	std::list<Glib::RefPtr<Breeder> > breeders;
+
+	PGresult *result = PQexec(m_db_,sql);
+	if (PQresultStatus(result) == PGRES_TUPLES_OK) {
+		int rows = PQntuples(result);
+		for (int i = 0; i < rows; ++i) {
+			uint64_t id = std::stoull(PQgetvalue(result,i,0));
+			Glib::ustring name = PQgetvalue(result,i,1);
+			std::string homepage = PQgetvalue(result,i,2);
+
+			Glib::RefPtr<Breeder> breeder = Breeder::create(id,name,homepage);
+			breeders.push_back(breeder);
+		}
+	}
+	PQclear(result);
+	return breeders;
+}
+
+Glib::RefPtr<Breeder>
+DatabasePostgresql::get_breeder_vfunc(uint64_t id) const
+{
+}
+
+Glib::RefPtr<Breeder>
+DatabasePostgresql::get_breeder_vfunc(const Glib::ustring &name) const
+{
+}
+
+void
+DatabasePostgresql::add_breeder_vfunc(const Glib::RefPtr<Breeder> &breeder)
 {
 }
 

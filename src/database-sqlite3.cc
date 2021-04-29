@@ -30,8 +30,10 @@
 #include <glibmm.h>
 #include <glibmm/i18n.h>
 #include <unistd.h>
+#include <fstream>
 
 #include "error.h"
+#include "application.h"
 
 /*******************************************************************************
  * DatabaseModuleSqlite3
@@ -145,5 +147,165 @@ DatabaseSqlite3::close_vfunc()
 void
 DatabaseSqlite3::create_database_vfunc()
 {
+	std::string sql_file = Glib::build_filename(app->get_settings()->get_sql_dir(),
+	                                            "growbook.sqlite3.sql");
+	std::fstream file;
+	
+	file.open(sql_file,std::ios::in);
+	std::string text,sql;
+
+	char *errmsg;
+	int err;
+	
+	while (std::getline(file,text)) {
+		if (text.empty())
+			continue;
+		if (!sql.empty())
+			sql+="\n";
+		sql+=text;
+
+		if (sql[sql.size() - 1] == ';') {
+			err = sqlite3_exec(m_db_,sql.c_str(),0,0,&errmsg);
+			if (err != SQLITE_OK) {
+				Glib::ustring msg = _("Unable to create GrowBook sqlite3-database!");
+				msg += "\n(";
+				msg += errmsg;
+				msg += ")";
+				sqlite3_free(errmsg);
+				throw DatabaseError(err,msg);
+			}
+			sql = "";
+		}
+	}
 }
 
+std::list<Glib::RefPtr<Breeder> >
+DatabaseSqlite3::get_breeders_vfunc() const
+{
+	assert(m_db_);
+	
+	const char *sql = "SELECT id,name,homepage FROM breeder ORDER BY name;";
+	sqlite3_stmt *stmt = nullptr;
+	std::list<Glib::RefPtr<Breeder> > breeders;
+	int err = sqlite3_prepare(m_db_,sql,-1,&stmt,0);
+	
+	if (err != SQLITE_OK) {
+		Glib::ustring msg = _("Unable to get breeders from database.");
+		msg += "\n(";
+		msg += sqlite3_errmsg(m_db_);
+		msg += ")";
+		if (stmt)
+			sqlite3_finalize(stmt);
+		throw DatabaseError(err,msg);
+	}
+	while (sqlite3_step(stmt) == SQLITE_ROW) {
+		uint64_t id = sqlite3_column_int64(stmt,0);
+		Glib::ustring name = (const char*) sqlite3_column_text(stmt,1);
+		std::string homepage = (const char*) sqlite3_column_text(stmt,2);
+
+		Glib::RefPtr<Breeder> breeder = Breeder::create(id,name,homepage);
+		breeders.push_back(breeder);
+	}
+	sqlite3_finalize(stmt);
+	return breeders;
+}
+
+Glib::RefPtr<Breeder>
+DatabaseSqlite3::get_breeder_vfunc(uint64_t id) const
+{
+	assert(m_db_);
+
+	const char *sql = "SELECT name,homepage FROM breeder WHERE id=?;";
+	Glib::RefPtr<Breeder> breeder{};
+	sqlite3_stmt *stmt = nullptr;
+
+	int err = sqlite3_prepare(m_db_,sql,-1,&stmt,0);
+	if (err != SQLITE_OK) {
+		Glib::ustring msg = _("Unable to lookup breeder from sqlite3-database!");
+		msg += "\n(";
+		msg += sqlite3_errmsg(m_db_);
+		msg += ")";
+		if (stmt)
+			sqlite3_finalize(stmt);
+		throw DatabaseError(err,msg);
+	}
+	sqlite3_bind_int64(stmt,1,static_cast<sqlite3_int64>(id));
+
+	if (sqlite3_step(stmt) == SQLITE_ROW) {
+		Glib::ustring name = (const char*) sqlite3_column_text(stmt,0);
+		std::string homepage = (const char*) sqlite3_column_text(stmt,1);
+
+		breeder = Breeder::create(id,name,homepage);
+	}
+	sqlite3_finalize(stmt);
+	return breeder;
+}
+
+Glib::RefPtr<Breeder>
+DatabaseSqlite3::get_breeder_vfunc(const Glib::ustring &name) const
+{
+	assert(m_db_);
+
+	const char *sql = "SELECT id,homepage FROM breeder WHERE name=?;";
+	Glib::RefPtr<Breeder> breeder{};
+	sqlite3_stmt *stmt = nullptr;
+
+	int err = sqlite3_prepare(m_db_,sql,-1,&stmt,0);
+	if (err != SQLITE_OK) {
+		Glib::ustring msg = _("Unable to lookup breeder from sqlite3-database!");
+		msg += "\n(";
+		msg += sqlite3_errmsg(m_db_);
+		msg += ")";
+		if (stmt)
+			sqlite3_finalize(stmt);
+		throw DatabaseError(err,msg);
+	}
+	sqlite3_bind_text(stmt,1,name.c_str(),-1,0);
+	if (sqlite3_step(stmt) == SQLITE_ROW) {
+		uint64_t id = static_cast<uint64_t>(sqlite3_column_int64(stmt,0));
+		std::string homepage = (const char*) sqlite3_column_text(stmt,1);
+
+		breeder = Breeder::create(id,name,homepage);
+	}
+	sqlite3_finalize(stmt);
+	return breeder;
+}
+
+void
+DatabaseSqlite3::add_breeder_vfunc(const Glib::RefPtr<Breeder> &breeder)
+{
+	assert(m_db_);
+	assert(breeder);
+
+	sqlite3_stmt *stmt = nullptr;
+	std::string sql;
+	if (!breeder->get_id()) {
+		sql = "INSERT INTO breeder(name,homepage) VALUES (?1,?2)";
+	} else {
+		sql = "UPDATE breeder SET name=?1,homepage=?2 WHERE id=?3";
+	}
+	int err = sqlite3_prepare(m_db_,sql.c_str(),-1,&stmt,0);
+	if (err != SQLITE_OK) {
+		Glib::ustring msg = _("Unable to add breeder to sqlite3-database!");
+		msg += "\n(";
+		msg += sqlite3_errmsg(m_db_);
+		msg += ")";
+		if (stmt)
+			sqlite3_finalize(stmt);
+		throw DatabaseError(err,msg);
+	}
+	sqlite3_bind_text(stmt,1,breeder->get_name().c_str(),-1,0);
+	sqlite3_bind_text(stmt,2,breeder->get_homepage().c_str(),-1,0);
+	if (breeder->get_id())
+		sqlite3_bind_int64(stmt,3,static_cast<sqlite3_int64>(breeder->get_id()));
+	err = sqlite3_step(stmt);
+	if (err != SQLITE_OK && err != SQLITE_DONE) {
+		Glib::ustring msg = _("Adding breeder to database failed!");
+		msg += "\n(";
+		msg += sqlite3_errmsg(m_db_);
+		msg += ")";
+		sqlite3_finalize(stmt);
+		throw DatabaseError(err,msg);
+	}
+	sqlite3_finalize(stmt);
+}

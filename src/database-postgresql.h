@@ -72,6 +72,11 @@ class DatabasePostgresql:
 		void connect_vfunc() override;
 		void close_vfunc() override;
 		void create_database_vfunc() override;
+
+		virtual std::list<Glib::RefPtr<Breeder> > get_breeders_vfunc() const override;
+		virtual Glib::RefPtr<Breeder> get_breeder_vfunc(uint64_t id) const override;
+		virtual Glib::RefPtr<Breeder> get_breeder_vfunc(const Glib::ustring &name) const override;
+		virtual void add_breeder_vfunc(const Glib::RefPtr<Breeder> &breeder) override;
 };
 
 #endif /* __DATABASE_POSTGRESQL_H__ */

@@ -29,25 +29,40 @@
 
 #include <gtkmm/applicationwindow.h>
 #include <gtkmm/menubar.h>
+#include <gtkmm/notebook.h>
 
 #include "settings.h"
+#include "database.h"
 
 class AppWindow:
 	public Gtk::ApplicationWindow
 {
 	 private:
 		 Glib::RefPtr<Settings> m_settings_;
+		 Glib::RefPtr<Database> m_database_;
+		 
 		 Gtk::MenuBar m_menubar_;
+		 Gtk::Notebook m_selector_notebook_;
+		 Gtk::Notebook m_browser_notebook_;
 		 
 	 public:
-		 AppWindow(const Glib::RefPtr<Settings> &settings);
+		 AppWindow(const Glib::RefPtr<Settings> &settings,
+		           const Glib::RefPtr<Database> &database);
 		 virtual ~AppWindow();
-	private:
+
+	 private:
 		 void _add_menu();
 
 		 void on_database_settings();
 		 void on_preferences();
 		 void on_about();
+
+	 public:
+		 Gtk::Notebook* get_selector_notebook();
+		 const Gtk::Notebook* get_selector_notebook() const;
+
+		 Gtk::Notebook* get_browser_notebook();
+		 const Gtk::Notebook* get_browser_notebook() const;
 };
 
 #endif /* __APPWINDOW_H__ */

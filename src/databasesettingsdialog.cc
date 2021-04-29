@@ -442,5 +442,10 @@ DatabaseSettingsDialog::on_create_database_clicked()
 		dialog.set_secondary_text (ex.get_message());
 		dialog.run();
 		dialog.hide();
+		return;
 	}
+	Glib::ustring msg = _("Database successfully created!");
+	Gtk::MessageDialog dialog{*this,msg,false,Gtk::MESSAGE_INFO,Gtk::BUTTONS_OK,true};
+	dialog.run();
+	dialog.hide();
 }

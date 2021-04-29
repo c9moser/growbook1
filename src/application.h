@@ -60,6 +60,9 @@ class Application:
 
 		 Glib::RefPtr<Settings> get_settings();
 		 Glib::RefPtr<const Settings> get_settings() const;
+
+		 Glib::RefPtr<Database> get_database();
+		 Glib::RefPtr<const Database> get_database() const;
 };
 
 extern Glib::RefPtr<Application> app;
