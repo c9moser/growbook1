@@ -1,0 +1,67 @@
+## Process this file with automake to produce Makefile.in
+
+## Created by Anjuta
+
+
+sqldir = $(pkgdatadir)/sql
+sql_DATA = config.sql \
+	growbook.sqlite3.sql \
+	growbook.postgresql.sql
+
+
+AM_CPPFLAGS = \
+	-DPACKAGE_LOCALE_DIR=\""$(localedir)"\" \
+	-DPACKAGE_SRC_DIR=\""$(srcdir)"\" \
+	-DPACKAGE_DATA_DIR=\""$(pkgdatadir)"\" \
+	$(GROWBOOK_CFLAGS) \
+	$(PGSQL_CFLAGS)
+
+AM_CFLAGS =\
+	 -Wall\
+	 -g
+
+bin_PROGRAMS = growbook
+
+growbook_SOURCES = \
+	main.cc \
+	application.cc \
+	application.h \
+	appwindow.cc \
+	appwindow.h \
+	settings.cc \
+	settings.h \
+	refclass.h \
+	error.cc \
+	error.h \
+	database.cc \
+	database.h \
+	database-sqlite3.cc \
+	database-sqlite3.h \
+	database-postgresql.cc \
+	database-postgresql.h \
+	databasesettingsdialog.cc \
+	databasesettingsdialog.h \
+	settingsdialog.cc \
+	settingsdialog.h \
+	refclass.cc \
+	aboutdialog.cc \
+	aboutdialog.h
+
+growbook_LDFLAGS = 
+
+growbook_LDADD = $(GROWBOOK_LIBS) $(PGSQL_LIBS)
+
+
+if NATIVE_WIN32
+growbook_LDFLAGS += -mwindows
+endif
+
+
+
+EXTRA_DIST = $(sql_DATA)
+
+# Remove ui directory on uninstall
+uninstall-local:
+	-rm -r $(sqldir)
+	-rm -r $(pkgdatadir)
+
