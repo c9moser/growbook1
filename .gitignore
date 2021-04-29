@@ -1,0 +1,7 @@
+*~
+Debug
+Debug/*
+*.tmp
+*.temp
+*.log
+*.swp
