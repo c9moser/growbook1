@@ -5,3 +5,5 @@ Debug/*
 *.temp
 *.log
 *.swp
+.anjuta
+.anjuta*
