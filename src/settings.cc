@@ -136,6 +136,12 @@ DatabaseSettings::get_engine() const
 }
 
 bool
+DatabaseSettings::get_dbname_is_filename() const
+{
+	return (m_flags_ & DB_NAME_IS_FILENAME);
+}
+
+bool
 DatabaseSettings::get_has_host() const
 {
 	return (m_flags_ & DB_HAS_HOST);

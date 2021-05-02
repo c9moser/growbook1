@@ -34,6 +34,9 @@
 #include "settings.h"
 #include "database.h"
 
+#include "strainselector.h"
+#include "browserpage.h"
+
 class AppWindow:
 	public Gtk::ApplicationWindow
 {
@@ -42,9 +45,12 @@ class AppWindow:
 		 Glib::RefPtr<Database> m_database_;
 		 
 		 Gtk::MenuBar m_menubar_;
-		 Gtk::Notebook m_selector_notebook_;
-		 Gtk::Notebook m_browser_notebook_;
 		 
+		 Gtk::Notebook m_selector_notebook_;
+		 StrainSelector m_strain_selector_;
+		 
+		 Gtk::Notebook m_browser_notebook_;
+			 
 	 public:
 		 AppWindow(const Glib::RefPtr<Settings> &settings,
 		           const Glib::RefPtr<Database> &database);
@@ -56,13 +62,18 @@ class AppWindow:
 		 void on_database_settings();
 		 void on_preferences();
 		 void on_about();
-
+		 
+		 void on_browser_title_changed(Gtk::Label *label,BrowserPage *page);
+		 void on_close_page(Gtk::Widget *page);	 
 	 public:
 		 Gtk::Notebook* get_selector_notebook();
 		 const Gtk::Notebook* get_selector_notebook() const;
 
 		 Gtk::Notebook* get_browser_notebook();
 		 const Gtk::Notebook* get_browser_notebook() const;
+
+		 int add_browser_page(Gtk::Widget &widget, const Glib::ustring &title);
+		 int add_browser_page(BrowserPage &page);
 };
 
 #endif /* __APPWINDOW_H__ */

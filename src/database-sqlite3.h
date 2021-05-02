@@ -94,6 +94,14 @@ class DatabaseSqlite3:
 		virtual Glib::RefPtr<Breeder> get_breeder_vfunc(uint64_t id) const override;
 		virtual Glib::RefPtr<Breeder> get_breeder_vfunc(const Glib::ustring &name) const override;
 		virtual void add_breeder_vfunc(const Glib::RefPtr<Breeder> &breeder) override;
+
+		virtual std::list<Glib::RefPtr<Strain> > get_strains_for_breeder_vfunc(uint64_t breeder_id) const override;
+		virtual std::list<Glib::RefPtr<Strain> > get_strains_for_growlog_vfunc(uint64_t growlog_id) const override;
+		virtual Glib::RefPtr<Strain> get_strain_vfunc(uint64_t id) const override;
+		virtual Glib::RefPtr<Strain> get_strain_vfunc(const Glib::ustring &breeder_name,
+		                                              const Glib::ustring &strain_name) const override;
+		virtual void add_strain_vfunc(const Glib::RefPtr<Strain> &strain) override;
+		
 };
 
 #endif /* __DATABASE_SQLITE3_H__ */

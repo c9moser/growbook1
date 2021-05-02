@@ -154,7 +154,53 @@ Database::add_breeder(const Glib::RefPtr<Breeder> &breeder)
 {
 	return this->add_breeder_vfunc(breeder);
 }
-		 
+
+
+std::list<Glib::RefPtr<Strain> >
+Database::get_strains_for_breeder(uint64_t breeder_id) const
+{
+	return this->get_strains_for_breeder_vfunc(breeder_id);
+}
+
+std::list<Glib::RefPtr<Strain> >
+Database::get_strains_for_breeder(const Glib::RefPtr<Breeder> &breeder) const
+{
+	return this->get_strains_for_breeder_vfunc(breeder->get_id());
+}
+
+std::list<Glib::RefPtr<Strain> >
+Database::get_strains_for_growlog(uint64_t growlog_id) const
+{
+	return this->get_strains_for_growlog_vfunc(growlog_id);
+}
+
+
+std::list<Glib::RefPtr<Strain> >
+Database::get_strains_for_growlog(const Glib::RefPtr<Growlog> &growlog) const
+{
+	return this->get_strains_for_growlog_vfunc(growlog->get_id());
+}
+
+
+Glib::RefPtr<Strain>
+Database::get_strain(uint64_t id) const
+{
+	return this->get_strain_vfunc(id);
+}
+
+Glib::RefPtr<Strain>
+Database::get_strain(const Glib::ustring &breeder_name,
+                     const Glib::ustring &strain_name) const
+{
+	return this->get_strain_vfunc(breeder_name,strain_name);	                              
+}
+
+void
+Database::add_strain_vfunc(const Glib::RefPtr<Strain> &strain)
+{
+	return this->add_strain_vfunc(strain);
+}
+
 /*******************************************************************************
  * DatabaseModule
  ******************************************************************************/

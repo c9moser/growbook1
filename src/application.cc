@@ -29,6 +29,7 @@
 #endif
 
 #include <glibmm/i18n.h>
+#include <glibmm.h>
 #include <gtkmm/messagedialog.h>
 #include <cstdlib>
 #include <cstdio>
@@ -77,7 +78,14 @@ Application::on_activate()
 		dialog.hide();
 	}
 
+	bool create_db = false;
+	
 	Glib::RefPtr<DatabaseSettings> dbsettings = m_settings_->get_database_settings();
+	if (dbsettings->get_dbname_is_filename () 
+	    && ! Glib::file_test(dbsettings->get_dbname(),Glib::FILE_TEST_EXISTS)) {
+		create_db=true;
+	}
+	
 	if (dbsettings->get_ask_password () && dbsettings->get_password().empty()) {
 		int retry=0;
 		bool connected = false;
@@ -132,6 +140,8 @@ Application::on_activate()
 			exit(EXIT_FAILURE);
 		}
 	}
+	if (create_db)
+		m_database_->create_database();
 		
 	if (!m_appwindow_) {
 		m_appwindow_ = new AppWindow(m_settings_,m_database_);

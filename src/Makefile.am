@@ -47,7 +47,15 @@ growbook_SOURCES = \
 	aboutdialog.cc \
 	aboutdialog.h \
 	datatypes.cc \
-	datatypes.h
+	datatypes.h \
+	strainchooser.cc \
+	strainchooser.h \
+	strainselector.cc \
+	strainselector.h \
+	browserpage.cc \
+	browserpage.h \
+	strainview.cc \
+	strainview.h
 
 growbook_LDFLAGS = 
 
