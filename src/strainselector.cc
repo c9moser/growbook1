@@ -25,11 +25,12 @@
 #endif
 
 #include <glibmm/i18n.h>
+#include <gtkmm/separatormenuitem.h>
 
 #include "strainview.h"
 #include "application.h"
+#include "breederdialog.h" 
 
-#include <iostream>
 
 /*******************************************************************************
  * StrainSelectorColumns
@@ -54,11 +55,45 @@ StrainSelectorColumns::~StrainSelectorColumns()
 StrainSelectorTreeView::StrainSelectorTreeView(const Glib::RefPtr<Database> &db):
 	Gtk::TreeView{},
 	columns{},
-	m_database_{db}
+	m_database_{db},
+	m_refresh_menuitem_{_("Refresh")},
+	m_open_menuitem_{_("Open")},
+	m_add_breeder_menuitem_{_("Add Breeder")},
+	m_add_strain_menuitem_{_("Add Strain")},
+	m_edit_menuitem_{_("Edit")},
+	m_delete_menuitem_{_("Delete")},
+	m_popup_menu_{}
 {
 	set_model(_create_model());
 	append_column ("Name",columns.column_name);
 	set_headers_visible(false);
+	
+	m_popup_menu_.attach_to_widget(*this);
+
+	m_refresh_menuitem_.signal_activate().connect(sigc::mem_fun(*this,&StrainSelectorTreeView::refresh));
+	m_popup_menu_.append(m_refresh_menuitem_);
+
+	m_popup_menu_.append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
+	
+	m_open_menuitem_.signal_activate().connect(sigc::mem_fun(*this,&StrainSelectorTreeView::on_open));
+	m_popup_menu_.append(m_open_menuitem_);
+	
+	m_add_breeder_menuitem_.signal_activate().connect(sigc::mem_fun(*this,&StrainSelectorTreeView::on_add_breeder));
+	m_popup_menu_.append(m_add_breeder_menuitem_);
+
+	m_add_strain_menuitem_.signal_activate().connect(sigc::mem_fun(*this,&StrainSelectorTreeView::on_add_strain));
+	m_popup_menu_.append(m_add_strain_menuitem_);
+
+	m_popup_menu_.append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
+
+	m_edit_menuitem_.signal_activate().connect(sigc::mem_fun(*this,&StrainSelectorTreeView::on_edit));
+	m_popup_menu_.append(m_edit_menuitem_);
+
+	m_popup_menu_.append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
+
+	m_delete_menuitem_.signal_activate().connect(sigc::mem_fun(*this,&StrainSelectorTreeView::on_delete));
+	m_popup_menu_.append(m_delete_menuitem_);
+	m_popup_menu_.show_all();
 }
 
 StrainSelectorTreeView::~StrainSelectorTreeView()
@@ -104,6 +139,13 @@ StrainSelectorTreeView::get_database() const
 }
 
 void
+StrainSelectorTreeView::refresh()
+{
+	set_model(this->_create_model());
+	show();
+}
+
+void
 StrainSelectorTreeView::on_row_activated(const Gtk::TreeModel::Path &path,
                                          Gtk::TreeViewColumn *column)
 {
@@ -128,6 +170,120 @@ StrainSelectorTreeView::on_row_activated(const Gtk::TreeModel::Path &path,
 		}
 	}
 }
+
+bool
+StrainSelectorTreeView::on_button_press_event(GdkEventButton *event)
+{
+	bool ret = Gtk::TreeView::on_button_press_event (event);
+	if (event->button == 3 && event->type == GDK_BUTTON_PRESS) {
+		Gtk::TreeModel::iterator iter = get_selection()->get_selected();
+		if (iter) {
+			Gtk::TreeModel::Row row = *iter;
+			if (row[columns.column_breeder_id]) {
+				m_add_strain_menuitem_.set_sensitive(true);
+			} else {
+				m_add_strain_menuitem_.set_sensitive(false);
+			}
+			if (row[columns.column_breeder_id] || row[columns.column_id]) {
+				m_edit_menuitem_.set_sensitive(true);
+				m_delete_menuitem_.set_sensitive(true);
+			} else {
+				m_edit_menuitem_.set_sensitive(false);
+				m_delete_menuitem_.set_sensitive(false);
+			}
+			if (row[columns.column_id]) {
+				m_open_menuitem_.set_sensitive(true);
+			} else {
+				m_open_menuitem_.set_sensitive(false);
+			}
+		} else {
+			m_open_menuitem_.set_sensitive(false);
+			m_add_strain_menuitem_.set_sensitive(false);
+			m_edit_menuitem_.set_sensitive(false);
+			m_delete_menuitem_.set_sensitive(false);
+		}
+		m_popup_menu_.popup(event->button,event->time);
+	}
+	return ret;
+}
+
+void
+StrainSelectorTreeView::on_open()
+{
+	Gtk::TreeModel::iterator iter = get_selection()->get_selected();
+	if (!iter || !(*iter)[columns.column_id])
+		return;
+
+	uint64_t id = (*iter)[columns.column_id];
+	Glib::RefPtr<Strain> strain = m_database_->get_strain(id);
+	if (!strain)
+		return;
+
+	AppWindow *window = dynamic_cast<AppWindow*>(get_toplevel());
+	if (!window)
+		window = app->get_appwindow();
+	
+	StrainView *sv = Gtk::manage(new StrainView(m_database_,strain));
+	int pagenum = window->add_browser_page(*sv);
+	if (pagenum == -1)
+		delete sv;
+}
+
+void
+StrainSelectorTreeView::on_add_breeder()
+{
+	Gtk::Window *window = dynamic_cast<Gtk::Window*>(get_toplevel());
+	if (!window)
+		window = app->get_appwindow();
+	
+	BreederDialog dialog{*window,m_database_};
+	if (dialog.run() == Gtk::RESPONSE_APPLY) {
+		refresh();
+	}		
+	dialog.hide();
+}
+
+void
+StrainSelectorTreeView::on_add_strain()
+{
+}
+
+void
+StrainSelectorTreeView::on_edit()
+{
+	Gtk::TreeModel::iterator iter = get_selection()->get_selected();
+	if (!iter)
+		return;
+
+	Gtk::Window *window = dynamic_cast<Gtk::Window*>(get_toplevel());
+	if (!window)
+		window = app->get_appwindow();
+	
+	Gtk::TreeModel::Row row = *iter;
+	if (row[columns.column_id]) {
+		//TODO
+	} else if (row[columns.column_breeder_id]) {
+		Glib::RefPtr<Breeder> breeder = m_database_->get_breeder(row[columns.column_breeder_id]);
+		if (!breeder) return;
+
+		BreederDialog dialog{*window,m_database_,breeder};
+		int response = dialog.run();
+		dialog.hide();
+		if (response == Gtk::RESPONSE_APPLY) {
+			refresh();
+		}
+	}
+}
+
+void
+StrainSelectorTreeView::on_delete()
+{
+	Gtk::TreeModel::iterator iter = get_selection()->get_selected();
+	if (!iter)
+		return;
+	Gtk::TreeModel::Row row = *iter;
+}
+                                  
 /*******************************************************************************
  * StrainSelector
  ******************************************************************************/
@@ -154,4 +310,22 @@ const StrainSelector::TreeView*
 StrainSelector::get_treeview() const
 {
 	return &m_treeview_;
+}
+
+Glib::RefPtr<Database>
+StrainSelector::get_database()
+{
+	return m_treeview_.get_database();
+}
+
+Glib::RefPtr<const Database>
+StrainSelector::get_database() const
+{
+	return m_treeview_.get_database();
+}
+
+void
+StrainSelector::refresh()
+{
+	m_treeview_.refresh();
 }

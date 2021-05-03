@@ -89,6 +89,8 @@ DatabasePostgresql::create(const Glib::RefPtr<DatabaseSettings> &settings)
 	return Glib::RefPtr<DatabasePostgresql>(new DatabasePostgresql(settings));
 }
 
+/**** Database methods ********************************************************/
+
 bool
 DatabasePostgresql::is_connected_vfunc() const
 {
@@ -224,6 +226,8 @@ DatabasePostgresql::rollback()
 	PQclear(result);
 }
 
+/**** Breeder methods *********************************************************/
+
 std::list<Glib::RefPtr<Breeder> >
 DatabasePostgresql::get_breeders_vfunc() const
 {
@@ -343,6 +347,33 @@ DatabasePostgresql::add_breeder_vfunc(const Glib::RefPtr<Breeder> &breeder)
 	}
 	commit();
 }
+
+void
+DatabasePostgresql::remove_breeder_vfunc(uint64_t id)
+{
+	assert(m_db_);
+
+	const char *sql = "DELETE FROM breeder WHERE id=$1;";
+	const char *values[1];
+	std::string id_str = std::to_string(id);
+	values[0] = id_str.c_str();
+
+	PGresult *result = PQexecParams(m_db_,sql,1,NULL,values,NULL,NULL,0);
+	if (PQresultStatus(result) != PGRES_COMMAND_OK) {
+		Glib::ustring msg = _("Unable to delete breeder from database!");
+		msg += "\n)";
+		msg += PQerrorMessage(m_db_);
+		msg += ")";
+		PQclear(result);
+		rollback();
+		throw DatabaseError(msg);
+	}
+	PQclear(result);
+	commit();
+}
+
+
+/**** Strain methods **********************************************************/
 
 std::list<Glib::RefPtr<Strain> >
 DatabasePostgresql::get_strains_for_breeder_vfunc(uint64_t breeder_id) const
@@ -531,6 +562,28 @@ DatabasePostgresql::add_strain_vfunc(const Glib::RefPtr<Strain> &strain)
 		}
 		PQclear(result);
 	}
+	commit();
+}
+
+void
+DatabasePostgresql::remove_strain_vfunc(uint64_t id)
+{
+	const char *sql = "DELETE FROM strain WHERE id=$1;";
+	const char *values[1];
+	std::string id_str = std::to_string(id);
+	values[0] = id_str.c_str();
+
+	PGresult *result = PQexecParams(m_db_,sql,1,NULL,values,NULL,NULL,0);
+	if (PQresultStatus(result) != PGRES_COMMAND_OK) {
+		Glib::ustring msg = _("Unable to delete strain from database!");
+		msg += "\n)";
+		msg += PQerrorMessage(m_db_);
+		msg += ")";
+		PQclear(result);
+		rollback();
+		throw DatabaseError(msg);
+	}
+	PQclear(result);
 	commit();
 }
 

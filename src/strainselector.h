@@ -29,7 +29,8 @@
 #include <gtkmm/treeview.h>
 #include <gtkmm/treestore.h>
 #include <gtkmm/scrolledwindow.h>
-
+#include <gtkmm/menu.h>
+#include <gtkmm/menuitem.h>
 #include "database.h"
 
 class StrainSelectorColumns:
@@ -55,7 +56,13 @@ class StrainSelectorTreeView:
 		Columns columns;
 	private:
 		Glib::RefPtr<Database> m_database_;
-		
+		Gtk::MenuItem m_refresh_menuitem_;
+		Gtk::MenuItem m_open_menuitem_;
+		Gtk::MenuItem m_add_breeder_menuitem_;
+		Gtk::MenuItem m_add_strain_menuitem_;
+		Gtk::MenuItem m_edit_menuitem_;
+		Gtk::MenuItem m_delete_menuitem_;
+		Gtk::Menu m_popup_menu_;
 	public:
 		StrainSelectorTreeView(const Glib::RefPtr<Database> &database);
 		virtual ~StrainSelectorTreeView();
@@ -67,9 +74,18 @@ class StrainSelectorTreeView:
 		Glib::RefPtr<Database> get_database();
 		Glib::RefPtr<const Database> get_database() const;
 
+		void refresh();
 	protected:
-		void on_row_activated(const Gtk::TreeModel::Path &path, 
-		                      Gtk::TreeViewColumn *column) override;
+		virtual void on_row_activated(const Gtk::TreeModel::Path &path, 
+		                              Gtk::TreeViewColumn *column) override;
+		virtual bool on_button_press_event (GdkEventButton *button_event) override;
+
+	private:
+		void on_open();
+		void on_add_breeder();
+		void on_add_strain();
+		void on_edit();
+		void on_delete();
 		
 }; // StrainSelectorTreeView class
 
@@ -93,6 +109,8 @@ class StrainSelector:
 
 		Glib::RefPtr<Database> get_database();
 		Glib::RefPtr<const Database> get_database() const;
+
+		void refresh();
 }; // StrainSelector class
 
 

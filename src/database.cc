@@ -152,7 +152,19 @@ Database::get_breeder(const Glib::ustring &name) const
 void
 Database::add_breeder(const Glib::RefPtr<Breeder> &breeder)
 {
-	return this->add_breeder_vfunc(breeder);
+	this->add_breeder_vfunc(breeder);
+}
+
+void
+Database::remove_breeder(uint64_t id)
+{
+	this->remove_breeder_vfunc (id);
+}
+
+void
+Database::remove_breeder(const Glib::RefPtr<Breeder> &breeder)
+{
+	this->remove_breeder_vfunc(breeder->get_id());
 }
 
 
@@ -198,7 +210,19 @@ Database::get_strain(const Glib::ustring &breeder_name,
 void
 Database::add_strain_vfunc(const Glib::RefPtr<Strain> &strain)
 {
-	return this->add_strain_vfunc(strain);
+	this->add_strain_vfunc(strain);
+}
+
+void
+Database::remove_strain(uint64_t id)
+{
+	this->remove_strain_vfunc(id);
+}
+
+void
+Database::remove_strain(const Glib::RefPtr<Strain> &strain)
+{
+	this->remove_strain_vfunc(strain->get_id());
 }
 
 /*******************************************************************************

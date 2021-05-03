@@ -95,6 +95,8 @@ DatabaseSqlite3::create(const Glib::RefPtr<DatabaseSettings> &settings)
 	return Glib::RefPtr<DatabaseSqlite3>(new DatabaseSqlite3(settings));
 }
 
+/**** Database methods ********************************************************/
+
 bool
 DatabaseSqlite3::is_connected_vfunc() const
 {
@@ -230,6 +232,8 @@ DatabaseSqlite3::commit()
 	}
 }
 
+/**** Breeder methods *********************************************************/
+
 std::list<Glib::RefPtr<Breeder> >
 DatabaseSqlite3::get_breeders_vfunc() const
 {
@@ -345,6 +349,7 @@ DatabaseSqlite3::add_breeder_vfunc(const Glib::RefPtr<Breeder> &breeder)
 		msg += ")";
 		if (stmt)
 			sqlite3_finalize(stmt);
+		rollback();
 		throw DatabaseError(err,msg);
 	}
 	sqlite3_bind_text(stmt,1,breeder->get_name().c_str(),-1,0);
@@ -364,6 +369,45 @@ DatabaseSqlite3::add_breeder_vfunc(const Glib::RefPtr<Breeder> &breeder)
 	sqlite3_finalize(stmt);
 	commit();
 }
+
+void
+DatabaseSqlite3::remove_breeder_vfunc (uint64_t id)
+{
+	assert(m_db_);
+
+	begin_transaction();
+	
+	const char *sql = "DELETE FROM breeder WHERE id=?;";
+	sqlite3_stmt *stmt = nullptr;
+	int err = sqlite3_prepare(m_db_,sql,-1,&stmt,0);
+	
+	if (err != SQLITE_OK) {
+		Glib::ustring msg = _("Unable to delete breeder from database!");
+		msg += "\n(";
+		msg += sqlite3_errmsg(m_db_);
+		msg += ")";
+		if (stmt)
+			sqlite3_finalize(stmt);
+		rollback();
+		throw DatabaseError(err,msg);
+	}
+	sqlite3_bind_int64(stmt,1,static_cast<sqlite3_int64>(id));
+
+	err = sqlite3_step(stmt);
+	if (err != SQLITE_OK && err != SQLITE_DONE) {
+		Glib::ustring msg = _("Deleting breeder from database failed!");
+		msg += "\n(";
+		msg += sqlite3_errmsg(m_db_);
+		msg += ")";
+		sqlite3_finalize(stmt);
+		rollback();
+		throw DatabaseError(err,msg);
+	}
+	sqlite3_finalize(stmt);
+	commit();
+}
+
+/**** Strain methods **********************************************************/
 
 std::list<Glib::RefPtr<Strain> >
 DatabaseSqlite3::get_strains_for_breeder_vfunc(uint64_t breeder_id) const
@@ -551,6 +595,7 @@ DatabaseSqlite3::add_strain_vfunc(const Glib::RefPtr<Strain> &strain)
 			msg += ")";
 			if (stmt)
 				sqlite3_finalize(stmt);
+			rollback();
 			throw DatabaseError(err,msg);
 		}
 		sqlite3_bind_text(stmt,1,name.c_str(),-1,0);
@@ -569,6 +614,7 @@ DatabaseSqlite3::add_strain_vfunc(const Glib::RefPtr<Strain> &strain)
 			msg += ")";
 			if (stmt)
 				sqlite3_finalize(stmt);
+			rollback();
 			throw DatabaseError(err,msg);
 		}
 		sqlite3_bind_int64(stmt,1,strain->get_breeder_id());
@@ -581,6 +627,43 @@ DatabaseSqlite3::add_strain_vfunc(const Glib::RefPtr<Strain> &strain)
 	err = sqlite3_step(stmt);
 	if (err != SQLITE_OK && err != SQLITE_DONE) {
 		Glib::ustring msg = _("Could not add strain to database!");
+		msg += "\n(";
+		msg += sqlite3_errmsg(m_db_);
+		msg += ")";
+		sqlite3_finalize(stmt);
+		rollback();
+		throw DatabaseError(err,msg);
+	}
+	sqlite3_finalize(stmt);
+	commit();
+}
+
+void
+DatabaseSqlite3::remove_strain_vfunc (uint64_t id)
+{
+	assert(m_db_);
+	
+	const char *sql = "DELETE FROM strain WHERE id=?;";
+	sqlite3_stmt *stmt = nullptr;
+
+	int err = sqlite3_prepare(m_db_,sql,-1,&stmt,0);
+
+	if (err != SQLITE_OK) {
+		Glib::ustring msg = _("Unable to delete strain from database!");
+		msg += "\n(";
+		msg += sqlite3_errmsg(m_db_);
+		msg += ")";
+		if (stmt)
+			sqlite3_finalize(stmt);
+		rollback();
+		throw DatabaseError(err,msg);
+	}
+
+	sqlite3_bind_int64(stmt,1,static_cast<sqlite3_int64>(id));
+
+	err = sqlite3_step(stmt);
+	if (err != SQLITE_OK && err != SQLITE_DONE) {
+		Glib::ustring msg = _("Deleting strain from database failed!");
 		msg += "\n(";
 		msg += sqlite3_errmsg(m_db_);
 		msg += ")";

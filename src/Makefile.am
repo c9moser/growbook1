@@ -55,7 +55,11 @@ growbook_SOURCES = \
 	browserpage.cc \
 	browserpage.h \
 	strainview.cc \
-	strainview.h
+	strainview.h \
+	breederdialog.cc \
+	breederdialog.h \
+	straindialog.cc \
+	straindialog.h
 
 growbook_LDFLAGS = 
 
