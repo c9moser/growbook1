@@ -208,7 +208,7 @@ Database::get_strain(const Glib::ustring &breeder_name,
 }
 
 void
-Database::add_strain_vfunc(const Glib::RefPtr<Strain> &strain)
+Database::add_strain(const Glib::RefPtr<Strain> &strain)
 {
 	this->add_strain_vfunc(strain);
 }

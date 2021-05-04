@@ -91,10 +91,16 @@ class BreederDialog:
 		 void _add_buttons();
 		 void _add_widgets();
 
+	public:
+		Glib::RefPtr<Breeder> get_breeder();
+		Glib::RefPtr<const Breeder> get_breeder() const;
+		
+	private:
 		void on_add_clicked();
 		void on_edit_clicked();
 		void on_delete_clicked();
 
+		void on_selection_changed();
 	protected:
 		virtual void on_response(int response_id) override;
 };

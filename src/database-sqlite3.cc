@@ -642,10 +642,11 @@ void
 DatabaseSqlite3::remove_strain_vfunc (uint64_t id)
 {
 	assert(m_db_);
-	
+
 	const char *sql = "DELETE FROM strain WHERE id=?;";
 	sqlite3_stmt *stmt = nullptr;
 
+	begin_transaction ();
 	int err = sqlite3_prepare(m_db_,sql,-1,&stmt,0);
 
 	if (err != SQLITE_OK) {

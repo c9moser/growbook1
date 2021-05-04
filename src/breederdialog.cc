@@ -30,7 +30,11 @@
 #include <gtkmm/label.h>
 #include <gtkmm/separator.h>
 #include <gtkmm/scrolledwindow.h>
+#include <gtkmm/messagedialog.h>
 #include <cassert>
+
+#include "straindialog.h"
+#include "error.h"
 
 /*******************************************************************************
  * BreederDialogColumns
@@ -195,30 +199,224 @@ BreederDialog::_add_widgets()
 	m_treeview_.set_model(model);
 	m_treeview_.append_column(_("Name"),m_columns_.column_name);
 	m_treeview_.set_headers_visible(false);
-
+	m_treeview_.get_selection()->signal_changed().connect(sigc::mem_fun(*this,&BreederDialog::on_selection_changed));
 	scrolled->add(m_treeview_);
 	box->pack_start(*scrolled,true,true,0);
 	
 }
 
+Glib::RefPtr<Breeder>
+BreederDialog::get_breeder()
+{
+	return m_breeder_;
+}
+
+Glib::RefPtr<const Breeder>
+BreederDialog::get_breeder() const
+{
+	return Glib::RefPtr<Breeder>::cast_const(m_breeder_);
+}
+
 void 
 BreederDialog::on_response(int response)
 {
+	typedef Gtk::TreeModel::Children children_t;
+	
+	if (response == Gtk::RESPONSE_APPLY) {
+
+		if (! m_breeder_) {
+			m_breeder_ = Breeder::create(m_name_entry_.get_text(),
+			                             m_homepage_entry_.get_text().c_str());
+		} else {	
+			m_breeder_->set_name(m_name_entry_.get_text());
+			m_breeder_->set_homepage(m_homepage_entry_.get_text().c_str());
+		}
+		
+
+		try {
+			m_database_->add_breeder(m_breeder_);
+		} catch (DatabaseError ex) {
+			Gtk::MessageDialog dialog{*this,ex.what(),false,Gtk::MESSAGE_ERROR,Gtk::BUTTONS_OK,true};
+			dialog.run();
+			dialog.hide();
+			return;
+		}
+
+		if (!m_breeder_->get_id())
+			m_breeder_ = m_database_->get_breeder(m_breeder_->get_name());
+
+		// delete strains
+		for (auto iter = m_deleted_strains_.begin(); iter != m_deleted_strains_.end(); ++iter) {
+			try {
+				m_database_->remove_strain(*iter);
+			} catch (DatabaseError ex) {
+				Gtk::MessageDialog dialog{*this,ex.what(),false,Gtk::MESSAGE_ERROR,Gtk::BUTTONS_OK,true};
+				dialog.run();
+				dialog.hide();
+			}
+		}
+		// add strains
+		Glib::RefPtr<Gtk::ListStore> model = Glib::RefPtr<Gtk::ListStore>::cast_dynamic(m_treeview_.get_model());
+
+		assert(model);
+
+		children_t children = model->children();
+
+		for (children_t::iterator iter = children.begin(); iter != children.end(); ++iter) {
+			Gtk::TreeModel::Row row = *iter;
+			uint64_t strain_id = row[m_columns_.column_id];
+			if (!strain_id || row[m_columns_.column_changed]) {
+				Glib::RefPtr<Strain> strain = Strain::create(strain_id,
+				                                             m_breeder_->get_id(),
+				                                             m_breeder_->get_name(),
+				                                             row[m_columns_.column_name],
+				                                             row[m_columns_.column_info],
+				                                             row[m_columns_.column_description],
+				                                             row[m_columns_.column_homepage],
+				                                             row[m_columns_.column_seedfinder]);
+				try {
+					m_database_->add_strain(strain);
+				} catch (DatabaseError ex) {
+					Gtk::MessageDialog dialog{*this,ex.what(),false,Gtk::MESSAGE_ERROR,Gtk::BUTTONS_OK,true};
+					dialog.run();
+					dialog.hide();
+				}
+			}
+		}
+	}
 	Gtk::Dialog::on_response(response);
+}
+
+void
+BreederDialog::on_selection_changed()
+{
+	Gtk::TreeModel::iterator iter = m_treeview_.get_selection()->get_selected();
+	if (iter) {
+		m_edit_button_.set_sensitive(true);
+		m_delete_button_.set_sensitive(true);
+	} else {
+		m_edit_button_.set_sensitive (false);
+		m_delete_button_.set_sensitive(false);
+	}
 }
 
 void
 BreederDialog::on_add_clicked()
 {
+	typedef Gtk::TreeModel::Children children_t;
+	
+	uint64_t id = 0;
+	if (m_breeder_)
+		id = m_breeder_->get_id();
+	Glib::ustring name = m_name_entry_.get_text();
+	
+	Glib::RefPtr<Strain> strain = Strain::create(id,name,"","","","","");
+	StrainDialog dialog{*this,m_database_,strain};
+	dialog.set_update_database(false);
+	
+	int response = dialog.run();
+	dialog.hide();
+	if (response == Gtk::RESPONSE_APPLY) {
+		strain = dialog.get_strain();
+		Glib::RefPtr<Gtk::ListStore> model = Glib::RefPtr<Gtk::ListStore>::cast_dynamic(m_treeview_.get_model());
+
+		assert(model);
+		
+		children_t children = model->children();
+		for (children_t::iterator iter = children.begin(); iter != children.end(); ++iter) {
+			Gtk::TreeModel::Row row = *iter;
+			Glib::ustring name = row[m_columns_.column_name];
+			if (strain->get_name() == name) {
+				Gtk::MessageDialog dialog{*this,
+				                          _("Strain already exists. Do you want to overwrite existing strain?"),
+				                          false,
+				                          Gtk::MESSAGE_WARNING,
+				                          Gtk::BUTTONS_YES_NO,
+				                          true};
+				int response1 = dialog.run();
+				dialog.hide();
+				if (response1 == Gtk::RESPONSE_YES) {
+					row[m_columns_.column_info] = strain->get_info();
+					row[m_columns_.column_description] = strain->get_description();
+					row[m_columns_.column_homepage] = strain->get_homepage();
+					row[m_columns_.column_seedfinder] = strain->get_seedfinder();
+					row[m_columns_.column_changed] = true;
+				}
+				return;
+			}
+		}	
+		
+		Gtk::TreeModel::iterator iter = model->append();
+		Gtk::TreeModel::Row row = *iter;
+
+		row[m_columns_.column_id] = 0;
+		row[m_columns_.column_name] = strain->get_name();
+		row[m_columns_.column_info] = strain->get_info();
+		row[m_columns_.column_description] = strain->get_description();
+		row[m_columns_.column_homepage] = strain->get_homepage();
+		row[m_columns_.column_seedfinder] = strain->get_seedfinder();
+		row[m_columns_.column_changed] = true;
+	}
 }
 
 void
 BreederDialog::on_edit_clicked()
 {
+	Gtk::TreeModel::iterator iter = m_treeview_.get_selection()->get_selected();
+	if (!iter)
+		return;
+
+	uint64_t breeder_id = 0;
+	if (m_breeder_)
+		breeder_id = m_breeder_->get_id();
+	
+	Gtk::TreeModel::Row row = *iter;
+	Glib::RefPtr<Strain> strain = Strain::create(row[m_columns_.column_id],
+	                                             breeder_id,
+	                                             m_name_entry_.get_text(),
+	                                             row[m_columns_.column_name],
+	                                             row[m_columns_.column_info],
+	                                             row[m_columns_.column_description],
+	                                             row[m_columns_.column_homepage],
+	                                             row[m_columns_.column_seedfinder]);
+	StrainDialog dialog{*this,m_database_,strain};
+	dialog.set_update_database(false);
+	int response = dialog.run();
+	if (response == Gtk::RESPONSE_APPLY) {
+		strain = dialog.get_strain();
+		row[m_columns_.column_name] = strain->get_name();
+		row[m_columns_.column_info] = strain->get_info();
+		row[m_columns_.column_description] = strain->get_description();
+		row[m_columns_.column_homepage] = strain->get_homepage();
+		row[m_columns_.column_seedfinder] = strain->get_seedfinder();
+		row[m_columns_.column_changed] = true;
+	}
 }
 
 void
 BreederDialog::on_delete_clicked()
 {
+	Gtk::TreeModel::iterator iter = m_treeview_.get_selection()->get_selected();
+	if (!iter)
+		return;
+	
+	Gtk::MessageDialog dialog{*this,
+	                          _("Do you really want to delete the selected strain?"),
+	                          false,
+	                          Gtk::MESSAGE_QUESTION,
+	                          Gtk::BUTTONS_YES_NO,
+	                          true};
+	int response = dialog.run();
+	if (response == Gtk::RESPONSE_YES) {
+		Gtk::TreeModel::Row row = *iter;
+		uint64_t id = row[m_columns_.column_id];
+		if (id)
+			m_deleted_strains_.push_back(id);
+		Glib::RefPtr<Gtk::ListStore> model = Glib::RefPtr<Gtk::ListStore>::cast_dynamic(m_treeview_.get_model());
+		
+		assert(model);
+
+		model->erase(iter);
+	}
 }
 

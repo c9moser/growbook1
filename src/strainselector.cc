@@ -26,11 +26,13 @@
 
 #include <glibmm/i18n.h>
 #include <gtkmm/separatormenuitem.h>
+#include <gtkmm/messagedialog.h>
 
 #include "strainview.h"
 #include "application.h"
 #include "breederdialog.h" 
-
+#include "straindialog.h"
+#include "error.h"
 
 /*******************************************************************************
  * StrainSelectorColumns
@@ -246,6 +248,29 @@ StrainSelectorTreeView::on_add_breeder()
 void
 StrainSelectorTreeView::on_add_strain()
 {
+	Gtk::Window *window = dynamic_cast<Gtk::Window*>(get_toplevel());
+	if (!window)
+		window = app->get_appwindow();
+
+	//Glib::RefPtr<Gtk::TreeStore> model = Glib::RefPtr<Gtk::TreeStore>::cast_dynamic(get_model());
+	Gtk::TreeModel::iterator iter = get_selection()->get_selected();
+	if (!iter)
+		return;
+	
+	Gtk::TreeModel::Row row = *iter;
+	Glib::RefPtr<Breeder> breeder = m_database_->get_breeder(row[columns.column_breeder_id]);
+	Glib::RefPtr<Strain> strain = Strain::create(breeder->get_id(),
+	                                             breeder->get_name(),
+	                                             "",
+	                                             "",
+	                                             "",
+	                                             "",
+	                                             "");
+	StrainDialog dialog(*window,m_database_,strain);
+	int response = dialog.run();
+	if (response == Gtk::RESPONSE_APPLY) {
+		refresh();
+	}
 }
 
 void
@@ -261,7 +286,16 @@ StrainSelectorTreeView::on_edit()
 	
 	Gtk::TreeModel::Row row = *iter;
 	if (row[columns.column_id]) {
-		//TODO
+		Glib::RefPtr<Strain> strain = m_database_->get_strain(row[columns.column_id]);
+
+		if (!strain) return;
+		
+		StrainDialog dialog{*window,m_database_,strain};
+		int response = dialog.run();
+		dialog.hide();
+		if (response == Gtk::RESPONSE_APPLY) {
+			refresh();
+		}			
 	} else if (row[columns.column_breeder_id]) {
 		Glib::RefPtr<Breeder> breeder = m_database_->get_breeder(row[columns.column_breeder_id]);
 		if (!breeder) return;
@@ -281,7 +315,61 @@ StrainSelectorTreeView::on_delete()
 	Gtk::TreeModel::iterator iter = get_selection()->get_selected();
 	if (!iter)
 		return;
+
+	Gtk::Window *window = dynamic_cast<Gtk::Window*>(get_toplevel());
+	if (!window)
+		window = app->get_appwindow();
+	
 	Gtk::TreeModel::Row row = *iter;
+	if (row[columns.column_id]) {
+		Gtk::MessageDialog dialog{*window,
+		                          _("Do you really want to delete the selected strain?"),
+		                          false,
+		                          Gtk::MESSAGE_QUESTION,
+		                          Gtk::BUTTONS_YES_NO,
+		                          true};
+		int response = dialog.run();
+		dialog.hide();
+		if (response == Gtk::RESPONSE_YES) {
+			try {
+				m_database_->remove_strain(row[columns.column_id]);
+				refresh();
+			} catch (DatabaseError ex) {
+				Gtk::MessageDialog dialog{*window,ex.what(),false,Gtk::MESSAGE_ERROR,Gtk::BUTTONS_OK,true};
+				dialog.run();
+				dialog.hide();
+			}
+		}
+	} else if (row[columns.column_breeder_id]) {
+		Gtk::MessageDialog dialog{*window,
+		                          _("Do you really want to delete the selected breeder and all corresponding strains?"),
+		                          false,
+		                          Gtk::MESSAGE_QUESTION,
+		                          Gtk::BUTTONS_YES_NO,
+		                          true};
+		int response = dialog.run();
+		dialog.hide();
+		if (response == Gtk::RESPONSE_YES) {
+			std::list<Glib::RefPtr<Strain> > strains = m_database_->get_strains_for_breeder(row[columns.column_breeder_id]);
+			for (auto iter = strains.begin(); iter != strains.end(); ++iter) {
+				try {
+					m_database_->remove_strain(*iter);
+				} catch (DatabaseError ex) {
+					Gtk::MessageDialog dialog{*window,ex.what(),false,Gtk::MESSAGE_ERROR,Gtk::BUTTONS_OK,true};
+					dialog.run();
+					dialog.hide();
+				}
+			}
+			try {
+				m_database_->remove_breeder(row[columns.column_breeder_id]);
+				refresh();
+			} catch (DatabaseError ex) {
+				Gtk::MessageDialog dialog1{*window,ex.what(),false,Gtk::MESSAGE_ERROR,Gtk::BUTTONS_OK,true};
+				dialog1.run();
+				dialog1.hide();
+			}
+		}
+	}	
 }
                                   
 /*******************************************************************************

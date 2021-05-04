@@ -30,8 +30,11 @@
 #include <gtkmm/label.h>
 #include <gtkmm/grid.h>
 #include <gtkmm/scrolledwindow.h>
+#include <gtkmm/messagedialog.h>
 
 #include <cassert>
+
+#include "error.h"
 
 const char StrainDialog::TITLE[] = N_("GrowBook: Strain");
 
@@ -48,6 +51,7 @@ StrainDialog::StrainDialog(const Glib::RefPtr<Database> &db,
 	_add_buttons();
 	_add_widgets();
 
+	set_default_size(400,400);
 	show_all();
 }
 
@@ -65,6 +69,7 @@ StrainDialog::StrainDialog(Gtk::Window &parent,
 	_add_buttons();
 	_add_widgets();
 
+	set_default_size(400,400);
 	show_all();
 }
 
@@ -132,7 +137,7 @@ StrainDialog::get_update_database() const
 void
 StrainDialog::set_update_database(bool b)
 {
-	m_update_database_ = true;
+	m_update_database_ = b;
 }
 
 Glib::RefPtr<Strain>
@@ -150,5 +155,22 @@ StrainDialog::get_strain() const
 void
 StrainDialog::on_response(int response_id)
 {
+	if (response_id == Gtk::RESPONSE_APPLY) {
+		m_strain_->set_name(m_name_entry_.get_text());
+		m_strain_->set_info(m_info_textview_.get_buffer()->get_text(false));
+		m_strain_->set_description(m_description_textview_.get_buffer()->get_text(false));
+		m_strain_->set_homepage(m_homepage_entry_.get_text().c_str());
+		m_strain_->set_seedfinder(m_seedfinder_entry_.get_text().c_str());
+
+		if (m_update_database_) {
+			try {
+				m_database_->add_strain(m_strain_);
+			} catch (DatabaseError ex) {
+				Gtk::MessageDialog dialog{*this,ex.what(),false,Gtk::MESSAGE_ERROR,Gtk::BUTTONS_OK,true};
+				dialog.run();
+				dialog.hide();
+			}
+		}
+	}
 	Gtk::Dialog::on_response(response_id);
 }
