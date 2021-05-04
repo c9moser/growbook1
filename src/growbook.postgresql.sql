@@ -71,3 +71,5 @@ CREATE TABLE growlog_strain (
 );
 CREATE INDEX idx_growlog_strain_growlog ON growlog_strain(growlog);
 CREATE INDEX idx_growlog_strain_strain ON growlog_strain(strain);
+
+COMMIT;

@@ -66,12 +66,31 @@ class DatabasePostgresql:
 	public:
 		static Glib::RefPtr<DatabasePostgresql> create(const Glib::RefPtr<DatabaseSettings> &settings);
 
+	public:
+		void commit();
+		void rollback();
+		
 	protected:
 		bool is_connected_vfunc() const override;
 		bool test_connection_vfunc() override;
 		void connect_vfunc() override;
 		void close_vfunc() override;
 		void create_database_vfunc() override;
+
+		virtual std::list<Glib::RefPtr<Breeder> > get_breeders_vfunc() const override;
+		virtual Glib::RefPtr<Breeder> get_breeder_vfunc(uint64_t id) const override;
+		virtual Glib::RefPtr<Breeder> get_breeder_vfunc(const Glib::ustring &name) const override;
+		virtual void add_breeder_vfunc(const Glib::RefPtr<Breeder> &breeder) override;
+		virtual void remove_breeder_vfunc(uint64_t id);
+
+		virtual std::list<Glib::RefPtr<Strain> > get_strains_for_breeder_vfunc(uint64_t breeder_id) const override;
+		virtual std::list<Glib::RefPtr<Strain> > get_strains_for_growlog_vfunc(uint64_t growlog_id) const override;
+		virtual Glib::RefPtr<Strain> get_strain_vfunc(uint64_t id) const override;
+		virtual Glib::RefPtr<Strain> get_strain_vfunc(const Glib::ustring &breeder_name,
+		                                              const Glib::ustring &strain_name) const override;
+		virtual void add_strain_vfunc(const Glib::RefPtr<Strain> &strain) override;
+		virtual void remove_strain_vfunc(uint64_t id) override;
+		
 };
 
 #endif /* __DATABASE_POSTGRESQL_H__ */

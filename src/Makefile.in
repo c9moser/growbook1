@@ -108,7 +108,10 @@ am_growbook_OBJECTS = main.$(OBJEXT) application.$(OBJEXT) \
 	database.$(OBJEXT) database-sqlite3.$(OBJEXT) \
 	database-postgresql.$(OBJEXT) databasesettingsdialog.$(OBJEXT) \
 	settingsdialog.$(OBJEXT) refclass.$(OBJEXT) \
-	aboutdialog.$(OBJEXT)
+	aboutdialog.$(OBJEXT) datatypes.$(OBJEXT) \
+	strainchooser.$(OBJEXT) strainselector.$(OBJEXT) \
+	browserpage.$(OBJEXT) strainview.$(OBJEXT) \
+	breederdialog.$(OBJEXT) straindialog.$(OBJEXT)
 growbook_OBJECTS = $(am_growbook_OBJECTS)
 am__DEPENDENCIES_1 =
 growbook_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
@@ -136,11 +139,15 @@ depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade = ./$(DEPDIR)/aboutdialog.Po \
 	./$(DEPDIR)/application.Po ./$(DEPDIR)/appwindow.Po \
+	./$(DEPDIR)/breederdialog.Po ./$(DEPDIR)/browserpage.Po \
 	./$(DEPDIR)/database-postgresql.Po \
 	./$(DEPDIR)/database-sqlite3.Po ./$(DEPDIR)/database.Po \
-	./$(DEPDIR)/databasesettingsdialog.Po ./$(DEPDIR)/error.Po \
-	./$(DEPDIR)/main.Po ./$(DEPDIR)/refclass.Po \
-	./$(DEPDIR)/settings.Po ./$(DEPDIR)/settingsdialog.Po
+	./$(DEPDIR)/databasesettingsdialog.Po ./$(DEPDIR)/datatypes.Po \
+	./$(DEPDIR)/error.Po ./$(DEPDIR)/main.Po \
+	./$(DEPDIR)/refclass.Po ./$(DEPDIR)/settings.Po \
+	./$(DEPDIR)/settingsdialog.Po ./$(DEPDIR)/strainchooser.Po \
+	./$(DEPDIR)/straindialog.Po ./$(DEPDIR)/strainselector.Po \
+	./$(DEPDIR)/strainview.Po
 am__mv = mv -f
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -432,7 +439,21 @@ growbook_SOURCES = \
 	settingsdialog.h \
 	refclass.cc \
 	aboutdialog.cc \
-	aboutdialog.h
+	aboutdialog.h \
+	datatypes.cc \
+	datatypes.h \
+	strainchooser.cc \
+	strainchooser.h \
+	strainselector.cc \
+	strainselector.h \
+	browserpage.cc \
+	browserpage.h \
+	strainview.cc \
+	strainview.h \
+	breederdialog.cc \
+	breederdialog.h \
+	straindialog.cc \
+	straindialog.h
 
 growbook_LDFLAGS = $(am__append_1)
 growbook_LDADD = $(GROWBOOK_LIBS) $(PGSQL_LIBS)
@@ -533,15 +554,22 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/aboutdialog.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/application.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/appwindow.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/breederdialog.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/browserpage.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/database-postgresql.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/database-sqlite3.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/database.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/databasesettingsdialog.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/datatypes.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/error.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/refclass.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/settings.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/settingsdialog.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/strainchooser.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/straindialog.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/strainselector.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/strainview.Po@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -727,15 +755,22 @@ distclean: distclean-am
 		-rm -f ./$(DEPDIR)/aboutdialog.Po
 	-rm -f ./$(DEPDIR)/application.Po
 	-rm -f ./$(DEPDIR)/appwindow.Po
+	-rm -f ./$(DEPDIR)/breederdialog.Po
+	-rm -f ./$(DEPDIR)/browserpage.Po
 	-rm -f ./$(DEPDIR)/database-postgresql.Po
 	-rm -f ./$(DEPDIR)/database-sqlite3.Po
 	-rm -f ./$(DEPDIR)/database.Po
 	-rm -f ./$(DEPDIR)/databasesettingsdialog.Po
+	-rm -f ./$(DEPDIR)/datatypes.Po
 	-rm -f ./$(DEPDIR)/error.Po
 	-rm -f ./$(DEPDIR)/main.Po
 	-rm -f ./$(DEPDIR)/refclass.Po
 	-rm -f ./$(DEPDIR)/settings.Po
 	-rm -f ./$(DEPDIR)/settingsdialog.Po
+	-rm -f ./$(DEPDIR)/strainchooser.Po
+	-rm -f ./$(DEPDIR)/straindialog.Po
+	-rm -f ./$(DEPDIR)/strainselector.Po
+	-rm -f ./$(DEPDIR)/strainview.Po
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -784,15 +819,22 @@ maintainer-clean: maintainer-clean-am
 		-rm -f ./$(DEPDIR)/aboutdialog.Po
 	-rm -f ./$(DEPDIR)/application.Po
 	-rm -f ./$(DEPDIR)/appwindow.Po
+	-rm -f ./$(DEPDIR)/breederdialog.Po
+	-rm -f ./$(DEPDIR)/browserpage.Po
 	-rm -f ./$(DEPDIR)/database-postgresql.Po
 	-rm -f ./$(DEPDIR)/database-sqlite3.Po
 	-rm -f ./$(DEPDIR)/database.Po
 	-rm -f ./$(DEPDIR)/databasesettingsdialog.Po
+	-rm -f ./$(DEPDIR)/datatypes.Po
 	-rm -f ./$(DEPDIR)/error.Po
 	-rm -f ./$(DEPDIR)/main.Po
 	-rm -f ./$(DEPDIR)/refclass.Po
 	-rm -f ./$(DEPDIR)/settings.Po
 	-rm -f ./$(DEPDIR)/settingsdialog.Po
+	-rm -f ./$(DEPDIR)/strainchooser.Po
+	-rm -f ./$(DEPDIR)/straindialog.Po
+	-rm -f ./$(DEPDIR)/strainselector.Po
+	-rm -f ./$(DEPDIR)/strainview.Po
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

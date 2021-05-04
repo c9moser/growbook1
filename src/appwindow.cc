@@ -28,20 +28,43 @@
 #include <gtkmm/box.h>
 #include <gtkmm/menu.h>
 #include <gtkmm/messagedialog.h>
+#include <gtkmm/paned.h>
+#include <gtkmm/image.h>
+#include <gtkmm/button.h>
+
+#include <cassert>
 
 #include "databasesettingsdialog.h"
 #include "settingsdialog.h"
 #include "aboutdialog.h"
 
-AppWindow::AppWindow(const Glib::RefPtr<Settings> &settings):
+#include <iostream>
+
+AppWindow::AppWindow(const Glib::RefPtr<Settings> &settings,
+                     const Glib::RefPtr<Database> &database):
 	Gtk::ApplicationWindow{},
 	m_settings_{settings},
-	m_menubar_{}
+	m_database_{database},
+	m_menubar_{},
+	m_selector_notebook_{},
+	m_strain_selector_{database},
+	m_browser_notebook_{}
 {
-	Gtk::Box *box = Gtk::manage(new Gtk::Box());
+	assert(settings);
+	assert(database);
+
+	set_default_size(800,600);
+	Gtk::Box *box = Gtk::manage(new Gtk::Box(Gtk::ORIENTATION_VERTICAL));
 	_add_menu();
 	box->pack_start(m_menubar_,false,false,0);
 
+
+	Gtk::Paned *paned = Gtk::manage(new Gtk::Paned(Gtk::ORIENTATION_HORIZONTAL));
+	m_selector_notebook_.append_page(m_strain_selector_,_("Strains"));
+	paned->add1(m_selector_notebook_);
+	paned->add2(m_browser_notebook_);	
+	box->pack_start(*paned,true,true,0);
+	
 	add(*box);
 	set_title(_("GrowBook"));
 	show_all();
@@ -136,4 +159,94 @@ AppWindow::on_about()
 	AboutDialog dialog{};
 	dialog.run();
 	dialog.hide();
+}
+
+Gtk::Notebook*
+AppWindow::get_selector_notebook()
+{
+	return &m_selector_notebook_;
+}
+
+const Gtk::Notebook*
+AppWindow::get_selector_notebook() const
+{
+	return &m_selector_notebook_;
+}
+
+Gtk::Notebook*
+AppWindow::get_browser_notebook()
+{
+	return &m_browser_notebook_;
+}
+
+const Gtk::Notebook*
+AppWindow::get_browser_notebook() const
+{
+	return &m_browser_notebook_;
+}
+
+int
+AppWindow::add_browser_page(Gtk::Widget &page,const Glib::ustring &title)
+{
+	page.show();
+	
+	Gtk::HBox *hbox = Gtk::manage(new Gtk::HBox());
+	Gtk::Label *label = Gtk::manage(new Gtk::Label(title));
+	Gtk::Image *image=Gtk::manage(new Gtk::Image("window-close",Gtk::ICON_SIZE_MENU));
+	Gtk::Button *button = Gtk::manage(new Gtk::Button());
+	button->set_relief (Gtk::RELIEF_NONE);
+	button->signal_clicked().connect(sigc::bind(sigc::mem_fun(*this,&AppWindow::on_close_page),&page));
+	hbox->pack_start(*label,false,false,0);
+	hbox->pack_start(*button,false,false,0);
+
+	
+	int n =  m_browser_notebook_.append_page(page,*hbox);
+	m_browser_notebook_.set_current_page (n);
+	return n;
+}
+
+int
+AppWindow::add_browser_page(BrowserPage &page)
+{
+	int n_pages = m_browser_notebook_.get_n_pages();
+	for (int i = 0; i < n_pages; ++i) {
+		BrowserPage *p = dynamic_cast<BrowserPage*>(m_browser_notebook_.get_nth_page (i));
+
+		if (p && page.get_type() == p->get_type() && page.get_id() == p->get_id()) {
+			p->refresh();
+			m_browser_notebook_.set_current_page(i);
+			m_browser_notebook_.show_all();
+			return -1;
+		}		
+	}
+	
+	Gtk::HBox *hbox = Gtk::manage(new Gtk::HBox());
+	Gtk::Label *label = Gtk::manage(new Gtk::Label(page.get_title()));
+	Gtk::Image *image=Gtk::manage(new Gtk::Image("window-close",Gtk::ICON_SIZE_MENU));
+	Gtk::Button *button = Gtk::manage(new Gtk::Button());
+	button->set_relief (Gtk::RELIEF_NONE);
+	button->signal_clicked().connect(sigc::bind(sigc::mem_fun(*this,&AppWindow::on_close_page),&page));
+	button->add(*image);
+	hbox->pack_start(*label,false,false,0);
+	hbox->pack_start(*button,false,false,0);
+	hbox->show_all();
+	page.signal_title_changed().connect(sigc::bind(sigc::mem_fun(*this,&AppWindow::on_browser_title_changed),
+	                                                label,&page));
+
+	int n =  m_browser_notebook_.append_page(page,*hbox);
+	m_browser_notebook_.show_all();
+	m_browser_notebook_.set_current_page (n);
+	return n;
+}
+
+void
+AppWindow::on_close_page(Gtk::Widget *widget)
+{
+	m_browser_notebook_.remove_page(*widget);
+}
+
+void
+AppWindow::on_browser_title_changed(Gtk::Label *label,BrowserPage *page)
+{
+	label->set_text(page->get_title());
 }

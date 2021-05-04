@@ -131,6 +131,100 @@ Database::close()
 	this->close_vfunc();
 }
 
+std::list<Glib::RefPtr<Breeder > >
+Database::get_breeders() const
+{
+	return this->get_breeders_vfunc();
+}
+
+Glib::RefPtr<Breeder>
+Database::get_breeder(uint64_t id) const
+{
+	return this->get_breeder_vfunc (id);
+}
+
+Glib::RefPtr<Breeder>
+Database::get_breeder(const Glib::ustring &name) const
+{
+	return this->get_breeder_vfunc(name);
+}
+
+void
+Database::add_breeder(const Glib::RefPtr<Breeder> &breeder)
+{
+	this->add_breeder_vfunc(breeder);
+}
+
+void
+Database::remove_breeder(uint64_t id)
+{
+	this->remove_breeder_vfunc (id);
+}
+
+void
+Database::remove_breeder(const Glib::RefPtr<Breeder> &breeder)
+{
+	this->remove_breeder_vfunc(breeder->get_id());
+}
+
+
+std::list<Glib::RefPtr<Strain> >
+Database::get_strains_for_breeder(uint64_t breeder_id) const
+{
+	return this->get_strains_for_breeder_vfunc(breeder_id);
+}
+
+std::list<Glib::RefPtr<Strain> >
+Database::get_strains_for_breeder(const Glib::RefPtr<Breeder> &breeder) const
+{
+	return this->get_strains_for_breeder_vfunc(breeder->get_id());
+}
+
+std::list<Glib::RefPtr<Strain> >
+Database::get_strains_for_growlog(uint64_t growlog_id) const
+{
+	return this->get_strains_for_growlog_vfunc(growlog_id);
+}
+
+
+std::list<Glib::RefPtr<Strain> >
+Database::get_strains_for_growlog(const Glib::RefPtr<Growlog> &growlog) const
+{
+	return this->get_strains_for_growlog_vfunc(growlog->get_id());
+}
+
+
+Glib::RefPtr<Strain>
+Database::get_strain(uint64_t id) const
+{
+	return this->get_strain_vfunc(id);
+}
+
+Glib::RefPtr<Strain>
+Database::get_strain(const Glib::ustring &breeder_name,
+                     const Glib::ustring &strain_name) const
+{
+	return this->get_strain_vfunc(breeder_name,strain_name);	                              
+}
+
+void
+Database::add_strain(const Glib::RefPtr<Strain> &strain)
+{
+	this->add_strain_vfunc(strain);
+}
+
+void
+Database::remove_strain(uint64_t id)
+{
+	this->remove_strain_vfunc(id);
+}
+
+void
+Database::remove_strain(const Glib::RefPtr<Strain> &strain)
+{
+	this->remove_strain_vfunc(strain->get_id());
+}
+
 /*******************************************************************************
  * DatabaseModule
  ******************************************************************************/

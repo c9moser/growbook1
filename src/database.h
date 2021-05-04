@@ -33,6 +33,8 @@
 #include <string>
 #include <list>
 
+#include "datatypes.h"
+
 /*******************************************************************************
  * Database
  ******************************************************************************/
@@ -78,6 +80,26 @@ class Database:
 		 /*! Close database connection.
 		  */
 		 void close();
+
+		 /*! Get a list with all Breeders
+		  */
+		 std::list<Glib::RefPtr<Breeder> > get_breeders() const;
+		 Glib::RefPtr<Breeder> get_breeder(uint64_t id) const;
+		 Glib::RefPtr<Breeder> get_breeder(const Glib::ustring &name) const;
+		 void add_breeder(const Glib::RefPtr<Breeder> &breeder);
+		 void remove_breeder(uint64_t breeder_id);
+		 void remove_breeder(const Glib::RefPtr<Breeder> &breeder);
+
+		 std::list<Glib::RefPtr<Strain> > get_strains_for_breeder(uint64_t breeder_id) const;
+		 std::list<Glib::RefPtr<Strain> > get_strains_for_breeder(const Glib::RefPtr<Breeder> &breeder) const;
+		 std::list<Glib::RefPtr<Strain> > get_strains_for_growlog(uint64_t growlog_id) const;
+		 std::list<Glib::RefPtr<Strain> > get_strains_for_growlog(const Glib::RefPtr<Growlog> &growlog) const;
+		 Glib::RefPtr<Strain> get_strain(uint64_t id) const;
+		 Glib::RefPtr<Strain> get_strain(const Glib::ustring &breeder_name,
+		                                 const Glib::ustring &strain_name) const;
+		 void add_strain(const Glib::RefPtr<Strain> &strain);
+		 void remove_strain(uint64_t id);
+		 void remove_strain(const Glib::RefPtr<Strain> &strain);
 		 
 	protected:
 		 virtual bool is_connected_vfunc() const = 0;
@@ -85,8 +107,21 @@ class Database:
 		 virtual void create_database_vfunc() = 0;
 		 virtual void connect_vfunc() = 0;
 		 virtual void close_vfunc() = 0;
-		 
-			 
+
+		 virtual std::list<Glib::RefPtr<Breeder> > get_breeders_vfunc() const = 0;
+		 virtual Glib::RefPtr<Breeder> get_breeder_vfunc(uint64_t id) const = 0;
+		 virtual Glib::RefPtr<Breeder> get_breeder_vfunc(const Glib::ustring &name) const = 0;
+		 virtual void add_breeder_vfunc(const Glib::RefPtr<Breeder> &breeder) = 0;
+		 virtual void remove_breeder_vfunc(uint64_t breeder_id) = 0;
+
+		 virtual std::list<Glib::RefPtr<Strain> > get_strains_for_breeder_vfunc(uint64_t breeder_id) const = 0;
+		 virtual std::list<Glib::RefPtr<Strain> > get_strains_for_growlog_vfunc(uint64_t growlog_id) const = 0;
+		 virtual Glib::RefPtr<Strain> get_strain_vfunc(uint64_t id) const = 0;
+		 virtual Glib::RefPtr<Strain> get_strain_vfunc(const Glib::ustring &breeder_name,
+		                                               const Glib::ustring &strain_name) const = 0;
+		 virtual void add_strain_vfunc(const Glib::RefPtr<Strain> &strain) = 0;
+		 virtual void remove_strain_vfunc(uint64_t strain_id) = 0;
+		
 }; // Database class
 
 /*******************************************************************************
