@@ -801,9 +801,6 @@ Settings::get_locale_dir() const
 std::string 
 Settings::get_sql_dir () const
 {
-	// for testing only
-	return std::string("src");
-	
 	return Glib::build_filename(get_package_data_dir (),"sql");
 }
 

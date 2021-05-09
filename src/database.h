@@ -100,6 +100,30 @@ class Database:
 		 void add_strain(const Glib::RefPtr<Strain> &strain);
 		 void remove_strain(uint64_t id);
 		 void remove_strain(const Glib::RefPtr<Strain> &strain);
+
+		 std::list<Glib::RefPtr<Growlog> > get_growlogs() const;
+		 std::list<Glib::RefPtr<Growlog> > get_ongoing_growlogs() const;
+		 std::list<Glib::RefPtr<Growlog> > get_finished_growlogs() const;
+		 Glib::RefPtr<Growlog> get_growlog(uint64_t id) const;
+		 Glib::RefPtr<Growlog> get_growlog(const Glib::ustring &title) const;
+		 void add_growlog(const Glib::RefPtr<Growlog> &growlog);
+		 void remove_growlog(uint64_t growlog_id);
+		 void remove_growlog(const Glib::RefPtr<Growlog> &growlog);
+
+		 std::list<Glib::RefPtr<GrowlogEntry> > get_growlog_entries(uint64_t growlog_id) const;
+		 std::list<Glib::RefPtr<GrowlogEntry> > get_growlog_entries(const Glib::RefPtr<Growlog> &growlog) const;
+		 Glib::RefPtr<GrowlogEntry> get_growlog_entry(uint64_t id) const;
+		 void add_growlog_entry(const Glib::RefPtr<GrowlogEntry> &entry);
+		 void remove_growlog_entry(uint64_t id);
+		 void remove_growlog_entry(const Glib::RefPtr<GrowlogEntry> &entry);
+
+		 void add_strain_for_growlog(uint64_t growlog_id,uint64_t strain_id);
+		 void add_strain_for_growlog(const Glib::RefPtr<Growlog> &growlog,
+		                             const Glib::RefPtr<Strain> &strain);
+		 void remove_strain_for_growlog(uint64_t growlog_id,uint64_t strain_id);
+		 void remove_strain_for_growlog(const Glib::RefPtr<Growlog> &growlog,
+		                                const Glib::RefPtr<Strain> &strain);
+		 void remove_strain_for_growlog(uint64_t growlog_strain_id);
 		 
 	protected:
 		 virtual bool is_connected_vfunc() const = 0;
@@ -121,7 +145,23 @@ class Database:
 		                                               const Glib::ustring &strain_name) const = 0;
 		 virtual void add_strain_vfunc(const Glib::RefPtr<Strain> &strain) = 0;
 		 virtual void remove_strain_vfunc(uint64_t strain_id) = 0;
-		
+
+		 virtual std::list<Glib::RefPtr<Growlog> > get_growlogs_vfunc() const = 0;
+		 virtual std::list<Glib::RefPtr<Growlog> > get_ongoing_growlogs_vfunc() const = 0;
+		 virtual std::list<Glib::RefPtr<Growlog> > get_finished_growlogs_vfunc() const = 0;
+		 virtual Glib::RefPtr<Growlog> get_growlog_vfunc(uint64_t id) const = 0;
+		 virtual Glib::RefPtr<Growlog> get_growlog_vfunc(const Glib::ustring &title) const = 0;
+		 virtual void add_growlog_vfunc(const Glib::RefPtr<Growlog> &growlog) = 0;
+		 virtual void remove_growlog_vfunc(uint64_t id) = 0;
+
+		 virtual std::list<Glib::RefPtr<GrowlogEntry> > get_growlog_entries_vfunc(uint64_t growlog_id) const = 0;
+		 virtual Glib::RefPtr<GrowlogEntry> get_growlog_entry_vfunc(uint64_t id) const = 0;
+		 virtual void add_growlog_entry_vfunc(const Glib::RefPtr<GrowlogEntry> &entry) = 0;
+		 virtual void remove_growlog_entry_vfunc(uint64_t id) = 0;
+
+		 virtual void add_strain_for_growlog_vfunc(uint64_t growlog_id,uint64_t strain_id) = 0;
+		 virtual void remove_strain_for_growlog_vfunc(uint64_t growlog_id,uint64_t strain_id) = 0;
+		 virtual void remove_strain_for_growlog_vfunc(uint64_t growlog_strain_id) = 0;
 }; // Database class
 
 /*******************************************************************************
