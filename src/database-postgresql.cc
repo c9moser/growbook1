@@ -746,6 +746,32 @@ DatabasePostgresql::get_finished_growlogs_vfunc() const
 	return ret;
 }
 
+std::list<Glib::RefPtr<Growlog> >
+DatabasePostgresql::get_growlogs_for_strain_vfunc(uint64_t strain_id) const 
+{
+	assert(m_db_);
+	
+	const char *sql = "SELECT growlog FROM growlog_strain WHERE strain=$1;";
+	std::list<Glib::RefPtr<Growlog> > ret;
+	std::string strain_id_str = std::to_string(strain_id);
+	const char *values[1];
+	values[0] = strain_id_str.c_str();
+
+	PGresult *result = PQexecParams(m_db_,sql,1,NULL,values,NULL,NULL,0);
+	if (PQresultStatus(result) == PGRES_TUPLES_OK) {
+		int n_rows = PQntuples(result);
+		for (int i=0; i<n_rows; ++i) {
+			std::string id_str = PQgetvalue(result,i,0);
+			uint64_t id = stoull(id_str);
+			Glib::RefPtr<Growlog> growlog = this->get_growlog(id);
+			if (growlog)
+				ret.push_back(growlog);
+		}
+	}
+	PQclear(result);
+	return ret;
+}
+
 Glib::RefPtr<Growlog>
 DatabasePostgresql::get_growlog_vfunc(uint64_t id) const
 {

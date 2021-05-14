@@ -96,12 +96,14 @@ ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
-DIST_COMMON = $(srcdir)/Makefile.am $(am__DIST_COMMON)
+DIST_COMMON = $(srcdir)/Makefile.am $(dist_sql_DATA) \
+	$(am__DIST_COMMON)
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 CONFIG_CLEAN_VPATH_FILES =
-am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(sqldir)"
+am__installdirs = "$(DESTDIR)$(bindir)" "$(DESTDIR)$(sqldir)" \
+	"$(DESTDIR)$(iconsdir)"
 PROGRAMS = $(bin_PROGRAMS)
 am_growbook_OBJECTS = main.$(OBJEXT) application.$(OBJEXT) \
 	appwindow.$(OBJEXT) settings.$(OBJEXT) error.$(OBJEXT) \
@@ -112,7 +114,9 @@ am_growbook_OBJECTS = main.$(OBJEXT) application.$(OBJEXT) \
 	strainchooser.$(OBJEXT) strainselector.$(OBJEXT) \
 	browserpage.$(OBJEXT) strainview.$(OBJEXT) \
 	breederdialog.$(OBJEXT) straindialog.$(OBJEXT) \
-	strptime.$(OBJEXT)
+	strptime.$(OBJEXT) growlogselector.$(OBJEXT) \
+	growlogview.$(OBJEXT) growlogdialog.$(OBJEXT) \
+	growlogentrydialog.$(OBJEXT)
 growbook_OBJECTS = $(am_growbook_OBJECTS)
 am__DEPENDENCIES_1 =
 growbook_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
@@ -144,11 +148,14 @@ am__depfiles_remade = ./$(DEPDIR)/aboutdialog.Po \
 	./$(DEPDIR)/database-postgresql.Po \
 	./$(DEPDIR)/database-sqlite3.Po ./$(DEPDIR)/database.Po \
 	./$(DEPDIR)/databasesettingsdialog.Po ./$(DEPDIR)/datatypes.Po \
-	./$(DEPDIR)/error.Po ./$(DEPDIR)/main.Po \
-	./$(DEPDIR)/refclass.Po ./$(DEPDIR)/settings.Po \
-	./$(DEPDIR)/settingsdialog.Po ./$(DEPDIR)/strainchooser.Po \
-	./$(DEPDIR)/straindialog.Po ./$(DEPDIR)/strainselector.Po \
-	./$(DEPDIR)/strainview.Po ./$(DEPDIR)/strptime.Po
+	./$(DEPDIR)/error.Po ./$(DEPDIR)/growlogdialog.Po \
+	./$(DEPDIR)/growlogentrydialog.Po \
+	./$(DEPDIR)/growlogselector.Po ./$(DEPDIR)/growlogview.Po \
+	./$(DEPDIR)/main.Po ./$(DEPDIR)/refclass.Po \
+	./$(DEPDIR)/settings.Po ./$(DEPDIR)/settingsdialog.Po \
+	./$(DEPDIR)/strainchooser.Po ./$(DEPDIR)/straindialog.Po \
+	./$(DEPDIR)/strainselector.Po ./$(DEPDIR)/strainview.Po \
+	./$(DEPDIR)/strptime.Po
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -220,7 +227,7 @@ am__uninstall_files_from_dir = { \
     || { echo " ( cd '$$dir' && rm -f" $$files ")"; \
          $(am__cd) "$$dir" && rm -f $$files; }; \
   }
-DATA = $(sql_DATA)
+DATA = $(dist_sql_DATA) $(icons_DATA)
 am__tagged_files = $(HEADERS) $(SOURCES) $(TAGS_FILES) $(LISP)
 # Read a list of newline-separated strings from the standard input,
 # and print each of them once, without duplicates.  Input order is
@@ -402,10 +409,11 @@ top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 sqldir = $(pkgdatadir)/sql
-sql_DATA = config.sql \
+dist_sql_DATA = config.sql \
 	growbook.sqlite3.sql \
 	growbook.postgresql.sql
 
+iconsdir = $(datadir)/icons/default/scalable
 AM_CPPFLAGS = \
 	-DPACKAGE_LOCALE_DIR=\""$(localedir)"\" \
 	-DPACKAGE_SRC_DIR=\""$(srcdir)"\" \
@@ -456,11 +464,20 @@ growbook_SOURCES = \
 	straindialog.cc \
 	straindialog.h \
 	strptime.c \
-	strptime.h
+	strptime.h \
+	growlogselector.cc \
+	growlogselector.h \
+	growlogview.cc \
+	growlogview.h \
+	growlogdialog.cc \
+	growlogdialog.h \
+	growlogentrydialog.cc \
+	growlogentrydialog.h
 
 growbook_LDFLAGS = $(am__append_1)
 growbook_LDADD = $(GROWBOOK_LIBS) $(PGSQL_LIBS)
-EXTRA_DIST = $(sql_DATA)
+icons_DATA = flower-icon.svg
+EXTRA_DIST = $(sql_DATA) $(icons_DATA)
 all: all-am
 
 .SUFFIXES:
@@ -565,6 +582,10 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/databasesettingsdialog.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/datatypes.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/error.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/growlogdialog.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/growlogentrydialog.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/growlogselector.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/growlogview.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/main.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/refclass.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/settings.Po@am__quote@ # am--include-marker
@@ -628,9 +649,9 @@ mostlyclean-libtool:
 
 clean-libtool:
 	-rm -rf .libs _libs
-install-sqlDATA: $(sql_DATA)
+install-dist_sqlDATA: $(dist_sql_DATA)
 	@$(NORMAL_INSTALL)
-	@list='$(sql_DATA)'; test -n "$(sqldir)" || list=; \
+	@list='$(dist_sql_DATA)'; test -n "$(sqldir)" || list=; \
 	if test -n "$$list"; then \
 	  echo " $(MKDIR_P) '$(DESTDIR)$(sqldir)'"; \
 	  $(MKDIR_P) "$(DESTDIR)$(sqldir)" || exit 1; \
@@ -644,11 +665,32 @@ install-sqlDATA: $(sql_DATA)
 	  $(INSTALL_DATA) $$files "$(DESTDIR)$(sqldir)" || exit $$?; \
 	done
 
-uninstall-sqlDATA:
+uninstall-dist_sqlDATA:
 	@$(NORMAL_UNINSTALL)
-	@list='$(sql_DATA)'; test -n "$(sqldir)" || list=; \
+	@list='$(dist_sql_DATA)'; test -n "$(sqldir)" || list=; \
 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
 	dir='$(DESTDIR)$(sqldir)'; $(am__uninstall_files_from_dir)
+install-iconsDATA: $(icons_DATA)
+	@$(NORMAL_INSTALL)
+	@list='$(icons_DATA)'; test -n "$(iconsdir)" || list=; \
+	if test -n "$$list"; then \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(iconsdir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(iconsdir)" || exit 1; \
+	fi; \
+	for p in $$list; do \
+	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
+	  echo "$$d$$p"; \
+	done | $(am__base_list) | \
+	while read files; do \
+	  echo " $(INSTALL_DATA) $$files '$(DESTDIR)$(iconsdir)'"; \
+	  $(INSTALL_DATA) $$files "$(DESTDIR)$(iconsdir)" || exit $$?; \
+	done
+
+uninstall-iconsDATA:
+	@$(NORMAL_UNINSTALL)
+	@list='$(icons_DATA)'; test -n "$(iconsdir)" || list=; \
+	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
+	dir='$(DESTDIR)$(iconsdir)'; $(am__uninstall_files_from_dir)
 
 ID: $(am__tagged_files)
 	$(am__define_uniq_tagged_files); mkid -fID $$unique
@@ -739,7 +781,7 @@ check-am: all-am
 check: check-am
 all-am: Makefile $(PROGRAMS) $(DATA)
 installdirs:
-	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(sqldir)"; do \
+	for dir in "$(DESTDIR)$(bindir)" "$(DESTDIR)$(sqldir)" "$(DESTDIR)$(iconsdir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: install-am
@@ -788,6 +830,10 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/databasesettingsdialog.Po
 	-rm -f ./$(DEPDIR)/datatypes.Po
 	-rm -f ./$(DEPDIR)/error.Po
+	-rm -f ./$(DEPDIR)/growlogdialog.Po
+	-rm -f ./$(DEPDIR)/growlogentrydialog.Po
+	-rm -f ./$(DEPDIR)/growlogselector.Po
+	-rm -f ./$(DEPDIR)/growlogview.Po
 	-rm -f ./$(DEPDIR)/main.Po
 	-rm -f ./$(DEPDIR)/refclass.Po
 	-rm -f ./$(DEPDIR)/settings.Po
@@ -813,7 +859,7 @@ info: info-am
 
 info-am:
 
-install-data-am: install-sqlDATA
+install-data-am: install-dist_sqlDATA install-iconsDATA
 
 install-dvi: install-dvi-am
 
@@ -853,6 +899,10 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/databasesettingsdialog.Po
 	-rm -f ./$(DEPDIR)/datatypes.Po
 	-rm -f ./$(DEPDIR)/error.Po
+	-rm -f ./$(DEPDIR)/growlogdialog.Po
+	-rm -f ./$(DEPDIR)/growlogentrydialog.Po
+	-rm -f ./$(DEPDIR)/growlogselector.Po
+	-rm -f ./$(DEPDIR)/growlogview.Po
 	-rm -f ./$(DEPDIR)/main.Po
 	-rm -f ./$(DEPDIR)/refclass.Po
 	-rm -f ./$(DEPDIR)/settings.Po
@@ -878,7 +928,8 @@ ps: ps-am
 
 ps-am:
 
-uninstall-am: uninstall-binPROGRAMS uninstall-local uninstall-sqlDATA
+uninstall-am: uninstall-binPROGRAMS uninstall-dist_sqlDATA \
+	uninstall-iconsDATA uninstall-local
 
 .MAKE: install-am install-strip
 
@@ -887,15 +938,16 @@ uninstall-am: uninstall-binPROGRAMS uninstall-local uninstall-sqlDATA
 	ctags ctags-am distclean distclean-compile distclean-generic \
 	distclean-libtool distclean-tags distdir dvi dvi-am html \
 	html-am info info-am install install-am install-binPROGRAMS \
-	install-data install-data-am install-dvi install-dvi-am \
-	install-exec install-exec-am install-html install-html-am \
-	install-info install-info-am install-man install-pdf \
-	install-pdf-am install-ps install-ps-am install-sqlDATA \
-	install-strip installcheck installcheck-am installdirs \
-	maintainer-clean maintainer-clean-generic mostlyclean \
-	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
-	pdf pdf-am ps ps-am tags tags-am uninstall uninstall-am \
-	uninstall-binPROGRAMS uninstall-local uninstall-sqlDATA
+	install-data install-data-am install-dist_sqlDATA install-dvi \
+	install-dvi-am install-exec install-exec-am install-html \
+	install-html-am install-iconsDATA install-info install-info-am \
+	install-man install-pdf install-pdf-am install-ps \
+	install-ps-am install-strip installcheck installcheck-am \
+	installdirs maintainer-clean maintainer-clean-generic \
+	mostlyclean mostlyclean-compile mostlyclean-generic \
+	mostlyclean-libtool pdf pdf-am ps ps-am tags tags-am uninstall \
+	uninstall-am uninstall-binPROGRAMS uninstall-dist_sqlDATA \
+	uninstall-iconsDATA uninstall-local
 
 .PRECIOUS: Makefile
 

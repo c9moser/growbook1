@@ -107,6 +107,7 @@ class DatabaseSqlite3:
 		virtual std::list<Glib::RefPtr<Growlog> > get_growlogs_vfunc() const override;
 		virtual std::list<Glib::RefPtr<Growlog> > get_ongoing_growlogs_vfunc() const override;
 		virtual std::list<Glib::RefPtr<Growlog> > get_finished_growlogs_vfunc() const override;
+		virtual std::list<Glib::RefPtr<Growlog> > get_growlogs_for_strain_vfunc(uint64_t strain_id) const override;
 		virtual Glib::RefPtr<Growlog> get_growlog_vfunc(uint64_t id) const override;
 		virtual Glib::RefPtr<Growlog> get_growlog_vfunc(const Glib::ustring &title) const override;
 		virtual void add_growlog_vfunc(const Glib::RefPtr<Growlog> &growlog) override;

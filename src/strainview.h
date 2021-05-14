@@ -61,10 +61,10 @@ class StrainView:
 		 Glib::RefPtr<const Strain> get_strain() const;
 		 
 	protected:
-		 virtual uint64_t get_id_vfunc() const;
-		 virtual Glib::ustring get_title_vfunc() const;
+		 virtual uint64_t get_id_vfunc() const override;
+		 virtual Glib::ustring get_title_vfunc() const override;
 		 
-		 virtual void on_refresh();
+		 virtual void on_refresh() override;
 
 	private:
 		 void on_breeder_homepage_clicked();

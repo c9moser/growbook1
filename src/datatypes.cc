@@ -360,18 +360,16 @@ Growlog::get_created_on_format(const Glib::ustring &format) const
 		//datetime went wrong
 		return Glib::ustring();
 	}
-	size_t size = strftime(0,0,format.c_str(),&datetime);
-	char *buf = new char[size+1];
+	const size_t size = 100;
+	char buf[size];
 	buf[0] = '\1';
-	buf[size] = '\0';
-	size_t len = strftime(buf,size+1,format.c_str(),&datetime);
-	if (len == 0 && buf[0] != '\n') {
+	buf[size-1] = '\0';
+	size_t len = strftime(buf,size,format.c_str(),&datetime);
+	if (len == 0 && buf[0] != '\0') {
 		//strftime went wrong
-		delete[] buf;
 		return Glib::ustring();
 	}
 	Glib::ustring ret = buf;
-	delete[] buf;
 	return ret;
 }
 
@@ -392,18 +390,17 @@ Growlog::get_flower_on_format(const Glib::ustring &format) const
 		//datetime went wrong
 		return Glib::ustring();
 	}
-	size_t size = strftime(0,0,format.c_str(),&datetime);
-	char *buf = new char[size+1];
+	const size_t size = 100;
+	char buf[size];
 	buf[0] = '\1';
-	buf[size] = '\0';
-	size_t len = strftime(buf,size+1,format.c_str(),&datetime);
-	if (len == 0 && buf[0] != '\n') {
+	buf[size-1] = '\0';
+	size_t len = strftime(buf,size,format.c_str(),&datetime);
+	if (len == 0 && buf[0] != '\0') {
 		//strftime went wrong
-		delete[] buf;
 		return Glib::ustring();
 	}
 	Glib::ustring ret = buf;
-	delete[] buf;
+	
 	return ret;
 }
 
@@ -434,18 +431,16 @@ Growlog::get_finished_on_format(const Glib::ustring &format) const
 		//datetime went wrong
 		return Glib::ustring();
 	}
-	size_t size = strftime(0,0,format.c_str(),&datetime);
-	char *buf = new char[size+1];
+	const size_t size = 100;
+	char buf[size];
 	buf[0] = '\1';
-	buf[size] = '\0';
-	size_t len = strftime(buf,size+1,format.c_str(),&datetime);
-	if (len == 0 && buf[0] != '\n') {
+	buf[size-1] = '\0';
+	size_t len = strftime(buf,size,format.c_str(),&datetime);
+	if (len == 0 && buf[0] != '\0') {
 		//strftime went wrong
-		delete[] buf;
 		return Glib::ustring();
 	}
 	Glib::ustring ret = buf;
-	delete[] buf;
 	return ret;
 }
 
@@ -542,17 +537,15 @@ GrowlogEntry::get_created_on_format(const Glib::ustring &format) const
 		//datetime went wrong
 		return Glib::ustring();
 	}
-	size_t size = strftime(0,0,format.c_str(),&datetime);
-	char *buf = new char[size+1];
+	const size_t size = 100;
+	char buf[size];
 	buf[0] = '\1';
-	buf[size] = '\0';
-	size_t len = strftime(buf,size+1,format.c_str(),&datetime);
-	if (len == 0 && buf[0] != '\n') {
+	buf[size-1] = '\0';
+	size_t len = strftime(buf,size,format.c_str(),&datetime);
+	if (len == 0 && buf[0] != '\0') {
 		//strftime went wrong
-		delete[] buf;
 		return Glib::ustring();
 	}
 	Glib::ustring ret = buf;
-	delete[] buf;
 	return ret;
 }

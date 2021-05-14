@@ -243,6 +243,18 @@ Database::get_finished_growlogs() const
 	return this->get_finished_growlogs_vfunc();
 }
 
+std::list<Glib::RefPtr<Growlog> >
+Database::get_growlogs_for_strain(uint64_t strain_id) const
+{
+	return this->get_growlogs_for_strain_vfunc (strain_id);
+}
+
+std::list<Glib::RefPtr<Growlog> >
+Database::get_growlogs_for_strain(const Glib::RefPtr<Strain> &strain) const
+{
+	return this->get_growlogs_for_strain_vfunc (strain->get_id());
+}
+
 Glib::RefPtr<Growlog> 
 Database::get_growlog(uint64_t id) const
 {

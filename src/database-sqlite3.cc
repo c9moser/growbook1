@@ -845,6 +845,82 @@ DatabaseSqlite3::get_finished_growlogs_vfunc() const
 	return ret;
 }
 
+std::list<Glib::RefPtr<Growlog> > 
+DatabaseSqlite3::get_growlogs_for_strain_vfunc(uint64_t strain_id) const
+{
+	assert(m_db_);
+	
+	const char *sql0 = "SELECT growlog FROM growlog_strain WHERE strain=?;";
+	const char *sql1 = "SELECT title,description,created_on,flower_on,finished_on FROM growlog WHERE id=?;";
+
+	sqlite3_stmt *stmt0 = nullptr;
+	sqlite3_stmt *stmt1 = nullptr;
+
+	std::list<Glib::RefPtr<Growlog> > ret;
+
+	int err = sqlite3_prepare(m_db_,sql0,-1,&stmt0,0);
+	if (err != SQLITE_OK) {
+		Glib::ustring msg = _("Unable to fetch growlog from 'growlog_strain'!");
+		msg += "\n(";
+		msg += sqlite3_errmsg(m_db_);
+		msg += ")";
+		if (stmt0)
+			sqlite3_finalize(stmt0);
+	}
+	sqlite3_bind_int64(stmt0,1,static_cast<sqlite3_int64>(strain_id));
+	while (sqlite3_step(stmt0) == SQLITE_ROW) {
+		sqlite3_int64 growlog_id = sqlite3_column_int64(stmt0,0);
+		err = sqlite3_prepare(m_db_,sql1,-1,&stmt1,0);
+		if (err != SQLITE_OK) {
+			Glib::ustring msg = _("Unable to fetch growlog from database!");
+			msg += "\n(";
+			msg += sqlite3_errmsg(m_db_);
+			msg += ")";
+			sqlite3_finalize(stmt0);
+			if (stmt1)
+				sqlite3_finalize(stmt1);
+			throw DatabaseError(err,msg);
+		}
+		sqlite3_bind_int64(stmt1,1,growlog_id);
+		if (sqlite3_step(stmt1) == SQLITE_ROW) {
+			Glib::ustring title = (const char*) sqlite3_column_text(stmt1,0);
+			Glib::ustring desc = (const char*) sqlite3_column_text(stmt1,1);
+			Glib::ustring created_on_str = (const char*) sqlite3_column_text(stmt1,2);
+			tm datetime;
+			strptime(created_on_str.c_str(),DATETIME_ISO_FORMAT,&datetime);
+			time_t created_on = mktime(&datetime);
+			time_t flower_on = 0;
+			time_t finished_on = 0;
+
+			if (sqlite3_column_type(stmt1,3) != SQLITE_NULL) {
+				Glib::ustring flower_on_str = (const char*) sqlite3_column_text(stmt1,3);
+				if (!flower_on_str.empty()) {
+					strptime(flower_on_str.c_str(),DATE_ISO_FORMAT,&datetime);
+					flower_on = mktime(&datetime);
+				}
+			}
+
+			if (sqlite3_column_type(stmt1,4) != SQLITE_NULL) {
+				Glib::ustring finished_on_str = (const char*) sqlite3_column_text(stmt1,4);
+				if (!finished_on_str.empty()) {
+					strptime(finished_on_str.c_str(),DATETIME_ISO_FORMAT,&datetime);
+					finished_on = mktime(&datetime);
+				}
+			}
+			Glib::RefPtr<Growlog> growlog = Growlog::create(static_cast<uint64_t>(growlog_id),
+			                                                title,
+			                                                desc,
+			                                                created_on,
+			                                                flower_on,
+			                                                finished_on);
+			ret.push_back(growlog);
+		}
+		sqlite3_finalize(stmt1);
+	}
+	sqlite3_finalize(stmt0);
+	return ret;
+}
+
 Glib::RefPtr<Growlog>
 DatabaseSqlite3::get_growlog_vfunc(uint64_t id) const
 {
@@ -1007,7 +1083,7 @@ DatabaseSqlite3::add_growlog_vfunc(const Glib::RefPtr<Growlog> &growlog)
 			throw DatabaseError(err,msg);
 		}
 	} else {
-		const char *sql = "INSERT INTO growlog (title,description,created_on,flower_on,finished_on VALUES (?,?,?,?,?);";
+		const char *sql = "INSERT INTO growlog (title,description,created_on,flower_on,finished_on) VALUES (?,?,?,?,?);";
 		
 		int err = sqlite3_prepare(m_db_,sql,-1,&stmt,0);
 		if (err != SQLITE_OK) {
@@ -1199,7 +1275,7 @@ DatabaseSqlite3::add_growlog_entry_vfunc(const Glib::RefPtr<GrowlogEntry> &entry
 			throw DatabaseError(err,msg);
 		}
 	} else {
-		const char *sql = "INSERT INTO growlog_entry (entry,created_on) VALUES (?,?);";
+		const char *sql = "INSERT INTO growlog_entry (growlog,entry,created_on) VALUES (?,?,?);";
 		err = sqlite3_prepare(m_db_,sql,-1,&stmt,0);
 		if (err != SQLITE_OK) {
 			Glib::ustring msg = _("Unable to insert growlog-entry into database!");
@@ -1211,8 +1287,9 @@ DatabaseSqlite3::add_growlog_entry_vfunc(const Glib::RefPtr<GrowlogEntry> &entry
 			rollback();
 			throw DatabaseError(err,msg);
 		}
-		sqlite3_bind_text(stmt,1,text.c_str(),-1,0);
-		sqlite3_bind_text(stmt,2,created_on_str.c_str(),-1,0);
+		sqlite3_bind_int64(stmt,1,static_cast<sqlite3_int64>(entry->get_growlog_id()));
+		sqlite3_bind_text(stmt,2,text.c_str(),-1,0);
+		sqlite3_bind_text(stmt,3,created_on_str.c_str(),-1,0);
 
 		err = sqlite3_step(stmt);
 		if ((err != SQLITE_OK) && (err != SQLITE_DONE)) {
@@ -1234,7 +1311,7 @@ DatabaseSqlite3::remove_growlog_entry_vfunc(uint64_t id)
 {
 	assert(m_db_);
 
-	const char *sql = "DELETE FROM grwlog_entry WHERE id=?;";
+	const char *sql = "DELETE FROM growlog_entry WHERE id=?;";
 	sqlite3_stmt *stmt = nullptr;
 
 	begin_transaction();
