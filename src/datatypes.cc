@@ -365,7 +365,7 @@ Growlog::get_created_on_format(const Glib::ustring &format) const
 	char buf[size];
 	buf[0] = '\1';
 	buf[size-1] = '\0';
-	size_t len = strftime(bufmsize,format.c_str(),datetime);
+	size_t len = strftime(buf,size,format.c_str(),datetime);
 
 	if (len == 0 && buf[0] != '\0') {
 		//strftime went wrong
@@ -415,7 +415,7 @@ Growlog::get_flower_on_format(const Glib::ustring &format) const
 	char buf[size];
 	buf[0] = '\1';
 	buf[size-1] = '\0';
-	size_t len = strftime(bufmsize,format.c_str(),datetime);
+	size_t len = strftime(buf,size,format.c_str(),datetime);
 
 	if (len == 0 && buf[0] != '\0') {
 		//strftime went wrong
@@ -476,7 +476,7 @@ Growlog::get_finished_on_format(const Glib::ustring &format) const
 	char buf[size];
 	buf[0] = '\1';
 	buf[size-1] = '\0';
-	size_t len = strftime(bufmsize,format.c_str(),datetime);
+	size_t len = strftime(buf,size,format.c_str(),datetime);
 
 	if (len == 0 && buf[0] != '\0') {
 		//strftime went wrong
@@ -602,7 +602,7 @@ GrowlogEntry::get_created_on_format(const Glib::ustring &format) const
 	char buf[size];
 	buf[0] = '\1';
 	buf[size-1] = '\0';
-	size_t len = strftime(bufmsize,format.c_str(),datetime);
+	size_t len = strftime(buf,size,format.c_str(),datetime);
 
 	if (len == 0 && buf[0] != '\0') {
 		//strftime went wrong
