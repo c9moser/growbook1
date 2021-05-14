@@ -37,6 +37,8 @@
 #include "databasesettingsdialog.h"
 #include "settingsdialog.h"
 #include "aboutdialog.h"
+#include "growlogview.h"
+//#include "application.h"
 
 #include <iostream>
 
@@ -46,8 +48,9 @@ AppWindow::AppWindow(const Glib::RefPtr<Settings> &settings,
 	m_settings_{settings},
 	m_database_{database},
 	m_menubar_{},
-	m_selector_notebook_{},
+	m_growlog_selector_{database},
 	m_strain_selector_{database},
+	m_selector_notebook_{},
 	m_browser_notebook_{}
 {
 	assert(settings);
@@ -58,11 +61,24 @@ AppWindow::AppWindow(const Glib::RefPtr<Settings> &settings,
 	_add_menu();
 	box->pack_start(m_menubar_,false,false,0);
 
-
 	Gtk::Paned *paned = Gtk::manage(new Gtk::Paned(Gtk::ORIENTATION_HORIZONTAL));
+	m_selector_notebook_.append_page(m_growlog_selector_,_("Growlogs"));
 	m_selector_notebook_.append_page(m_strain_selector_,_("Strains"));
+	m_selector_notebook_.set_current_page(1);
 	paned->add1(m_selector_notebook_);
-	paned->add2(m_browser_notebook_);	
+
+	m_browser_notebook_.set_scrollable(true);
+	// open ongoing growlogs
+	if (settings->get_open_ongoing_growlogs()) {
+		std::list<Glib::RefPtr<Growlog> > growlogs{m_database_->get_ongoing_growlogs()};
+		for (auto iter = growlogs.begin(); iter != growlogs.end(); ++iter) {
+			GrowlogView *glv = Gtk::manage(new GrowlogView(m_database_,*iter));
+			if (add_browser_page(*glv) == -1)
+				delete glv;
+		}
+	}
+	paned->add2(m_browser_notebook_);
+	
 	box->pack_start(*paned,true,true,0);
 	
 	add(*box);

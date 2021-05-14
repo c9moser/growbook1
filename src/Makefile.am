@@ -4,10 +4,11 @@
 
 
 sqldir = $(pkgdatadir)/sql
-sql_DATA = config.sql \
+dist_sql_DATA = config.sql \
 	growbook.sqlite3.sql \
 	growbook.postgresql.sql
 
+iconsdir = $(datadir)/icons/default/scalable
 
 AM_CPPFLAGS = \
 	-DPACKAGE_LOCALE_DIR=\""$(localedir)"\" \
@@ -59,7 +60,17 @@ growbook_SOURCES = \
 	breederdialog.cc \
 	breederdialog.h \
 	straindialog.cc \
-	straindialog.h
+	straindialog.h \
+	strptime.c \
+	strptime.h \
+	growlogselector.cc \
+	growlogselector.h \
+	growlogview.cc \
+	growlogview.h \
+	growlogdialog.cc \
+	growlogdialog.h \
+	growlogentrydialog.cc \
+	growlogentrydialog.h
 
 growbook_LDFLAGS = 
 
@@ -71,11 +82,14 @@ growbook_LDFLAGS += -mwindows
 endif
 
 
+icons_DATA = flower-icon.svg
 
-EXTRA_DIST = $(sql_DATA)
+EXTRA_DIST = $(sql_DATA) $(icons_DATA)
 
 # Remove ui directory on uninstall
 uninstall-local:
 	-rm -r $(sqldir)
 	-rm -r $(pkgdatadir)
+
+
 

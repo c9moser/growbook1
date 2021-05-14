@@ -355,6 +355,22 @@ Growlog::get_created_on() const
 Glib::ustring
 Growlog::get_created_on_format(const Glib::ustring &format) const
 {
+	tm datetime;
+	if (localtime_r(&m_created_on_,&datetime) != &datetime) {
+		//datetime went wrong
+		return Glib::ustring();
+	}
+	const size_t size = 100;
+	char buf[size];
+	buf[0] = '\1';
+	buf[size-1] = '\0';
+	size_t len = strftime(buf,size,format.c_str(),&datetime);
+	if (len == 0 && buf[0] != '\0') {
+		//strftime went wrong
+		return Glib::ustring();
+	}
+	Glib::ustring ret = buf;
+	return ret;
 }
 
 time_t
@@ -366,6 +382,26 @@ Growlog::get_flower_on() const
 Glib::ustring
 Growlog::get_flower_on_format(const Glib::ustring &format) const
 {
+	if (!m_flower_on_)
+		return Glib::ustring();
+	
+	tm datetime;
+	if (localtime_r(&m_flower_on_,&datetime) != &datetime) {
+		//datetime went wrong
+		return Glib::ustring();
+	}
+	const size_t size = 100;
+	char buf[size];
+	buf[0] = '\1';
+	buf[size-1] = '\0';
+	size_t len = strftime(buf,size,format.c_str(),&datetime);
+	if (len == 0 && buf[0] != '\0') {
+		//strftime went wrong
+		return Glib::ustring();
+	}
+	Glib::ustring ret = buf;
+	
+	return ret;
 }
 
 void
@@ -387,6 +423,25 @@ Growlog::get_finished_on() const
 Glib::ustring
 Growlog::get_finished_on_format(const Glib::ustring &format) const
 {
+	if (!m_finished_on_)
+		return Glib::ustring();
+	
+	tm datetime;
+	if (localtime_r(&m_finished_on_,&datetime) != &datetime) {
+		//datetime went wrong
+		return Glib::ustring();
+	}
+	const size_t size = 100;
+	char buf[size];
+	buf[0] = '\1';
+	buf[size-1] = '\0';
+	size_t len = strftime(buf,size,format.c_str(),&datetime);
+	if (len == 0 && buf[0] != '\0') {
+		//strftime went wrong
+		return Glib::ustring();
+	}
+	Glib::ustring ret = buf;
+	return ret;
 }
 
 void
@@ -403,19 +458,23 @@ Growlog::set_finished_on(time_t t)
  * GrowlogEntry
  ******************************************************************************/
 
-GrowlogEntry::GrowlogEntry(const Glib::ustring &text,
+GrowlogEntry::GrowlogEntry(uint64_t growlog_id,
+                           const Glib::ustring &text,
                            time_t created_on):
 	RefClass{},
 	m_id_{0},
+	m_growlog_id_{growlog_id},
 	m_text_{text},
 	m_created_on_{created_on ? created_on : time(0)}
 {}
 
 GrowlogEntry::GrowlogEntry(uint64_t id,
+                           uint64_t growlog_id,
                            const Glib::ustring &text,
                            time_t created_on):
 	RefClass{},
 	m_id_{id},
+	m_growlog_id_{growlog_id},
 	m_text_{text},
 	m_created_on_{created_on ? created_on : time(0)}
 {}
@@ -424,24 +483,32 @@ GrowlogEntry::~GrowlogEntry()
 {}
 
 Glib::RefPtr<GrowlogEntry>
-GrowlogEntry::create(const Glib::ustring &text,
+GrowlogEntry::create(uint64_t growlog_id,
+                     const Glib::ustring &text,
                      time_t created_on)
 {
-	return Glib::RefPtr<GrowlogEntry>(new GrowlogEntry(text,created_on));
+	return Glib::RefPtr<GrowlogEntry>(new GrowlogEntry(growlog_id,text,created_on));
 }
 
 Glib::RefPtr<GrowlogEntry>
 GrowlogEntry::create(uint64_t id,
+                     uint64_t growlog_id,
                      const Glib::ustring &text,
                      time_t created_on)
 {
-	return Glib::RefPtr<GrowlogEntry>(new GrowlogEntry(id,text,created_on));
+	return Glib::RefPtr<GrowlogEntry>(new GrowlogEntry(id,growlog_id,text,created_on));
 }
 
 uint64_t 
 GrowlogEntry::get_id() const
 {
 	return m_id_;
+}
+
+uint64_t
+GrowlogEntry::get_growlog_id() const
+{
+	return m_growlog_id_;
 }
 
 Glib::ustring
@@ -465,4 +532,20 @@ GrowlogEntry::get_created_on() const
 Glib::ustring
 GrowlogEntry::get_created_on_format(const Glib::ustring &format) const
 {
+	tm datetime;
+	if (localtime_r(&m_created_on_,&datetime) != &datetime) {
+		//datetime went wrong
+		return Glib::ustring();
+	}
+	const size_t size = 100;
+	char buf[size];
+	buf[0] = '\1';
+	buf[size-1] = '\0';
+	size_t len = strftime(buf,size,format.c_str(),&datetime);
+	if (len == 0 && buf[0] != '\0') {
+		//strftime went wrong
+		return Glib::ustring();
+	}
+	Glib::ustring ret = buf;
+	return ret;
 }

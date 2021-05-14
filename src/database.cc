@@ -225,6 +225,135 @@ Database::remove_strain(const Glib::RefPtr<Strain> &strain)
 	this->remove_strain_vfunc(strain->get_id());
 }
 
+std::list<Glib::RefPtr<Growlog> > 
+Database::get_growlogs() const
+{
+	return this->get_growlogs_vfunc();
+}
+
+std::list<Glib::RefPtr<Growlog> > 
+Database::get_ongoing_growlogs() const
+{
+	return this->get_ongoing_growlogs_vfunc();
+}
+
+std::list<Glib::RefPtr<Growlog> > 
+Database::get_finished_growlogs() const
+{
+	return this->get_finished_growlogs_vfunc();
+}
+
+std::list<Glib::RefPtr<Growlog> >
+Database::get_growlogs_for_strain(uint64_t strain_id) const
+{
+	return this->get_growlogs_for_strain_vfunc (strain_id);
+}
+
+std::list<Glib::RefPtr<Growlog> >
+Database::get_growlogs_for_strain(const Glib::RefPtr<Strain> &strain) const
+{
+	return this->get_growlogs_for_strain_vfunc (strain->get_id());
+}
+
+Glib::RefPtr<Growlog> 
+Database::get_growlog(uint64_t id) const
+{
+	return this->get_growlog_vfunc(id);
+}
+
+Glib::RefPtr<Growlog> 
+Database::get_growlog(const Glib::ustring &title) const
+{
+	return this->get_growlog_vfunc(title);
+}
+
+void 
+Database::add_growlog(const Glib::RefPtr<Growlog> &growlog)
+{
+	return this->add_growlog_vfunc(growlog);
+}
+
+void 
+Database::remove_growlog(uint64_t id)
+{
+	return this->remove_growlog_vfunc(id);
+}
+
+void 
+Database::remove_growlog(const Glib::RefPtr<Growlog> &growlog)
+{
+	return this->remove_growlog_vfunc(growlog->get_id());
+}
+
+std::list<Glib::RefPtr<GrowlogEntry> > 
+Database::get_growlog_entries(uint64_t growlog_id) const
+{
+	return this->get_growlog_entries_vfunc(growlog_id);
+}
+
+std::list<Glib::RefPtr<GrowlogEntry> > 
+Database::get_growlog_entries(const Glib::RefPtr<Growlog> &growlog) const
+{
+	return this->get_growlog_entries_vfunc(growlog->get_id());
+}
+
+Glib::RefPtr<GrowlogEntry> 
+Database::get_growlog_entry(uint64_t id) const
+{
+	return this->get_growlog_entry_vfunc(id);
+}
+
+void 
+Database::add_growlog_entry(const Glib::RefPtr<GrowlogEntry> &entry)
+{
+	return this->add_growlog_entry_vfunc(entry);
+}
+
+void 
+Database::remove_growlog_entry(uint64_t id)
+{
+	return this->remove_growlog_entry_vfunc(id);
+}
+
+void 
+Database::remove_growlog_entry(const Glib::RefPtr<GrowlogEntry> &entry)
+{
+	return this->remove_growlog_entry_vfunc(entry->get_id());
+}
+
+void 
+Database::add_strain_for_growlog(uint64_t growlog_id,uint64_t strain_id)
+{
+	return this->add_strain_for_growlog_vfunc(growlog_id,strain_id);
+}
+
+void 
+Database::add_strain_for_growlog(const Glib::RefPtr<Growlog> &growlog,
+                                 const Glib::RefPtr<Strain> &strain)
+{
+	return this->add_strain_for_growlog_vfunc(growlog->get_id(),strain->get_id());
+}
+
+void 
+Database::remove_strain_for_growlog(uint64_t growlog_id,
+                                    uint64_t strain_id)
+{
+	return this->remove_strain_for_growlog_vfunc(growlog_id,strain_id);
+}
+
+void 
+Database::remove_strain_for_growlog(const Glib::RefPtr<Growlog> &growlog,
+                                    const Glib::RefPtr<Strain> &strain)
+{
+	return this->remove_strain_for_growlog_vfunc(growlog->get_id(),strain->get_id());
+}
+
+void 
+Database::remove_strain_for_growlog(uint64_t growlog_strain_id)
+{
+	return this->remove_strain_for_growlog_vfunc(growlog_strain_id);
+}
+
 /*******************************************************************************
  * DatabaseModule
  ******************************************************************************/

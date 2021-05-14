@@ -35,6 +35,7 @@
 #include "database.h"
 
 #include "strainselector.h"
+#include "growlogselector.h"
 #include "browserpage.h"
 
 class AppWindow:
@@ -45,10 +46,11 @@ class AppWindow:
 		 Glib::RefPtr<Database> m_database_;
 		 
 		 Gtk::MenuBar m_menubar_;
-		 
-		 Gtk::Notebook m_selector_notebook_;
+
+		 GrowlogSelector m_growlog_selector_;
 		 StrainSelector m_strain_selector_;
-		 
+		 Gtk::Notebook m_selector_notebook_;
+		 		 
 		 Gtk::Notebook m_browser_notebook_;
 			 
 	 public:

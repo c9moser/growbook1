@@ -67,6 +67,7 @@ class DatabasePostgresql:
 		static Glib::RefPtr<DatabasePostgresql> create(const Glib::RefPtr<DatabaseSettings> &settings);
 
 	public:
+		void begin_transaction();
 		void commit();
 		void rollback();
 		
@@ -90,7 +91,24 @@ class DatabasePostgresql:
 		                                              const Glib::ustring &strain_name) const override;
 		virtual void add_strain_vfunc(const Glib::RefPtr<Strain> &strain) override;
 		virtual void remove_strain_vfunc(uint64_t id) override;
-		
+
+		virtual std::list<Glib::RefPtr<Growlog> > get_growlogs_vfunc() const override;
+		virtual std::list<Glib::RefPtr<Growlog> > get_ongoing_growlogs_vfunc() const override;
+		virtual std::list<Glib::RefPtr<Growlog> > get_finished_growlogs_vfunc() const override;
+		virtual std::list<Glib::RefPtr<Growlog> > get_growlogs_for_strain_vfunc(uint64_t strain_id) const override;
+		virtual Glib::RefPtr<Growlog> get_growlog_vfunc(uint64_t id) const override;
+		virtual Glib::RefPtr<Growlog> get_growlog_vfunc(const Glib::ustring &title) const override;
+		virtual void add_growlog_vfunc(const Glib::RefPtr<Growlog> &growlog) override;
+		virtual void remove_growlog_vfunc(uint64_t id) override;
+
+		virtual std::list<Glib::RefPtr<GrowlogEntry> > get_growlog_entries_vfunc(uint64_t growlog_id) const override;
+		virtual Glib::RefPtr<GrowlogEntry> get_growlog_entry_vfunc(uint64_t id) const override;
+		virtual void add_growlog_entry_vfunc(const Glib::RefPtr<GrowlogEntry> &entry) override;
+		virtual void remove_growlog_entry_vfunc(uint64_t id) override;
+
+		virtual void add_strain_for_growlog_vfunc(uint64_t growlog_id,uint64_t strain_id) override;
+		virtual void remove_strain_for_growlog_vfunc(uint64_t growlog_id,uint64_t strain_id) override;
+		virtual void remove_strain_for_growlog_vfunc(uint64_t growlog_strain_id) override;		
 };
 
 #endif /* __DATABASE_POSTGRESQL_H__ */

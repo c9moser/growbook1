@@ -183,17 +183,17 @@ class Growlog:
 		virtual ~Growlog();
 
 	public:
-		Glib::RefPtr<Growlog> create(const Glib::ustring &title,
-		                             const Glib::ustring &description,
-		                             time_t created_on=0,
-		                             time_t flower_on=0,
-		                             time_t finished_on=0);
-		Glib::RefPtr<Growlog> create(uint64_t id,
-		                             const Glib::ustring &title,
-		                             const Glib::ustring &description,
-		                             time_t created_on,
-		                             time_t flower_on,
-		                             time_t finished_on);
+		static Glib::RefPtr<Growlog> create(const Glib::ustring &title,
+		                                    const Glib::ustring &description,
+		                                    time_t created_on=0,
+		                                    time_t flower_on=0,
+		                                    time_t finished_on=0);
+		static Glib::RefPtr<Growlog> create(uint64_t id,
+		                                    const Glib::ustring &title,
+		                                    const Glib::ustring &description,
+		                                    time_t created_on,
+		                                    time_t flower_on,
+		                                    time_t finished_on);
 	public:
 		uint64_t get_id() const;
 
@@ -220,6 +220,7 @@ class GrowlogEntry:
 {
 	private:
 		uint64_t m_id_;
+		uint64_t m_growlog_id_;
 		Glib::ustring m_text_;
 		time_t m_created_on_;
 
@@ -228,23 +229,29 @@ class GrowlogEntry:
 		GrowlogEntry& operator = (const GrowlogEntry &src) = delete;
 
 	protected:
-		GrowlogEntry(const Glib::ustring &text,
+		GrowlogEntry(uint64_t growlog_id,
+		             const Glib::ustring &text,
 		             time_t created_on = 0);
 		GrowlogEntry(uint64_t id,
+		             uint64_t growlog_id,
 		             const Glib::ustring &text,
 		             time_t created_on);
 	public:
 		virtual ~GrowlogEntry();
 
 	public:
-		static Glib::RefPtr<GrowlogEntry> create(const Glib::ustring &text,
+		static Glib::RefPtr<GrowlogEntry> create(uint64_t growlog_id,
+		                                         const Glib::ustring &text,
 		                                         time_t created_on = 0);
 		static Glib::RefPtr<GrowlogEntry> create(uint64_t id,
+		                                         uint64_t growlog_id,
 		                                         const Glib::ustring &text,
 		                                         time_t created_on);
 
 	public:
 		uint64_t get_id() const;
+
+		uint64_t get_growlog_id() const;
 
 		Glib::ustring get_text() const;
 		void set_text(const Glib::ustring &text);

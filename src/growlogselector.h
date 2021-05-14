@@ -1,12 +1,12 @@
 /***************************************************************************
- *            strainchooser.h
+ *            growlogselector.h
  *
- *  Sa Mai 01 14:49:52 2021
+ *  Mo Mai 10 17:01:26 2021
  *  Copyright  2021  Christian Moser
  *  <user@host>
  ****************************************************************************/
 /*
- * strainchooser.h
+ * growlogselector.h
  *
  * Copyright (C) 2021 - Christian Moser
  *
@@ -23,105 +23,92 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  */
-#ifndef __STRAINCHOOSER_H__
-#define __STRAINCHOOSER_H__
+#ifndef __GROWLOGSELECTOR_H__
+#define __GROWLOGSELECTOR_H__
 
-#include <gtkmm/dialog.h>
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/treeview.h>
 #include <gtkmm/treestore.h>
+#include <gtkmm/menu.h>
+#include <gtkmm/menuitem.h>
 
 #include "database.h"
 
-class StrainChooserColumns:
+class GrowlogSelectorColumns:
 	public Gtk::TreeModelColumnRecord
 {
 	 public:
 		 Gtk::TreeModelColumn<uint64_t> column_id;
-		 Gtk::TreeModelColumn<uint64_t> column_breeder_id;
-		 Gtk::TreeModelColumn<Glib::ustring> column_name;
-		 
-	 public:
-		 StrainChooserColumns();
-		 virtual ~StrainChooserColumns();
+		 Gtk::TreeModelColumn<Glib::ustring> column_title;
+
+	public:
+		 GrowlogSelectorColumns();
+		 virtual ~GrowlogSelectorColumns();
 };
 
-class StrainChooserTreeView:
+class GrowlogSelectorTreeView:
 	public Gtk::TreeView
 {
 	public:
-		using Columns = StrainChooserColumns;
-
+		using Columns = GrowlogSelectorColumns;
+	public:
+		Columns columns;
 	private:
 		Glib::RefPtr<Database> m_database_;
 
+		Gtk::MenuItem m_refresh_menuitem_;
+		Gtk::MenuItem m_open_menuitem_;
+		Gtk::MenuItem m_new_menuitem_;
+		Gtk::MenuItem m_edit_menuitem_;
+		Gtk::MenuItem m_delete_menuitem_;
+		Gtk::Menu m_popup_menu_;
 	public:
-		Columns columns;
-		
-	public:
-		StrainChooserTreeView(const Glib::RefPtr<Database> &database);
-		virtual ~StrainChooserTreeView();
+		GrowlogSelectorTreeView(const Glib::RefPtr<Database> &database);
+		virtual ~GrowlogSelectorTreeView();
 
 	private:
 		Glib::RefPtr<Gtk::TreeStore> _create_model();
 
+		void on_open();
+		void on_new();
+		void on_edit();
+		void on_delete();
 	public:
-		Glib::RefPtr<Strain> get_selected_strain();
+		void refresh();
 
 		Glib::RefPtr<Database> get_database();
 		Glib::RefPtr<const Database> get_database() const;
+
+	protected:
+		virtual bool on_button_press_event(GdkEventButton *button_event) override;
+		virtual void on_row_activated (const Gtk::TreeModel::Path &path,
+		                               Gtk::TreeViewColumn *column) override;
 };
 
-class StrainChooser:
+class GrowlogSelector:
 	public Gtk::ScrolledWindow
 {
 	public:
-		using TreeView = StrainChooserTreeView;
-		using Columns = StrainChooserColumns;
+		using Columns = GrowlogSelectorColumns;
+		using TreeView = GrowlogSelectorTreeView;
 		
 	private:
 		TreeView m_treeview_;
 
 	public:
-		StrainChooser(const Glib::RefPtr<Database> &database);
-		virtual ~StrainChooser();
+		GrowlogSelector(const Glib::RefPtr<Database> &database);
+		virtual ~GrowlogSelector();
 
 	public:
-		Glib::RefPtr<Strain> get_selected_strain();
-
 		TreeView* get_treeview();
 		const TreeView* get_treeview() const;
 
 		Glib::RefPtr<Database> get_database();
 		Glib::RefPtr<const Database> get_database() const;
-};
 
-class StrainChooserDialog:
-	public Gtk::Dialog
-{
-	private:
-		static const char TITLE[];
-		
-	private:
-		StrainChooser m_strain_chooser_;
-		
-	public:
-		StrainChooserDialog(const Glib::RefPtr<Database> &database);
-		StrainChooserDialog(Gtk::Window &parent,
-		                    const Glib::RefPtr<Database> &database);
-	private:
-		void _add_buttons();
-		void _add_widgets();
-
-		void on_chooser_selection_changed();
-
-	public:
-		Glib::RefPtr<Strain> get_selected_strain();
-
-		Glib::RefPtr<Database> get_database();
-		Glib::RefPtr<const Database> get_database() const;
-		
+		void refresh();
 };
 
 
-#endif /* __STRAINCHOOSER_H__ */
+
+#endif /* __GROWLOGSELECTOR_H__ */
