@@ -6,6 +6,10 @@
  *  <user@host>
  ****************************************************************************/
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
+
 #include "strptime.h"
 
 #include <stdio.h>
