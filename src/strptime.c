@@ -18,7 +18,7 @@
 #include <time.h>
 #include <ctype.h>
 
-#ifdef NAITVE_WIN32
+#ifdef NAITVE_WINDOWS
 static const char * strp_weekdays[] = 
     { "sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"};
 static const char * strp_monthnames[] = 
@@ -269,4 +269,4 @@ char * strptime(const char *s, const char *format, struct tm *tm)
         }
     return (working?(char *)s:0);
     }
-#endif // NATIVE_WIN32
+#endif // NATIVE_WINDOWS
