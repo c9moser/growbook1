@@ -359,7 +359,7 @@ Growlog::get_created_on_format(const Glib::ustring &format) const
 #ifdef NATIVE_WINDOWS
 	tm *datetime = localtime(&m_created_on_);
 	if (!datetime)
-		return Glib::ustring;
+		return Glib::ustring();
 
 	const size_t size = 100;
 	char buf[size];
@@ -409,7 +409,7 @@ Growlog::get_flower_on_format(const Glib::ustring &format) const
 #ifdef NATIVE_WINDOWS
 	tm *datetime = localtime(&m_flower_on_);
 	if (!datetime)
-		return Glib::ustring;
+		return Glib::ustring();
 
 	const size_t size = 100;
 	char buf[size];
@@ -470,7 +470,7 @@ Growlog::get_finished_on_format(const Glib::ustring &format) const
 #ifdef NATIVE_WINDOWS
 	tm *datetime = localtime(&m_finished_on_);
 	if (!datetime)
-		return Glib::ustring;
+		return Glib::ustring();
 
 	const size_t size = 100;
 	char buf[size];
@@ -596,7 +596,7 @@ GrowlogEntry::get_created_on_format(const Glib::ustring &format) const
 #ifdef NATIVE_WINDOWS
 	tm *datetime = localtime(&m_created_on_);
 	if (!datetime)
-		return Glib::ustring;
+		return Glib::ustring();
 
 	const size_t size = 100;
 	char buf[size];
