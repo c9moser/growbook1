@@ -177,7 +177,7 @@ StrainView::get_title_vfunc() const
 void
 StrainView::on_refresh()
 {
-	Glib::RefPtr<Strain> strain = get_database()->get_strain(strain->get_id());
+	Glib::RefPtr<Strain> strain = get_database()->get_strain(m_strain_->get_id());
 	if (strain)
 		m_strain_ = strain;
 
