@@ -790,6 +790,12 @@ Settings::get_package_data_dir() const
 }
 
 std::string
+Settings::get_package_doc_dir()
+{
+	return Glib::build_filename(m_prefix_,"share","doc","growbook");
+}
+
+std::string
 Settings::get_locale_dir() const
 {
 //#ifdef NATIVE_WINDOWS
