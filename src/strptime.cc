@@ -26,7 +26,7 @@ static const char * strp_weekdays[] =
 static const char * strp_monthnames[] = 
     { "january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"};
 
-CDECL static bool strp_atoi(const char * & s, int & result, int low, int high, int offset)
+static bool strp_atoi(const char * & s, int & result, int low, int high, int offset)
     {
     bool worked = false;
     char * end;
@@ -40,7 +40,7 @@ CDECL static bool strp_atoi(const char * & s, int & result, int low, int high, i
     return worked;
     }
 
-char * strptime(const char *s, const char *format, struct tm *tm)
+CDECL char * strptime(const char *s, const char *format, struct tm *tm)
     {
     bool working = true;
     while (working && *format && *s)

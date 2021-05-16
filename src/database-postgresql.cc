@@ -184,7 +184,7 @@ DatabasePostgresql::create_database_vfunc()
 				rollback();
 				Glib::ustring msg = _("Unable to create GrowBook database!");
 				msg += "\n(";
-				msg += PQerrorMessage(m_db_);
+				msg += PQresultErrorMessage(result);
 				msg += ")";
 				PQclear(result);
 				throw DatabaseError(msg);
@@ -204,7 +204,7 @@ DatabasePostgresql::begin_transaction()
 	if (PQresultStatus(result) != PGRES_COMMAND_OK) {
 		Glib::ustring msg = _("Unable to start a transaction!");
 		msg += "\n(";
-		msg += PQerrorMessage(m_db_);
+		msg += PQresultErrorMessage(result);
 		msg += ")";
 		PQclear(result);
 		throw DatabaseError(msg);
@@ -221,7 +221,7 @@ DatabasePostgresql::commit()
 	if (PQresultStatus(result) != PGRES_COMMAND_OK) {
 		Glib::ustring msg = _("Unable to commit changes!");
 		msg += "\n(";
-		msg += PQerrorMessage(m_db_);
+		msg += PQresultErrorMessage(result);
 		msg += ")";
 		PQclear(result);
 		rollback();
@@ -239,7 +239,7 @@ DatabasePostgresql::rollback()
 	if (PQresultStatus(result) != PGRES_COMMAND_OK) {
 		Glib::ustring msg = _("Unable to rollback changes!");
 		msg += "\n(";
-		msg += PQerrorMessage(m_db_);
+		msg += PQresultErrorMessage(result);
 		msg += ")";
 		PQclear(result);
 		throw DatabaseError(msg);
@@ -341,7 +341,7 @@ DatabasePostgresql::add_breeder_vfunc(const Glib::RefPtr<Breeder> &breeder)
 		if (PQresultStatus(result) != PGRES_COMMAND_OK) {
 			Glib::ustring msg = _("Unable to update breeder!");
 			msg += "\n(";
-			msg += PQerrorMessage(m_db_);
+			msg += PQresultErrorMessage(result);
 			msg += ")";
 			PQclear(result);
 			rollback();
@@ -360,7 +360,7 @@ DatabasePostgresql::add_breeder_vfunc(const Glib::RefPtr<Breeder> &breeder)
 		if (PQresultStatus(result) != PGRES_COMMAND_OK) {
 			Glib::ustring msg = _("Unable to insert breeder!");
 			msg += "\n(";
-			msg += PQerrorMessage(m_db_);
+			msg += PQresultErrorMessage(result);
 			msg += ")";
 			PQclear(result);
 			rollback();
@@ -387,7 +387,7 @@ DatabasePostgresql::remove_breeder_vfunc(uint64_t id)
 	if (PQresultStatus(result) != PGRES_COMMAND_OK) {
 		Glib::ustring msg = _("Unable to delete breeder from database!");
 		msg += "\n)";
-		msg += PQerrorMessage(m_db_);
+		msg += PQresultErrorMessage(result);
 		msg += ")";
 		PQclear(result);
 		rollback();
@@ -405,14 +405,15 @@ DatabasePostgresql::get_strains_for_breeder_vfunc(uint64_t breeder_id) const
 {
 	assert(m_db_);
 	
-	const char *sql = "SELECT id,breeder_name,name,info,decription,homepage,seedfinder FROM strain_view WHERE breeder_id=$1 ORDER BY name;";
+	const char *sql = "SELECT id,breeder_name,name,info,description,homepage,seedfinder FROM strain_view WHERE breeder_id=$1 ORDER BY name;";
 	const char *values[1];
 	std::list<Glib::RefPtr<Strain> > ret;
 	std::string breeder_id_str = std::to_string(breeder_id);
 	values[0] = breeder_id_str.c_str();
 
 	PGresult *result = PQexecParams(m_db_,sql,1,NULL,values,NULL,NULL,0);
-	if (PQresultStatus(result) == PGRES_TUPLES_OK) {
+	int status = PQresultStatus(result);
+	if (status == PGRES_TUPLES_OK) {
 		int rows = PQntuples(result);
 		for (int i=0; i<rows; ++i) {
 			uint64_t id = std::stoull(PQgetvalue(result,i,0));
@@ -433,6 +434,13 @@ DatabasePostgresql::get_strains_for_breeder_vfunc(uint64_t breeder_id) const
 			                                             seedfinder);
 			ret.push_back(strain);
 		}
+	} else if (status != PGRES_COMMAND_OK) {
+		Glib::ustring msg = _("Looking up strains for breeder failed!");
+		msg += "\n(";
+		msg += PQresultErrorMessage(result);
+		msg += ")";
+		PQclear(result);
+		throw DatabaseError(status,msg);
 	}
 	PQclear(result);
 	return ret;
@@ -553,7 +561,7 @@ DatabasePostgresql::add_strain_vfunc(const Glib::RefPtr<Strain> &strain)
 		if (PQresultStatus(result) != PGRES_COMMAND_OK) {
 			Glib::ustring msg = _("Unable to update strain!");
 			msg += "\n(";
-			msg += PQerrorMessage(m_db_);
+			msg += PQresultErrorMessage(result);
 			msg += ")";
 			PQclear(result);
 			rollback();
@@ -581,7 +589,7 @@ DatabasePostgresql::add_strain_vfunc(const Glib::RefPtr<Strain> &strain)
 		if (PQresultStatus(result) != PGRES_COMMAND_OK) {
 			Glib::ustring msg = _("Unable to insert strain into database!");
 			msg += "\n(";
-			msg += PQerrorMessage(m_db_);
+			msg += PQresultErrorMessage(result);
 			msg += ")";
 			PQclear(result);
 			rollback();
@@ -606,7 +614,7 @@ DatabasePostgresql::remove_strain_vfunc(uint64_t id)
 	if (PQresultStatus(result) != PGRES_COMMAND_OK) {
 		Glib::ustring msg = _("Unable to delete strain from database!");
 		msg += "\n)";
-		msg += PQerrorMessage(m_db_);
+		msg += PQresultErrorMessage(result);
 		msg += ")";
 		PQclear(result);
 		rollback();
@@ -896,7 +904,7 @@ DatabasePostgresql::add_growlog_vfunc(const Glib::RefPtr<Growlog> &growlog)
 		if (PQresultStatus(result) != PGRES_COMMAND_OK) {
 			Glib::ustring msg = _("Updating growlog failed!");
 			msg += "\n(";
-			msg += PQerrorMessage(m_db_);
+			msg += PQresultErrorMessage(result);
 			msg += ")";
 			PQclear(result);
 			rollback();
@@ -933,7 +941,7 @@ DatabasePostgresql::add_growlog_vfunc(const Glib::RefPtr<Growlog> &growlog)
 		if (PQresultStatus(result) != PGRES_COMMAND_OK) {
 			Glib::ustring msg = _("Inserting growlog into database failed!");
 			msg += "\n(";
-			msg += PQerrorMessage(m_db_);
+			msg += PQresultErrorMessage(result);
 			msg += ")";
 			PQclear(result);
 			rollback();
@@ -960,9 +968,10 @@ DatabasePostgresql::remove_growlog_vfunc(uint64_t id)
 	if (PQresultStatus(result) != PGRES_COMMAND_OK) {
 		Glib::ustring msg = _("Deleting growlog failed!");
 		msg += "\n(";
-		msg += PQerrorMessage(m_db_);
+		msg += PQresultErrorMessage(result);
 		msg += ")";
 		PQclear(result);
+		rollback();
 		throw DatabaseError(msg);
 	}
 	PQclear(result);
@@ -1049,25 +1058,27 @@ DatabasePostgresql::add_growlog_entry_vfunc(const Glib::RefPtr<GrowlogEntry> &en
 		if (PQresultStatus(result) != PGRES_COMMAND_OK) {
 			Glib::ustring msg = _("Updating growlog-entry failed!");
 			msg += "\n(";
-			msg += PQerrorMessage(m_db_);
+			msg += PQresultErrorMessage(result);
 			msg += ")";
 			PQclear(result);
 			rollback();
 			throw DatabaseError(msg);
 		}
 	} else {
-		const char *sql = "INSERT INTO growlog_entry (entry,created_on) VALUES ($1,$2);";
+		const char *sql = "INSERT INTO growlog_entry (growlog,entry,created_on) VALUES ($1,$2,$3);";
 		Glib::ustring created_on_str = entry->get_created_on_format(DATETIME_ISO_FORMAT);
-		
-		const char *values[2];
-		values[0] = text.c_str();
-		values[1] = created_on_str.c_str();
+		std::string growlog_id_str = std::to_string(entry->get_growlog_id());
+		const char *values[3];
 
-		result = PQexecParams(m_db_,sql,2,NULL,values,NULL,NULL,0);
+		values[0] = growlog_id_str.c_str();
+		values[1] = text.c_str();
+		values[2] = created_on_str.c_str();
+
+		result = PQexecParams(m_db_,sql,3,NULL,values,NULL,NULL,0);
 		if (PQresultStatus(result) != PGRES_COMMAND_OK) {
 			Glib::ustring msg = _("Inserting growlog-entry failed!");
 			msg += "\n(";
-			msg += PQerrorMessage(m_db_);
+			msg += PQresultErrorMessage(result);
 			msg += ")";
 			PQclear(result);
 			rollback();
@@ -1095,7 +1106,7 @@ DatabasePostgresql::remove_growlog_entry_vfunc(uint64_t id)
 	if (PQresultStatus(result) != PGRES_COMMAND_OK) {
 		Glib::ustring msg = _("Deleting growlog-entry failed!");
 		msg += "\n(";
-		msg += PQerrorMessage(m_db_);
+		msg += PQresultErrorMessage(result);
 		msg += ")";
 		PQclear(result);
 		rollback();
@@ -1127,7 +1138,7 @@ DatabasePostgresql::add_strain_for_growlog_vfunc(uint64_t growlog_id,
 	if (PQresultStatus(result) != PGRES_COMMAND_OK) {
 		Glib::ustring msg = _("INSERTING into growlog_strain failed!");
 		msg += "\n(";
-		msg += PQerrorMessage(m_db_);
+		msg += PQresultErrorMessage(result);
 		msg += ")";
 		PQclear(result);
 		rollback();
@@ -1156,7 +1167,7 @@ DatabasePostgresql::remove_strain_for_growlog_vfunc(uint64_t growlog_id,
 	if (PQresultStatus(result) != PGRES_COMMAND_OK) {
 		Glib::ustring msg = _("Deleting from 'growlog_strain' failed!");
 		msg += "\n(";
-		msg += PQerrorMessage(m_db_);
+		msg += PQresultErrorMessage(result);
 		msg += ")";
 		PQclear(result);
 		rollback();
@@ -1182,7 +1193,7 @@ DatabasePostgresql::remove_strain_for_growlog_vfunc(uint64_t id)
 	if (PQresultStatus(result) != PGRES_COMMAND_OK) {
 		Glib::ustring msg = _("Deleting from 'growlog_strain' failed!");
 		msg += "\n(";
-		msg += PQerrorMessage(m_db_);
+		msg += PQresultErrorMessage(result);
 		msg += ")";
 		PQclear(result);
 		rollback();

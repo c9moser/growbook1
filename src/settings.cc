@@ -495,6 +495,7 @@ Settings::on_save()
 	set("datetime_format_",m_datetime_format_);
 
 	/* Database Settings */
+	set("db-engine",m_db_settings_->get_engine());
 	set("db-name",m_db_settings_->get_dbname());
 	set("db-host",m_db_settings_->get_host());
 	set_uint16("db-port",m_db_settings_->get_port());
