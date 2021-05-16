@@ -461,7 +461,7 @@ DatabasePostgresql::get_strains_for_growlog_vfunc(uint64_t growlog_id) const
 	if (PQresultStatus(result) == PGRES_TUPLES_OK) {
 		int rows = PQntuples(result);
 		for (int i=0; i<rows; ++i) {
-			uint64_t strain_id = std::stoull(PQgetvalue(result,0,0));
+			uint64_t strain_id = std::stoull(PQgetvalue(result,i,0));
 			Glib::RefPtr<Strain> strain = this->get_strain(strain_id);
 			if (strain)
 				ret.push_back(strain);
@@ -1127,7 +1127,7 @@ DatabasePostgresql::add_strain_for_growlog_vfunc(uint64_t growlog_id,
 
 	begin_transaction();
 	
-	const char *sql = "INSERT INTO growlog_strain (growlog,strian) VALUES ($1,$2);";
+	const char *sql = "INSERT INTO growlog_strain (growlog,strain) VALUES ($1,$2);";
 	std::string growlog = std::to_string(growlog_id);
 	std::string strain = std::to_string(strain_id);
 	const char *values[2];
