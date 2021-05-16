@@ -6,9 +6,9 @@
  *  <user@host>
  ****************************************************************************/
 
-#ifdef HAVE_CONFIG_H
+//#ifdef HAVE_CONFIG_H
 # include "config.h"
-#endif
+//#endif
 
 #include "strptime.h"
 
@@ -18,11 +18,14 @@
 #include <time.h>
 #include <ctype.h>
 
-#ifdef NAITVE_WIN32
+#ifdef NATIVE_WINDOWS
+#define CDECL 	extern "C"
+
 static const char * strp_weekdays[] = 
     { "sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"};
 static const char * strp_monthnames[] = 
     { "january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"};
+
 static bool strp_atoi(const char * & s, int & result, int low, int high, int offset)
     {
     bool worked = false;
@@ -37,7 +40,7 @@ static bool strp_atoi(const char * & s, int & result, int low, int high, int off
     return worked;
     }
 
-char * strptime(const char *s, const char *format, struct tm *tm)
+CDECL char * strptime(const char *s, const char *format, struct tm *tm)
     {
     bool working = true;
     while (working && *format && *s)
@@ -269,4 +272,4 @@ char * strptime(const char *s, const char *format, struct tm *tm)
         }
     return (working?(char *)s:0);
     }
-#endif // NATIVE_WIN32
+#endif // NATIVE_WINDOWS

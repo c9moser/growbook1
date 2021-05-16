@@ -323,7 +323,10 @@ DatabaseSqlite3::get_breeder_vfunc(const Glib::ustring &name) const
 	sqlite3_bind_text(stmt,1,name.c_str(),-1,0);
 	if (sqlite3_step(stmt) == SQLITE_ROW) {
 		uint64_t id = static_cast<uint64_t>(sqlite3_column_int64(stmt,0));
-		std::string homepage = (const char*) sqlite3_column_text(stmt,1);
+		const char *c_homepage = (const char*) sqlite3_column_text(stmt,1);
+		std::string homepage;
+		if (c_homepage)
+			homepage = c_homepage;
 
 		breeder = Breeder::create(id,name,homepage);
 	}
@@ -340,36 +343,66 @@ DatabaseSqlite3::add_breeder_vfunc(const Glib::RefPtr<Breeder> &breeder)
 	begin_transaction();
 	
 	sqlite3_stmt *stmt = nullptr;
-	std::string sql;
-	if (!breeder->get_id()) {
-		sql = "INSERT INTO breeder(name,homepage) VALUES (?1,?2)";
-	} else {
-		sql = "UPDATE breeder SET name=?1,homepage=?2 WHERE id=?3";
-	}
-	int err = sqlite3_prepare(m_db_,sql.c_str(),-1,&stmt,0);
-	if (err != SQLITE_OK) {
-		Glib::ustring msg = _("Unable to add breeder to sqlite3-database!");
-		msg += "\n(";
-		msg += sqlite3_errmsg(m_db_);
-		msg += ")";
-		if (stmt)
-			sqlite3_finalize(stmt);
-		rollback();
-		throw DatabaseError(err,msg);
-	}
-	sqlite3_bind_text(stmt,1,breeder->get_name().c_str(),-1,0);
-	sqlite3_bind_text(stmt,2,breeder->get_homepage().c_str(),-1,0);
-	if (breeder->get_id())
+	int err = SQLITE_OK;
+	
+	if (breeder->get_id()) {
+		const char *sql = "UPDATE breeder SET name=?,homepage=? WHERE id=?;";
+		err = sqlite3_prepare(m_db_,sql,-1,&stmt,0);
+		if (err != SQLITE_OK) {
+			Glib::ustring msg = _("Unable to update breeder!");
+			msg += "\n(";
+			msg += sqlite3_errmsg(m_db_);
+			msg += ")";
+			if (stmt)
+				sqlite3_finalize(stmt);
+			rollback();
+			throw DatabaseError(err,msg);
+		}
+		Glib::ustring name = breeder->get_name();
+		std::string homepage = breeder->get_homepage();
+		sqlite3_bind_text(stmt,1,name.c_str(),-1,0);
+		sqlite3_bind_text(stmt,2,homepage.c_str(),-1,0);
 		sqlite3_bind_int64(stmt,3,static_cast<sqlite3_int64>(breeder->get_id()));
-	err = sqlite3_step(stmt);
-	if (err != SQLITE_OK && err != SQLITE_DONE) {
-		Glib::ustring msg = _("Adding breeder to database failed!");
-		msg += "\n(";
-		msg += sqlite3_errmsg(m_db_);
-		msg += ")";
-		sqlite3_finalize(stmt);
-		rollback();
-		throw DatabaseError(err,msg);
+
+		err = sqlite3_step(stmt);
+		if (err != SQLITE_OK && err != SQLITE_DONE) {
+			Glib::ustring msg = _("Updating breeder failed!");
+			msg += "\n(";
+			msg += sqlite3_errmsg(m_db_);
+			msg += ")";
+			sqlite3_finalize(stmt);
+			rollback();
+			throw DatabaseError(err,msg);
+		}
+	} else {
+		const char *sql = "INSERT INTO breeder (name,homepage) VALUES (?,?);";
+		err = sqlite3_prepare(m_db_,sql,-1,&stmt,0);
+		if (err != SQLITE_OK) {
+			Glib::ustring msg = _("Unable to insert breeder into database!");
+			msg += "\n(";
+			msg += sqlite3_errmsg(m_db_);
+			msg += ")";
+			if (stmt)
+				sqlite3_finalize(stmt);
+			rollback();
+			throw DatabaseError(err,msg);
+		}
+		Glib::ustring name = breeder->get_name();
+		std::string homepage = breeder->get_homepage();
+		
+		sqlite3_bind_text(stmt,1,name.c_str(),-1,0);
+		sqlite3_bind_text(stmt,2,homepage.c_str(),-1,0);
+
+		err = sqlite3_step(stmt);
+		if (err != SQLITE_OK && err != SQLITE_DONE) {
+			Glib::ustring msg = _("Inserting breeder into database failed!");
+			msg += "\n(";
+			msg += sqlite3_errmsg(m_db_);
+			msg += ")";
+			sqlite3_finalize(stmt);
+			rollback();
+			throw DatabaseError(err,msg);
+		}
 	}
 	sqlite3_finalize(stmt);
 	commit();

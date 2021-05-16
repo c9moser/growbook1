@@ -64,6 +64,9 @@ class AppWindow:
 		 void on_database_settings();
 		 void on_preferences();
 		 void on_about();
+
+		 void on_export();
+		 void on_import();
 		 
 		 void on_browser_title_changed(Gtk::Label *label,BrowserPage *page);
 		 void on_close_page(Gtk::Widget *page);	 

@@ -21,9 +21,9 @@
 
 #include "datatypes.h"
 
-#ifdef HAVE_CONFIG_H
+//#ifdef HAVE_CONFIG_H
 # include "config.h"
-#endif
+//#endif
 
 #include <cassert>
 
@@ -355,7 +355,27 @@ Growlog::get_created_on() const
 Glib::ustring
 Growlog::get_created_on_format(const Glib::ustring &format) const
 {
+	
+#ifdef NATIVE_WINDOWS
+	tm *datetime = localtime(&m_created_on_);
+	if (!datetime)
+		return Glib::ustring();
+
+	const size_t size = 100;
+	char buf[size];
+	buf[0] = '\1';
+	buf[size-1] = '\0';
+	size_t len = strftime(buf,size,format.c_str(),datetime);
+
+	if (len == 0 && buf[0] != '\0') {
+		//strftime went wrong
+		return Glib::ustring();
+	}
+	Glib::ustring ret = buf;
+	return ret;
+#else // !NATIVE_WINDOWS
 	tm datetime;
+	
 	if (localtime_r(&m_created_on_,&datetime) != &datetime) {
 		//datetime went wrong
 		return Glib::ustring();
@@ -371,6 +391,7 @@ Growlog::get_created_on_format(const Glib::ustring &format) const
 	}
 	Glib::ustring ret = buf;
 	return ret;
+#endif /*! NATIVE_WINDOWS */
 }
 
 time_t
@@ -384,7 +405,26 @@ Growlog::get_flower_on_format(const Glib::ustring &format) const
 {
 	if (!m_flower_on_)
 		return Glib::ustring();
-	
+
+#ifdef NATIVE_WINDOWS
+	tm *datetime = localtime(&m_flower_on_);
+	if (!datetime)
+		return Glib::ustring();
+
+	const size_t size = 100;
+	char buf[size];
+	buf[0] = '\1';
+	buf[size-1] = '\0';
+	size_t len = strftime(buf,size,format.c_str(),datetime);
+
+	if (len == 0 && buf[0] != '\0') {
+		//strftime went wrong
+		return Glib::ustring();
+	}
+	Glib::ustring ret = buf;
+	return ret;
+#else // !NATIVE_WINDOWS
+
 	tm datetime;
 	if (localtime_r(&m_flower_on_,&datetime) != &datetime) {
 		//datetime went wrong
@@ -402,6 +442,7 @@ Growlog::get_flower_on_format(const Glib::ustring &format) const
 	Glib::ustring ret = buf;
 	
 	return ret;
+#endif // ! NATIVE_WINDOWS
 }
 
 void
@@ -425,7 +466,26 @@ Growlog::get_finished_on_format(const Glib::ustring &format) const
 {
 	if (!m_finished_on_)
 		return Glib::ustring();
-	
+
+#ifdef NATIVE_WINDOWS
+	tm *datetime = localtime(&m_finished_on_);
+	if (!datetime)
+		return Glib::ustring();
+
+	const size_t size = 100;
+	char buf[size];
+	buf[0] = '\1';
+	buf[size-1] = '\0';
+	size_t len = strftime(buf,size,format.c_str(),datetime);
+
+	if (len == 0 && buf[0] != '\0') {
+		//strftime went wrong
+		return Glib::ustring();
+	}
+	Glib::ustring ret = buf;
+	return ret;
+#else // !NATIVE_WINDOWS
+
 	tm datetime;
 	if (localtime_r(&m_finished_on_,&datetime) != &datetime) {
 		//datetime went wrong
@@ -442,6 +502,7 @@ Growlog::get_finished_on_format(const Glib::ustring &format) const
 	}
 	Glib::ustring ret = buf;
 	return ret;
+#endif // ! NATIVE_WINDOWS
 }
 
 void
@@ -532,6 +593,25 @@ GrowlogEntry::get_created_on() const
 Glib::ustring
 GrowlogEntry::get_created_on_format(const Glib::ustring &format) const
 {
+#ifdef NATIVE_WINDOWS
+	tm *datetime = localtime(&m_created_on_);
+	if (!datetime)
+		return Glib::ustring();
+
+	const size_t size = 100;
+	char buf[size];
+	buf[0] = '\1';
+	buf[size-1] = '\0';
+	size_t len = strftime(buf,size,format.c_str(),datetime);
+
+	if (len == 0 && buf[0] != '\0') {
+		//strftime went wrong
+		return Glib::ustring();
+	}
+	Glib::ustring ret = buf;
+	return ret;
+#else // !NATIVE_WINDOWS
+
 	tm datetime;
 	if (localtime_r(&m_created_on_,&datetime) != &datetime) {
 		//datetime went wrong
@@ -548,4 +628,5 @@ GrowlogEntry::get_created_on_format(const Glib::ustring &format) const
 	}
 	Glib::ustring ret = buf;
 	return ret;
+#endif // !NATIVE_WINDOWS
 }

@@ -266,3 +266,8 @@ AppWindow::on_browser_title_changed(Gtk::Label *label,BrowserPage *page)
 {
 	label->set_text(page->get_title());
 }
+
+void
+AppWindow::on_export()
+{
+}

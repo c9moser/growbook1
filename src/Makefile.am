@@ -61,8 +61,8 @@ growbook_SOURCES = \
 	breederdialog.h \
 	straindialog.cc \
 	straindialog.h \
-	strptime.c \
 	strptime.h \
+	strptime.cc \
 	growlogselector.cc \
 	growlogselector.h \
 	growlogview.cc \
@@ -70,7 +70,7 @@ growbook_SOURCES = \
 	growlogdialog.cc \
 	growlogdialog.h \
 	growlogentrydialog.cc \
-	growlogentrydialog.h
+	growlogentrydialog.h 
 
 growbook_LDFLAGS = 
 

@@ -1,5 +1,3 @@
-CREATE SCHEMA growbook;
-SET search_path TO growbook,public;
 
 CREATE TABLE breeder (
 	id SERIAL PRIMARY KEY,
