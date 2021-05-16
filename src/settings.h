@@ -252,9 +252,11 @@ class Settings:
 
 		std::string get_prefix() const;
 		std::string get_package_data_dir() const;
+		std::string get_package_doc_dir();
 		std::string get_locale_dir() const;
 		std::string get_sql_dir() const;
 		std::string get_config_sql_file() const;
+		
 		
 		bool get_first_run() const;
 

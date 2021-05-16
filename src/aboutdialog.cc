@@ -25,7 +25,9 @@
 #endif
 
 #include <glibmm/i18n.h>
+#include <glibmm.h>
 
+#include "application.h"
 AboutDialog::AboutDialog()
 {
 	set_program_name ("GrowBook");
@@ -33,6 +35,8 @@ AboutDialog::AboutDialog()
 	set_copyright("(C) 2021 Christan Moser");
 	set_license_type(Gtk::LICENSE_GPL_3_0);
 	set_authors(_get_authors());
+
+	set_translator_credits (_get_translator_credits ());
 	show_all();
 }
 
@@ -48,4 +52,12 @@ AboutDialog::_get_authors()
 	authors[0] = "Chrsitian Moser";
 
 	return authors;
+}
+
+Glib::ustring
+AboutDialog::_get_translator_credits()
+{
+	Glib::ustring text = "[German] Christian Moser\n";
+
+	return text;
 }

@@ -37,6 +37,7 @@ class AboutDialog:
 
 	private:
 		std::vector<Glib::ustring> _get_authors();
+		Glib::ustring _get_translator_credits();
 };
 
 #endif /* __ABOUTDIALOG_H__ */
