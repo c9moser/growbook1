@@ -6317,9 +6317,15 @@ case $host_os in *\ *) host_os=`echo "$host_os" | sed 's/ /-/g'`;; esac
 
 
 case $host_os in
-  *mingw*)
+  *mingw* | *MINGW* | *MinGW*)
     platform_win32=yes
     native_win32=yes
+    
+$as_echo "@%:@define NATIVE_WIN32 1" >>confdefs.h
+
+    
+$as_echo "@%:@define NATIVE_WINDOWS 1" >>confdefs.h
+
     ;;
   pw32* | *cygwin*)
     platform_win32=yes
@@ -6330,22 +6336,6 @@ case $host_os in
     native_win32=no
     ;;
 esac
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for native Windows" >&5
-$as_echo_n "checking for native Windows... " >&6; }
-if "x$native_win32" == "xyes"; then
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-$as_echo "yes" >&6; }
-	
-$as_echo "@%:@define NATIVE_WINDOWS 1" >>confdefs.h
-
-	
-$as_echo "@%:@define NATIVE_WIN32 1" >>confdefs.h
-
-else
-	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
 
  if test x"$platform_win32" = "xyes"; then
   PLATFORM_WIN32_TRUE=
