@@ -174,6 +174,7 @@ GrowlogViewEntryView::GrowlogViewEntryView(const Glib::RefPtr<Database> &db,
 
 	set_model(_create_model());
 
+	//append_column("ID:",columns.column_id);
 	append_column("Created on",columns.column_datetime);
 	append_column("Text",columns.column_text);
 }
