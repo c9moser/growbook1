@@ -177,11 +177,15 @@ StrainView::get_title_vfunc() const
 void
 StrainView::on_refresh()
 {
-	Glib::RefPtr<Strain> strain = get_database()->get_strain(m_strain_->get_id());
+	Glib::RefPtr<Database> db = get_database();
+	if (! db) 
+		return;
+		
+	Glib::RefPtr<Strain> strain = db->get_strain(m_strain_->get_id());
 	if (strain)
 		m_strain_ = strain;
 
-	Glib::RefPtr<Breeder> breeder = get_database()->get_breeder(m_strain_->get_breeder_id());
+	Glib::RefPtr<Breeder> breeder = db->get_breeder(m_strain_->get_breeder_id());
 	if (breeder && !breeder->get_homepage().empty()) {
 		m_breeder_homepage_button_.set_sensitive(true);
 	} else {

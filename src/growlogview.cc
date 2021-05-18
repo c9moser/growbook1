@@ -36,6 +36,7 @@
 #include "application.h"
 #include "growlogdialog.h"
 #include "growlogentrydialog.h"
+#include "strainview.h"
 
 /*******************************************************************************
  * GrowlogViewStrainColumns
@@ -173,6 +174,7 @@ GrowlogViewEntryView::GrowlogViewEntryView(const Glib::RefPtr<Database> &db,
 
 	set_model(_create_model());
 
+	//append_column("ID:",columns.column_id);
 	append_column("Created on",columns.column_datetime);
 	append_column("Text",columns.column_text);
 }
@@ -285,17 +287,17 @@ GrowlogView::GrowlogView(const Glib::RefPtr<Database> &db,
 	m_edit_button_.set_tooltip_text(_("Edit Growlog."));
 	m_toolbar_.append(m_edit_button_);
 
-	//m_flower_button_.signal_clicked().connect(sigc::mem_fun(*this,&GrowlogView::on_flower));
+	m_flower_button_.signal_clicked().connect(sigc::mem_fun(*this,&GrowlogView::on_flower));
 	m_flower_button_.set_icon_name("flower-icon");
 	m_flower_button_.set_tooltip_text("Start flowering.");
 	if (m_growlog_->get_flower_on())
 		m_flower_button_.set_sensitive(false);
 	m_toolbar_.append(m_flower_button_);
 
-	//m_finish_button_.signal_clicked().connect(sigc::mem_fun(*this,&GrowlogView::on_finish));
+	m_finish_button_.signal_clicked().connect(sigc::mem_fun(*this,&GrowlogView::on_finish));
 	m_finish_button_.set_icon_name("process-stop");
 	m_finish_button_.set_tooltip_text("Finish growlog.");
-	if (m_growlog_->get_flower_on()) {
+	if (m_growlog_->get_finished_on()) {
 		m_finish_button_.set_sensitive(false);
 	}
 	m_toolbar_.append(m_finish_button_);
@@ -345,10 +347,12 @@ GrowlogView::GrowlogView(const Glib::RefPtr<Database> &db,
 	box->pack_start(m_textview_,false,false,0);
 
 	// StrainView //////////////////////////////////////////////////////////////
+	m_strain_view_.signal_row_activated().connect(sigc::mem_fun(*this,&GrowlogView::on_strain_view_row_activated));
 	box->pack_start(m_strain_view_,false,false,0);
 	
 	// EntryView ///////////////////////////////////////////////////////////////
 	m_entry_view_.get_selection()->signal_changed().connect(sigc::mem_fun(*this,&GrowlogView::on_entry_view_selection_changed));
+	m_entry_view_.signal_row_activated().connect(sigc::mem_fun(*this,&GrowlogView::on_entry_view_row_activated));
 	box->pack_start(m_entry_view_,true,true,0);
 
 	show_all();	
@@ -460,6 +464,50 @@ GrowlogView::on_refresh()
 }
 
 void
+GrowlogView::on_flower()
+{
+	Gtk::Window *window = dynamic_cast<Gtk::Window*>(get_toplevel());
+	if (!window)
+		window = app->get_appwindow();
+	
+	Gtk::MessageDialog dialog(*window,
+	                          _("Do you really want to start flowering?"),
+	                          false,
+	                          Gtk::MESSAGE_QUESTION,
+	                          Gtk::BUTTONS_YES_NO,
+	                          true);
+	int response = dialog.run();
+	dialog.hide();
+	if (response == Gtk::RESPONSE_YES) {
+		m_growlog_->set_flower_on(time(0));
+		get_database()->add_growlog(m_growlog_);
+		refresh();
+	}
+}
+
+void
+GrowlogView::on_finish()
+{
+	Gtk::Window *window = dynamic_cast<Gtk::Window*>(get_toplevel());
+	if (!window)
+		window = app->get_appwindow();
+
+	Gtk::MessageDialog dialog(*window,
+	                          _("Do you really want to finish growlog?"),
+	                          false,
+	                          Gtk::MESSAGE_QUESTION,
+	                          Gtk::BUTTONS_YES_NO,
+	                          true);
+	dialog.set_secondary_text (_("After finishing you will not be able to add or change entries!"));
+	int response = dialog.run();
+	if (response == Gtk::RESPONSE_YES) {
+		m_growlog_->set_finished_on (time(0));
+		get_database()->add_growlog(m_growlog_);
+		refresh();
+	}
+}
+
+void
 GrowlogView::on_entry_view_selection_changed()
 {
 	Gtk::TreeModel::iterator iter = m_entry_view_.get_selection()->get_selected();
@@ -549,4 +597,49 @@ GrowlogView::on_remove_logentry()
 	
 }
 
-                              
+void 
+GrowlogView::on_strain_view_row_activated(const Gtk::TreeModel::Path &path,
+                                          Gtk::TreeViewColumn *column)
+{
+	
+
+	Gtk::TreeModel::iterator iter = m_strain_view_.get_model()->get_iter(path);
+	if (!iter)
+		return;
+	Gtk::TreeModel::Row row = *iter;
+	AppWindow *window = dynamic_cast<AppWindow*>(get_toplevel());
+	if (!window)
+		window = app->get_appwindow();
+	Glib::RefPtr<Strain> strain = get_database()->get_strain(row[m_strain_view_.columns.column_id]);
+	if (!strain)
+		return;
+	
+	::StrainView *sv = Gtk::manage(new ::StrainView(get_database(),strain));
+	if (window->add_browser_page (*sv) == -1)
+		delete sv;
+}
+
+void 
+GrowlogView::on_entry_view_row_activated(const Gtk::TreeModel::Path &path,
+                                         Gtk::TreeViewColumn *column)
+{
+	if (m_growlog_->get_finished_on())
+		return;
+
+	Gtk::TreeModel::iterator iter = m_entry_view_.get_model()->get_iter(path);
+	if (!iter)
+		return;
+	Gtk::TreeModel::Row row = *iter;
+	Glib::RefPtr<GrowlogEntry> entry = GrowlogEntry::create(row[m_entry_view_.columns.column_id],
+	                                                        m_growlog_->get_id(),
+	                                                        row[m_entry_view_.columns.column_text],
+	                                                        row[m_entry_view_.columns.column_created_on]);
+	Gtk::Window *window = dynamic_cast<Gtk::Window*>(get_toplevel());
+	if (!window)
+		window = app->get_appwindow();
+	
+	GrowlogEntryDialog dialog{*window,get_database(),entry};
+	if (dialog.run() == Gtk::RESPONSE_APPLY) {
+		refresh();
+	}
+}

@@ -169,7 +169,14 @@ class GrowlogView:
 		 void on_add_logentry();
 		 void on_edit_logentry();
 		 void on_remove_logentry();
-		 void on_entry_view_selection_changed(); 
+		 void on_entry_view_selection_changed();
+		 void on_flower();
+		 void on_finish();
+
+		 void on_strain_view_row_activated(const Gtk::TreeModel::Path &path,
+		                                   Gtk::TreeViewColumn *column);
+		 void on_entry_view_row_activated(const Gtk::TreeModel::Path &path,
+		                                  Gtk::TreeViewColumn *column);
 };
 
 

@@ -36,6 +36,8 @@
 #include <fstream>
 #include <cassert>
 
+#include <iostream>
+
 #include "error.h"
 #include "application.h"
 
@@ -1002,7 +1004,7 @@ DatabasePostgresql::get_growlog_entries_vfunc(uint64_t growlog_id) const
 			strptime(created_on_str.c_str(),DATETIME_ISO_FORMAT,&datetime);
 			time_t created_on = mktime(&datetime);
 
-			Glib::RefPtr<GrowlogEntry> entry = GrowlogEntry::create(id,text,created_on);
+			Glib::RefPtr<GrowlogEntry> entry = GrowlogEntry::create(id,growlog_id,text,created_on);
 			if (entry)
 				ret.push_back(entry);
 		}
@@ -1048,8 +1050,9 @@ DatabasePostgresql::add_growlog_entry_vfunc(const Glib::RefPtr<GrowlogEntry> &en
 	PGresult *result = nullptr;
 	
 	if (entry->get_id()) {
-		const char *sql = "UPDATE growlog_entry SET text=$1 WHERE id=$2;";
+		const char *sql = "UPDATE growlog_entry SET entry=$1 WHERE id=$2;";
 		std::string id_str = std::to_string(entry->get_id());
+
 		const char *values[2];
 		values[0] = text.c_str();
 		values[1] = id_str.c_str();
@@ -1086,7 +1089,6 @@ DatabasePostgresql::add_growlog_entry_vfunc(const Glib::RefPtr<GrowlogEntry> &en
 		}
 	}
 	PQclear(result);
-	
 	commit();
 }
 
