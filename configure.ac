@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl Created by Anjuta application wizard.
 
-AC_INIT(growbook, 0.1)
+AC_INIT(growbook, 0.1.0)
 
 AC_CONFIG_HEADERS([config.h])
 
@@ -30,9 +30,11 @@ dnl ***************************************************************************
 AC_CANONICAL_HOST
 
 case $host_os in
-  *mingw*)
+  *mingw* | *MINGW* | *MinGW*)
     platform_win32=yes
     native_win32=yes
+    AC_DEFINE(NATIVE_WIN32,1,[Define 1 if we are compiling for Windows])
+    AC_DEFINE(NATIVE_WINDOWS,1,[Define 1 if we are compiling for Windows])
     ;;
   pw32* | *cygwin*)
     platform_win32=yes
@@ -43,15 +45,6 @@ case $host_os in
     native_win32=no
     ;;
 esac
-
-AC_MSG_CHECKING([for native Windows])
-if "x$native_win32" == "xyes"; then
-	AC_MSG_RESULT([yes])
-	AC_DEFINE(NATIVE_WINDOWS,1,[Define 1 if we are running on native windows])
-	AC_DEFINE(NATIVE_WIN32,1,[Define 1 when we are running on native win32])
-else
-	AC_MSG_RESULT([no])
-fi
 
 AM_CONDITIONAL(PLATFORM_WIN32, test x"$platform_win32" = "xyes")
 AM_CONDITIONAL(NATIVE_WIN32, test x"$native_win32" = "xyes")
