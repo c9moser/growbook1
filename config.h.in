@@ -71,10 +71,10 @@
 /* Define to the sub-directory where libtool stores uninstalled libraries. */
 #undef LT_OBJDIR
 
-/* Define 1 when we are running on native win32 */
+/* Define 1 if we are compiling for Windows */
 #undef NATIVE_WIN32
 
-/* Define 1 if we are running on native windows */
+/* Define 1 if we are compiling for Windows */
 #undef NATIVE_WINDOWS
 
 /* Name of package */

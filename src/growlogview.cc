@@ -94,6 +94,15 @@ GrowlogViewStrainView::GrowlogViewStrainView(const Glib::RefPtr<Database> &db,
 	append_column(_("Breeder"),columns.column_breeder);
 	append_column(_("Strain"),columns.column_name);
 
+	
+	Gtk::TreeViewColumn *col = get_column(0);
+	if (col)
+		col->set_sort_column(columns.column_breeder);
+
+	col = get_column(1);
+	if (col)
+		col->set_sort_column(columns.column_name);
+	
 	show();
 }
 
@@ -174,9 +183,12 @@ GrowlogViewEntryView::GrowlogViewEntryView(const Glib::RefPtr<Database> &db,
 
 	set_model(_create_model());
 
-	//append_column("ID:",columns.column_id);
 	append_column("Created on",columns.column_datetime);
 	append_column("Text",columns.column_text);
+
+	Gtk::TreeViewColumn *col = get_column(0);
+	if (col)
+		col->set_sort_column(columns.column_created_on);
 }
 
 GrowlogViewEntryView::~GrowlogViewEntryView()
