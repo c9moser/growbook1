@@ -68,6 +68,10 @@ PKG_CHECK_MODULES(PGSQL, [libpq],
 				  AC_DEFINE(HAVE_LIBPQ,1,[define 1 if we have libpq (PostgreSQL) installed.]),
 				  [])
 
+PKG_CHECK_MODULES(MARIADB, [libmariadb],
+				  AC_DEFINE(HAVE_MARIADB,1,[define 1 if we have MariaDB client installed.]),
+				  [])
+
 AC_OUTPUT([
 Makefile
 src/Makefile

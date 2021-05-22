@@ -6,7 +6,8 @@
 sqldir = $(pkgdatadir)/sql
 dist_sql_DATA = config.sql \
 	growbook.sqlite3.sql \
-	growbook.postgresql.sql
+	growbook.postgresql.sql \
+	growbook.mariadb.sql
 
 iconsdir = $(datadir)/icons/default/scalable
 
@@ -15,7 +16,8 @@ AM_CPPFLAGS = \
 	-DPACKAGE_SRC_DIR=\""$(srcdir)"\" \
 	-DPACKAGE_DATA_DIR=\""$(pkgdatadir)"\" \
 	$(GROWBOOK_CFLAGS) \
-	$(PGSQL_CFLAGS)
+	$(PGSQL_CFLAGS) \
+ 	$(MARIADB_CFLAGS)
 
 AM_CFLAGS =\
 	 -Wall\
@@ -70,11 +72,13 @@ growbook_SOURCES = \
 	growlogdialog.cc \
 	growlogdialog.h \
 	growlogentrydialog.cc \
-	growlogentrydialog.h 
+	growlogentrydialog.h \
+	database-mariadb.cc \
+	database-mariadb.h 
 
 growbook_LDFLAGS = 
 
-growbook_LDADD = $(GROWBOOK_LIBS) $(PGSQL_LIBS)
+growbook_LDADD = $(GROWBOOK_LIBS) $(PGSQL_LIBS) $(MARIADB_LIBS)
 
 
 if NATIVE_WIN32
