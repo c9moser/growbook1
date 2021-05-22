@@ -33,6 +33,10 @@
 # include "database-postgresql.h"
 #endif
 
+#ifdef HAVE_MARIADB
+# include "database-mariadb.h"
+#endif
+
 /*******************************************************************************
  * DatabaseModule functions
  ******************************************************************************/
@@ -45,6 +49,9 @@ void db_init() {
 #ifdef HAVE_LIBPQ
 		db_add_module(DatabaseModulePostgresql::create());
 #endif /* HAVE_LIBPQ */
+#ifdef HAVE_MARIADB
+		db_add_module(DatabaseModuleMariaDB::create());
+#endif
 	}
 }
 
