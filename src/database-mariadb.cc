@@ -47,7 +47,13 @@
  ******************************************************************************/
 
 DatabaseModuleMariaDB::DatabaseModuleMariaDB():
-	DatabaseModule{DatabaseSettings::create("MariaDB","","localhost",3306,Glib::get_user_name(),"",true,
+	DatabaseModule{DatabaseSettings::create("MariaDB",
+	                                        "mysql",
+	                                        "localhost",
+	                                        3306,
+	                                        Glib::get_user_name(),
+	                                        "",
+	                                        true,
 	                                        (DB_HAS_HOST|DB_HAS_PORT|DB_HAS_USER|DB_HAS_PASSWORD))}
 {
 }
@@ -1116,21 +1122,146 @@ DatabaseMariaDB::remove_growlog_vfunc(uint64_t id)
 std::list<Glib::RefPtr<GrowlogEntry> > 
 DatabaseMariaDB::get_growlog_entries_vfunc(uint64_t growlog_id) const
 {
+	assert(m_db_);
+
+	const char *sql = "SELECT id,entry,created_on FROM growlog_entry WHERE growlog=%s ORDER BY created_on;";
+	std::list<Glib::RefPtr<GrowlogEntry> > ret;
+
+	std::string growlog_id_str = std::to_string(growlog_id);
+	
+	size_t len = strlen(sql) + growlog_id_str.size() + 1;
+	std::unique_ptr<char[]> buffer(new char[len]);
+	snprintf(buffer.get(),len,sql,growlog_id_str.c_str());
+
+	if (mysql_query(m_db_,buffer.get()))
+		database_error(_("Unable to lookup growlog-entries!"));
+
+	MYSQL_RES *result = mysql_store_result(m_db_);
+	if (!result)
+		database_error(_(RESULT_ERROR));
+
+	MYSQL_ROW row;
+	while((row = mysql_fetch_row(result))) {
+		uint64_t id = std::stoull(row[0]);
+		tm datetime;
+		strptime(row[2], DATETIME_ISO_FORMAT, &datetime);
+		time_t created_on = mktime(&datetime);
+
+		Glib::RefPtr<GrowlogEntry> entry = GrowlogEntry::create(id,
+		                                                        growlog_id,
+		                                                        row[1],
+		                                                        created_on);
+		ret.push_back(entry);
+	}
+	mysql_free_result(result);
+	return ret;
 }
 
 Glib::RefPtr<GrowlogEntry> 
 DatabaseMariaDB::get_growlog_entry_vfunc(uint64_t id) const
 {
+	assert(m_db_);
+
+	const char *sql = "SELECT growlog_id,entry,created_on FROM growlog_entry WHERE id=%s;";
+	Glib::RefPtr<GrowlogEntry> entry;
+
+	std::string id_str = std::to_string(id);
+	size_t len = strlen(sql) + id_str.size() + 1;
+	std::unique_ptr<char[]> buffer(new char[len]);
+	snprintf(buffer.get(),len,sql,id_str.c_str());
+
+	if (mysql_query(m_db_,buffer.get()))
+		database_error(_("Unable to lookup growlog-entry!"));
+
+	MYSQL_RES *result = mysql_store_result(m_db_);
+	if (!result)
+		database_error(_(RESULT_ERROR));
+
+	MYSQL_ROW row = mysql_fetch_row(result);
+	if (row) {
+		uint64_t growlog_id = std::stoull(row[0]);
+
+		tm datetime;
+		strptime(row[2],DATETIME_ISO_FORMAT,&datetime);
+		time_t created_on = mktime(&datetime);
+
+		entry = GrowlogEntry::create(id,growlog_id,row[1],created_on);
+	}
+	mysql_free_result(result);
+	return entry;
 }
 
 void 
 DatabaseMariaDB::add_growlog_entry_vfunc(const Glib::RefPtr<GrowlogEntry> &entry)
 {
+	assert(m_db_);
+
+	std::string sql_command;
+
+	if (entry->get_id()) {
+		const char *sql = "UPDATE growlog_entry SET entry='%s' WHERE id=%s;";
+
+		std::string id_str = std::to_string(entry->get_id());
+
+		Glib::ustring text = entry->get_text(); 
+		size_t text_len = text.bytes() * 2 + 1;
+		std::unique_ptr<char[]> text_buffer(new char[text_len]);
+		mysql_real_escape_string(m_db_,text_buffer.get(),text.c_str(),text.bytes());
+
+		size_t len = strlen(sql) + text_len + id_str.size();
+		std::unique_ptr<char[]> buffer(new char[len]);
+		snprintf(buffer.get(),len,sql,text_buffer.get(),id_str.c_str());
+
+		sql_command = (const char*) buffer.get();
+	} else {
+		const char *sql = "INSERT INTO growlog_entry (growlog,entry,created_on) VALUES (%s,'%s','%s');";
+
+		std::string growlog_id_str = std::to_string(entry->get_growlog_id());
+
+		Glib::ustring text = entry->get_text();
+		size_t text_len = text.bytes() * 2 + 1;
+		std::unique_ptr<char[]> text_buffer(new char[text_len]);
+		mysql_real_escape_string(m_db_,text_buffer.get(),text.c_str(),text.bytes());
+		
+		Glib::ustring created_on_str = entry->get_created_on_format(DATETIME_ISO_FORMAT);
+		size_t created_on_len = created_on_str.bytes() * 2 + 1;
+		std::unique_ptr<char[]> created_on_buffer(new char[created_on_len]);
+		mysql_real_escape_string(m_db_,created_on_buffer.get(),created_on_str.c_str(),created_on_str.bytes());
+	
+		size_t len = strlen(sql) + growlog_id_str.size() + text_len + created_on_len;
+		std::unique_ptr<char[]> buffer(new char[len]);
+		snprintf(buffer.get(),len,sql,growlog_id_str.c_str(),text_buffer.get(),created_on_buffer.get());
+
+		sql_command = (const char*) buffer.get();
+	}
+
+	begin_transaction ();
+	
+	if (mysql_query(m_db_,sql_command.c_str()))
+		database_error(_("Unable to add growlog-entry!"),true);
+
+	commit();
 }
 
 void 
 DatabaseMariaDB::remove_growlog_entry_vfunc(uint64_t id)
 {
+	assert(m_db_);
+
+	const char *sql = "DELETE FROM growlog_entry WHERE id=%s;";
+
+	std::string id_str = std::to_string(id);
+
+	size_t len = strlen(sql) + id_str.size() + 1;
+	std::unique_ptr<char[]> buffer(new char[len]);
+	snprintf(buffer.get(),len,sql,id_str.c_str());
+
+	begin_transaction();
+
+	if (mysql_query(m_db_,buffer.get()))
+		database_error(_("Unable to delete growlog-entry!"),true);
+
+	commit();
 }
 
 /**** growlog_strain methods **************************************************/
@@ -1138,16 +1269,66 @@ DatabaseMariaDB::remove_growlog_entry_vfunc(uint64_t id)
 void 
 DatabaseMariaDB::add_strain_for_growlog_vfunc(uint64_t growlog_id,uint64_t strain_id)
 {
+	assert(m_db_);
+
+	const char *sql = "INSERT INTO growlog_strain (growlog,strain) VALUES (%s,%s);";
+
+	std::string growlog_id_str = std::to_string(growlog_id);
+	std::string strain_id_str = std::to_string(strain_id);
+
+	size_t len = strlen(sql) + growlog_id_str.size() + strain_id_str.size() + 1;
+	std::unique_ptr<char[]> buffer(new char[len]);
+	snprintf(buffer.get(),len,sql,growlog_id_str.c_str(),strain_id_str.c_str());
+
+	begin_transaction();
+
+	if (mysql_query(m_db_,buffer.get()))
+		database_error(_("Unable to insert into growlog_strain!"),true);
+
+	commit();
 }
 
 void 
 DatabaseMariaDB::remove_strain_for_growlog_vfunc(uint64_t growlog_id,uint64_t strain_id)
 {
+	assert(m_db_);
+
+	const char *sql = "DELETE FROM growlog_strain WHERE growlog=%s AND strain=%s;";
+
+	std::string growlog_id_str = std::to_string(growlog_id);
+	std::string strain_id_str = std::to_string(strain_id);
+
+	size_t len = strlen(sql) + growlog_id_str.size() + strain_id_str.size() + 1;
+	std::unique_ptr<char[]> buffer(new char[len]);
+	snprintf(buffer.get(),len,sql,growlog_id_str.c_str(),strain_id_str.c_str());
+
+	begin_transaction();
+	
+	if (mysql_query(m_db_,buffer.get()))
+		database_error("Unable to delete from 'growlog_strain'!",true);
+
+	commit();
 }
 
 void 
-DatabaseMariaDB::remove_strain_for_growlog_vfunc(uint64_t growlog_strain_id)
+DatabaseMariaDB::remove_strain_for_growlog_vfunc(uint64_t id)
 {
+	assert(m_db_);
+
+	const char *sql = "DELETE FROM growlog_strain WHERE id=%s;";
+
+	std::string id_str = std::to_string(id);
+
+	size_t len = strlen(sql) + id_str.size() + 1;
+	std::unique_ptr<char[]> buffer(new char[len]);
+	snprintf(buffer.get(),len,sql,id_str.c_str());
+
+	begin_transaction();
+
+	if (mysql_query(m_db_,buffer.get()))
+		database_error(_("Unable to delete from 'growlog_strain'!"));
+
+	commit();
 }
 
 

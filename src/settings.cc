@@ -798,11 +798,11 @@ Settings::get_package_doc_dir()
 std::string
 Settings::get_locale_dir() const
 {
-//#ifdef NATIVE_WINDOWS
+#ifdef NATIVE_WINDOWS
 	return Glib::build_filename (m_prefix_,"share","locale");
-//#else
-//	return std::string(LOCALEDIR);
-//#endif
+#else
+	return std::string(PACKAGE_LOCALE_DIR);
+#endif
 }
 
 std::string 
