@@ -498,7 +498,7 @@ DatabaseMariaDB::get_strains_for_growlog_vfunc(uint64_t growlog_id) const
 	snprintf(buffer.get(),len,sql,growlog_id_str.c_str());
 
 	if (mysql_query(m_db_,sql)) 
-		database_error(_("Unable to fetch strains for grwolog!"));
+		database_error(_("Unable to fetch strains for growlog!"));
 
 	MYSQL_RES *result = mysql_store_result(m_db_);
 	if (!result)

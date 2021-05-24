@@ -1,7 +1,7 @@
 BEGIN;
 
 CREATE TABLE breeder (
-	id SERIAL PRIMARY_KEY,
+	id SERIAL PRIMARY KEY,
 	name VARCHAR(256) UNIQUE NOT NULL,
 	homepage VARCHAR(1024) DEFAULT ''
 );
@@ -10,12 +10,12 @@ CREATE INDEX idx_breeder_name ON breeder (name);
 
 CREATE TABLE strain (
 	id SERIAL PRIMARY KEY,
-	breeder BIGINT NOT NULL,
+	breeder BIGINT UNSIGNED NOT NULL,
 	name VARCHAR(256) NOT NULL,
-	info MEDIUMTEXT DEFAULT '',
-	description MEDIUMTEXT DEFAULT '',
-	homepage VARCHAR(1024) DEFAULT '',
-	seedfinder VARCHAR(1024) DEFAULT '',
+	info MEDIUMTEXT,
+	description MEDIUMTEXT,
+	homepage VARCHAR(1024),
+	seedfinder VARCHAR(1024),
 	UNIQUE (breeder,name),
 	FOREIGN KEY (breeder) REFERENCES breeder(id)
 		ON UPDATE CASCADE
@@ -38,8 +38,8 @@ CREATE VIEW strain_view AS
 
 CREATE TABLE growlog (
 	id SERIAL PRIMARY KEY,
-	title VARCHAR(1024) UNIQUE NOT NULL,
-	description MEIDUMTEXT DEFAULT '',
+	title VARCHAR(512) UNIQUE NOT NULL,
+	description MEDIUMTEXT,
 	created_on TIMESTAMP NOT NULL,
 	flower_on DATE,
 	finished_on TIMESTAMP
@@ -48,7 +48,7 @@ CREATE INDEX idx_growlog_title ON growlog(title);
 
 CREATE TABLE growlog_entry (
 	id SERIAL PRIMARY KEY,
-	growlog BIGINT NOT NULL,
+	growlog BIGINT UNSIGNED NOT NULL,
 	entry MEDIUMTEXT NOT NULL,
 	created_on TIMESTAMP NOT NULL,
 	FOREIGN KEY (growlog) REFERENCES growlog(id)
@@ -59,8 +59,8 @@ CREATE INDEX idx_growlog_entry_growlog ON growlog_entry(growlog);
 
 CREATE TABLE growlog_strain (
 	id SERIAL PRIMARY KEY,
-	growlog BIGINT NOT NULL,
-	strain BIGINT NOT NULL,
+	growlog BIGINT UNSIGNED NOT NULL,
+	strain BIGINT USIGNED NOT NULL,
 	UNIQUE(growlog,strain),
 	FOREIGN KEY (growlog) REFERENCES growlog(id)
 		ON UPDATE CASCADE
