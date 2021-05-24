@@ -391,7 +391,7 @@ DatabaseMariaDB::add_breeder_vfunc(const Glib::RefPtr<Breeder> &breeder)
 		std::unique_ptr<char[]> buffer(new char[len]);
 		snprintf(buffer.get(),len,sql,name_buffer.get(),homepage_buffer.get(),id_str.c_str());
 
-		sql_command = (const char*) buffer.get();
+		sql_command = buffer.get();
 	} else {
 		const char *sql = "INSERT INTO breeder (name,homepage) VALUES ('%s','%s');";
 		
@@ -409,7 +409,7 @@ DatabaseMariaDB::add_breeder_vfunc(const Glib::RefPtr<Breeder> &breeder)
 		std::unique_ptr<char[]> buffer(new char[len]);
 		snprintf(buffer.get(),len,sql,name_buffer.get(),homepage_buffer.get());
 
-		sql_command = (const char*) buffer.get();
+		sql_command = buffer.get();
 	}
 
 	if (mysql_query(m_db_,sql_command.c_str())) {
@@ -648,7 +648,7 @@ DatabaseMariaDB::add_strain_vfunc(const Glib::RefPtr<Strain> &strain)
 		         homepage_buffer.get(),
 		         seedfinder_buffer.get(),
 		         id_str.c_str());
-		sql_command = (const char*) buffer.get();
+		sql_command = buffer.get();
 	} else {
 		const char *sql = "INSERT INTO strain (breeder,name,info,description,homepage,seedfinder) VALUES (%s,'%s','%s','%s','%s','%s');";
 
@@ -688,7 +688,7 @@ DatabaseMariaDB::add_strain_vfunc(const Glib::RefPtr<Strain> &strain)
 		         desc_buffer.get(),
 		         homepage_buffer.get(),
 		         seedfinder_buffer.get());
-		sql_command = (const char*) buffer.get();
+		sql_command = buffer.get();
 	}
 
 	if (mysql_query(m_db_,sql_command.c_str()))
@@ -1018,7 +1018,7 @@ DatabaseMariaDB::add_growlog_vfunc(const Glib::RefPtr<Growlog> &growlog)
 	begin_transaction();
 	
 	if (growlog->get_id()) {
-		const char *sql = "UPDATE growlog SET title='%s',description='%s',flower_on='%s',finished_on='%s' WHERE id=%s;";
+		const char *sql = "UPDATE growlog SET title='%s',description='%s',flower_on=%s,finished_on=%s WHERE id=%s;";
 
 		std::string id_str = std::to_string(growlog->get_id());
 
@@ -1032,28 +1032,41 @@ DatabaseMariaDB::add_growlog_vfunc(const Glib::RefPtr<Growlog> &growlog)
 		std::unique_ptr<char[]> desc_buffer(new char[desc_len]);
 		mysql_real_escape_string(m_db_,desc_buffer.get(),desc.c_str(),desc.bytes());
 
+
+		std::string flower_on_str = "NULL"; 
+		if (growlog->get_flower_on()) {
+			Glib::ustring flower_on = growlog->get_flower_on_format(DATE_ISO_FORMAT);
+			size_t flower_on_len = flower_on.bytes() * 2 + 1;
+			std::unique_ptr<char[]> flower_on_buffer(new char[flower_on_len]);
+			mysql_real_escape_string(m_db_,flower_on_buffer.get(),flower_on.c_str(),flower_on.bytes());
+			flower_on_str = "'";
+			flower_on_str += flower_on_buffer.get();
+			flower_on_str += "'";
+		}
 		
-		Glib::ustring flower_on = growlog->get_flower_on_format(DATE_ISO_FORMAT);
-		size_t flower_on_len = flower_on.bytes() * 2 + 1;
-		std::unique_ptr<char[]> flower_on_buffer(new char[flower_on_len]);
-		mysql_real_escape_string(m_db_,flower_on_buffer.get(),flower_on.c_str(),flower_on.bytes());
 
-		Glib::ustring finished_on = growlog->get_finished_on_format(DATETIME_ISO_FORMAT);
-		size_t finished_on_len = finished_on.bytes() * 2 + 1;
-		std::unique_ptr<char[]> finished_on_buffer(new char[finished_on_len]);
-		mysql_real_escape_string(m_db_,finished_on_buffer.get(),finished_on.c_str(),finished_on.bytes());
+		std::string finished_on_str = "NULL";
+		if (growlog->get_finished_on()) {
+			Glib::ustring finished_on = growlog->get_finished_on_format(DATETIME_ISO_FORMAT);
+			size_t finished_on_len = finished_on.bytes() * 2 + 1;
+			std::unique_ptr<char[]> finished_on_buffer(new char[finished_on_len]);
+			mysql_real_escape_string(m_db_,finished_on_buffer.get(),finished_on.c_str(),finished_on.bytes());
+			finished_on_str = "'";
+			finished_on_str += finished_on_buffer.get();
+			finished_on_str += "'";
+		}
 
-		size_t len = strlen(sql) + id_str.size() + title_len + desc_len + flower_on_len + finished_on_len;
+		size_t len = strlen(sql) + id_str.size() + title_len + desc_len + flower_on_str.size() + finished_on_str.size();
 		std::unique_ptr<char[]> buffer(new char[len]);
 		snprintf(buffer.get(),len,sql,
 		         title_buffer.get(),
 		         desc_buffer.get(),
-		         flower_on_buffer.get(),
-		         finished_on_buffer.get(),
+		         flower_on_str.c_str(),
+		         finished_on_str.c_str(),
 		         id_str.c_str());
-		sql_command = (const char*) buffer.get();
+		sql_command = buffer.get();
 	} else {
-		const char *sql = "INSERT INTO growlog (title,description,created_on,flower_on,finished_on) VALUES ('%s','%s','%s','%s','%s');";
+		const char *sql = "INSERT INTO growlog (title,description,created_on,flower_on,finished_on) VALUES ('%s','%s','%s',%s,%s);";
 
 		Glib::ustring title = growlog->get_title();
 		size_t title_len = title.bytes() * 2 + 1;
@@ -1070,25 +1083,39 @@ DatabaseMariaDB::add_growlog_vfunc(const Glib::RefPtr<Growlog> &growlog)
 		std::unique_ptr<char[]> created_on_buffer(new char[created_on_len]);
 		mysql_real_escape_string(m_db_,created_on_buffer.get(),created_on.c_str(),created_on.bytes());
 
-		Glib::ustring flower_on = growlog->get_flower_on_format(DATE_ISO_FORMAT);
-		size_t flower_on_len = flower_on.bytes() * 2 + 1;
-		std::unique_ptr<char[]> flower_on_buffer(new char[flower_on_len]);
-		mysql_real_escape_string(m_db_,flower_on_buffer.get(),flower_on.c_str(),flower_on.bytes());
+		std::string flower_on_str = "NULL";
+		if (growlog->get_flower_on()) {
+			Glib::ustring flower_on = growlog->get_flower_on_format(DATE_ISO_FORMAT);
+			size_t flower_on_len = flower_on.bytes() * 2 + 1;
+			std::unique_ptr<char[]> flower_on_buffer(new char[flower_on_len]);
+			mysql_real_escape_string(m_db_,flower_on_buffer.get(),flower_on.c_str(),flower_on.bytes());
+			
+			flower_on_str = "'";
+			flower_on_str += flower_on_buffer.get();
+			flower_on_str += "'";
+		}
 
-		Glib::ustring finished_on = growlog->get_finished_on_format(DATETIME_ISO_FORMAT);
-		size_t finished_on_len = finished_on.bytes() * 2 + 1;
-		std::unique_ptr<char[]> finished_on_buffer(new char[finished_on_len]);
-		mysql_real_escape_string(m_db_,finished_on_buffer.get(),finished_on.c_str(),finished_on.bytes());
+		std::string finished_on_str = "NULL";
+		if (growlog->get_finished_on()) {
+			Glib::ustring finished_on = growlog->get_finished_on_format(DATETIME_ISO_FORMAT);
+			size_t finished_on_len = finished_on.bytes() * 2 + 1;
+			std::unique_ptr<char[]> finished_on_buffer(new char[finished_on_len]);
+			mysql_real_escape_string(m_db_,finished_on_buffer.get(),finished_on.c_str(),finished_on.bytes());
 
-		size_t len = title_len + desc_len + created_on_len + flower_on_len + finished_on_len;
+			finished_on_str = "'";
+			finished_on_str += finished_on_buffer.get();
+			finished_on_str = "'";
+		}
+		
+		size_t len = title_len + desc_len + created_on_len + flower_on_str.size() + finished_on_str.size();
 		std::unique_ptr<char[]> buffer(new char[len]);
 		snprintf(buffer.get(),len,sql,
 		         title_buffer.get(),
 		         desc_buffer.get(),
 		         created_on_buffer.get(),
-		         flower_on_buffer.get(),
-		         finished_on_buffer.get());
-		sql_command = (const char*) buffer.get();
+		         flower_on_str.c_str(),
+		         finished_on_str.c_str());
+		sql_command = buffer.get();
 	}
 
 	if (mysql_query(m_db_,sql_command.c_str()))
@@ -1212,7 +1239,7 @@ DatabaseMariaDB::add_growlog_entry_vfunc(const Glib::RefPtr<GrowlogEntry> &entry
 		std::unique_ptr<char[]> buffer(new char[len]);
 		snprintf(buffer.get(),len,sql,text_buffer.get(),id_str.c_str());
 
-		sql_command = (const char*) buffer.get();
+		sql_command = buffer.get();
 	} else {
 		const char *sql = "INSERT INTO growlog_entry (growlog,entry,created_on) VALUES (%s,'%s','%s');";
 
@@ -1232,7 +1259,7 @@ DatabaseMariaDB::add_growlog_entry_vfunc(const Glib::RefPtr<GrowlogEntry> &entry
 		std::unique_ptr<char[]> buffer(new char[len]);
 		snprintf(buffer.get(),len,sql,growlog_id_str.c_str(),text_buffer.get(),created_on_buffer.get());
 
-		sql_command = (const char*) buffer.get();
+		sql_command = buffer.get();
 	}
 
 	begin_transaction ();
