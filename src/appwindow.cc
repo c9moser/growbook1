@@ -31,6 +31,7 @@
 #include <gtkmm/paned.h>
 #include <gtkmm/image.h>
 #include <gtkmm/button.h>
+#include <gtkmm/separatormenuitem.h>
 
 #include <cassert>
 
@@ -38,7 +39,8 @@
 #include "settingsdialog.h"
 #include "aboutdialog.h"
 #include "growlogview.h"
-//#include "application.h"
+#include "application.h"
+#include "export.h" 
 
 #include <iostream>
 
@@ -98,7 +100,17 @@ AppWindow::_add_menu()
 	Gtk::Menu *submenu_file = Gtk::manage(new Gtk::Menu());
 	menuitem_file->set_submenu(*submenu_file);
 
-	Gtk::MenuItem *menuitem = Gtk::manage(new Gtk::MenuItem(_("Quit")));
+	Gtk::MenuItem *menuitem = Gtk::manage(new Gtk::MenuItem(_("Export")));
+	menuitem->signal_activate().connect(sigc::mem_fun(*this,&AppWindow::on_export));
+	submenu_file->append(*menuitem);
+
+	menuitem = Gtk::manage(new Gtk::MenuItem(_("Import")));
+	menuitem->signal_activate().connect(sigc::mem_fun(*this,&AppWindow::on_import));
+	submenu_file->append(*menuitem);
+
+	submenu_file->append(*Gtk::manage(new Gtk::SeparatorMenuItem()));
+	
+	menuitem = Gtk::manage(new Gtk::MenuItem(_("Quit")));
 	menuitem->signal_activate().connect(sigc::mem_fun(*this,&AppWindow::hide));
 	submenu_file->append(*menuitem);
 
@@ -270,4 +282,19 @@ AppWindow::on_browser_title_changed(Gtk::Label *label,BrowserPage *page)
 void
 AppWindow::on_export()
 {
+	ExportDialog dialog(*this,m_database_);
+	int response = dialog.run();
+	dialog.hide();
+	if (response == Gtk::RESPONSE_APPLY) {
+		Glib::RefPtr<Exporter> exporter = dialog.get_exporter();
+		if (!exporter)
+			return;
+		exporter->export_db(*this);
+	}
 }
+
+void
+AppWindow::on_import()
+{
+}
+

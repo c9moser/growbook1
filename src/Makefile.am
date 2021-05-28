@@ -74,7 +74,9 @@ growbook_SOURCES = \
 	growlogentrydialog.cc \
 	growlogentrydialog.h \
 	database-mariadb.cc \
-	database-mariadb.h 
+	database-mariadb.h \
+	export.cc \
+	export.h 
 
 growbook_LDFLAGS = 
 

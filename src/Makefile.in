@@ -116,7 +116,8 @@ am_growbook_OBJECTS = main.$(OBJEXT) application.$(OBJEXT) \
 	breederdialog.$(OBJEXT) straindialog.$(OBJEXT) \
 	strptime.$(OBJEXT) growlogselector.$(OBJEXT) \
 	growlogview.$(OBJEXT) growlogdialog.$(OBJEXT) \
-	growlogentrydialog.$(OBJEXT) database-mariadb.$(OBJEXT)
+	growlogentrydialog.$(OBJEXT) database-mariadb.$(OBJEXT) \
+	export.$(OBJEXT)
 growbook_OBJECTS = $(am_growbook_OBJECTS)
 am__DEPENDENCIES_1 =
 growbook_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
@@ -150,8 +151,8 @@ am__depfiles_remade = ./$(DEPDIR)/aboutdialog.Po \
 	./$(DEPDIR)/database-postgresql.Po \
 	./$(DEPDIR)/database-sqlite3.Po ./$(DEPDIR)/database.Po \
 	./$(DEPDIR)/databasesettingsdialog.Po ./$(DEPDIR)/datatypes.Po \
-	./$(DEPDIR)/error.Po ./$(DEPDIR)/growlogdialog.Po \
-	./$(DEPDIR)/growlogentrydialog.Po \
+	./$(DEPDIR)/error.Po ./$(DEPDIR)/export.Po \
+	./$(DEPDIR)/growlogdialog.Po ./$(DEPDIR)/growlogentrydialog.Po \
 	./$(DEPDIR)/growlogselector.Po ./$(DEPDIR)/growlogview.Po \
 	./$(DEPDIR)/main.Po ./$(DEPDIR)/refclass.Po \
 	./$(DEPDIR)/settings.Po ./$(DEPDIR)/settingsdialog.Po \
@@ -480,7 +481,9 @@ growbook_SOURCES = \
 	growlogentrydialog.cc \
 	growlogentrydialog.h \
 	database-mariadb.cc \
-	database-mariadb.h 
+	database-mariadb.h \
+	export.cc \
+	export.h 
 
 growbook_LDFLAGS = $(am__append_1)
 growbook_LDADD = $(GROWBOOK_LIBS) $(PGSQL_LIBS) $(MARIADB_LIBS)
@@ -591,6 +594,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/databasesettingsdialog.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/datatypes.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/error.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/export.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/growlogdialog.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/growlogentrydialog.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/growlogselector.Po@am__quote@ # am--include-marker
@@ -819,6 +823,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/databasesettingsdialog.Po
 	-rm -f ./$(DEPDIR)/datatypes.Po
 	-rm -f ./$(DEPDIR)/error.Po
+	-rm -f ./$(DEPDIR)/export.Po
 	-rm -f ./$(DEPDIR)/growlogdialog.Po
 	-rm -f ./$(DEPDIR)/growlogentrydialog.Po
 	-rm -f ./$(DEPDIR)/growlogselector.Po
@@ -889,6 +894,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/databasesettingsdialog.Po
 	-rm -f ./$(DEPDIR)/datatypes.Po
 	-rm -f ./$(DEPDIR)/error.Po
+	-rm -f ./$(DEPDIR)/export.Po
 	-rm -f ./$(DEPDIR)/growlogdialog.Po
 	-rm -f ./$(DEPDIR)/growlogentrydialog.Po
 	-rm -f ./$(DEPDIR)/growlogselector.Po
