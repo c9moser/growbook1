@@ -239,7 +239,7 @@ ExportDialog::_configure()
 	tm *datetime;
 	
 #ifdef NATIVE_WINDOWS
-	datetime = localtime(*t);
+	datetime = localtime(&t);
 #else
 	datetime = new tm;
 	if (!localtime_r(&t,datetime))
