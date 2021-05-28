@@ -24,3 +24,4 @@ src/straindialog.cc
 src/strainselector.cc
 src/strainview.cc
 src/strptime.cc
+src/database-mariadb.cc

@@ -3381,18 +3381,29 @@ m4trace:configure.ac:67: -1- PKG_CHECK_EXISTS([libpq], [pkg_cv_[]PGSQL_CFLAGS=`$
 m4trace:configure.ac:67: -1- PKG_CHECK_EXISTS([libpq], [pkg_cv_[]PGSQL_LIBS=`$PKG_CONFIG --[]libs "libpq" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
 m4trace:configure.ac:67: -1- _PKG_SHORT_ERRORS_SUPPORTED
-m4trace:configure.ac:71: -1- _m4_warn([obsolete], [AC_OUTPUT should be used without arguments.
+m4trace:configure.ac:72: -2- m4_pattern_allow([^HAVE_MARIADB$])
+m4trace:configure.ac:71: -1- PKG_CHECK_MODULES([MARIADB], [libmariadb], [
+$as_echo "@%:@define HAVE_MARIADB 1" >>confdefs.h
+], [])
+m4trace:configure.ac:71: -1- m4_pattern_allow([^MARIADB_CFLAGS$])
+m4trace:configure.ac:71: -1- m4_pattern_allow([^MARIADB_LIBS$])
+m4trace:configure.ac:71: -1- PKG_CHECK_EXISTS([libmariadb], [pkg_cv_[]MARIADB_CFLAGS=`$PKG_CONFIG --[]cflags "libmariadb" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
+m4trace:configure.ac:71: -1- PKG_CHECK_EXISTS([libmariadb], [pkg_cv_[]MARIADB_LIBS=`$PKG_CONFIG --[]libs "libmariadb" 2>/dev/null`
+		      test "x$?" != "x0" && pkg_failed=yes ], [pkg_failed=yes])
+m4trace:configure.ac:71: -1- _PKG_SHORT_ERRORS_SUPPORTED
+m4trace:configure.ac:75: -1- _m4_warn([obsolete], [AC_OUTPUT should be used without arguments.
 You should run autoupdate.], [])
-m4trace:configure.ac:71: -1- m4_pattern_allow([^LIB@&t@OBJS$])
-m4trace:configure.ac:71: -1- m4_pattern_allow([^LTLIBOBJS$])
-m4trace:configure.ac:71: -1- AM_CONDITIONAL([am__EXEEXT], [test -n "$EXEEXT"])
-m4trace:configure.ac:71: -1- m4_pattern_allow([^am__EXEEXT_TRUE$])
-m4trace:configure.ac:71: -1- m4_pattern_allow([^am__EXEEXT_FALSE$])
-m4trace:configure.ac:71: -1- _AM_SUBST_NOTMAKE([am__EXEEXT_TRUE])
-m4trace:configure.ac:71: -1- _AM_SUBST_NOTMAKE([am__EXEEXT_FALSE])
-m4trace:configure.ac:71: -1- _AC_AM_CONFIG_HEADER_HOOK(["$ac_file"])
-m4trace:configure.ac:71: -1- _AM_OUTPUT_DEPENDENCY_COMMANDS
-m4trace:configure.ac:71: -1- AM_RUN_LOG([cd "$am_dirpart" \
+m4trace:configure.ac:75: -1- m4_pattern_allow([^LIB@&t@OBJS$])
+m4trace:configure.ac:75: -1- m4_pattern_allow([^LTLIBOBJS$])
+m4trace:configure.ac:75: -1- AM_CONDITIONAL([am__EXEEXT], [test -n "$EXEEXT"])
+m4trace:configure.ac:75: -1- m4_pattern_allow([^am__EXEEXT_TRUE$])
+m4trace:configure.ac:75: -1- m4_pattern_allow([^am__EXEEXT_FALSE$])
+m4trace:configure.ac:75: -1- _AM_SUBST_NOTMAKE([am__EXEEXT_TRUE])
+m4trace:configure.ac:75: -1- _AM_SUBST_NOTMAKE([am__EXEEXT_FALSE])
+m4trace:configure.ac:75: -1- _AC_AM_CONFIG_HEADER_HOOK(["$ac_file"])
+m4trace:configure.ac:75: -1- _AM_OUTPUT_DEPENDENCY_COMMANDS
+m4trace:configure.ac:75: -1- AM_RUN_LOG([cd "$am_dirpart" \
       && sed -e '/# am--include-marker/d' "$am_filepart" \
         | $MAKE -f - am--depfiles])
-m4trace:configure.ac:71: -1- _LT_PROG_LTMAIN
+m4trace:configure.ac:75: -1- _LT_PROG_LTMAIN

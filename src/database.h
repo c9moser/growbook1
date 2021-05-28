@@ -34,6 +34,7 @@
 #include <list>
 
 #include "datatypes.h"
+#include "error.h"
 
 /*******************************************************************************
  * Database

@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl Created by Anjuta application wizard.
 
-AC_INIT(growbook, 0.1.0)
+AC_INIT(growbook, 0.1.1)
 
 AC_CONFIG_HEADERS([config.h])
 
@@ -66,6 +66,10 @@ AC_CHECK_LIB(sqlite3,sqlite3_open)
 
 PKG_CHECK_MODULES(PGSQL, [libpq],
 				  AC_DEFINE(HAVE_LIBPQ,1,[define 1 if we have libpq (PostgreSQL) installed.]),
+				  [])
+
+PKG_CHECK_MODULES(MARIADB, [libmariadb],
+				  AC_DEFINE(HAVE_MARIADB,1,[define 1 if we have MariaDB client installed.]),
 				  [])
 
 AC_OUTPUT([

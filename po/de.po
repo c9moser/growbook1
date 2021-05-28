@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-16 16:37+0200\n"
-"PO-Revision-Date: 2021-05-16 17:27+0200\n"
+"POT-Creation-Date: 2021-05-23 17:38+0200\n"
+"PO-Revision-Date: 2021-05-23 17:45+0200\n"
+"Last-Translator: \n"
 "Language-Team: \n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.2.1\n"
-"Last-Translator: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"Language: de\n"
 
 #: ../src/application.cc:100
 #, c-format
@@ -28,7 +28,7 @@ msgstr "Keine Datenbankengine '%s'!\n"
 msgid "Could not connect to database!"
 msgstr "Konnte mich nicht mit der Datenbank verbinden!"
 
-#: ../src/application.cc:132 ../src/database-postgresql.cc:144
+#: ../src/application.cc:132 ../src/database-postgresql.cc:146
 #: ../src/database-sqlite3.cc:140
 msgid "Unable to connect to database!"
 msgstr "Konnte mich nicht mit der Datenbank verbinden!"
@@ -57,7 +57,7 @@ msgstr "Beenden"
 
 #. Edit Menu
 #: ../src/appwindow.cc:108 ../src/growlogselector.cc:60
-#: ../src/growlogview.cc:263 ../src/strainselector.cc:65
+#: ../src/growlogview.cc:277 ../src/strainselector.cc:65
 msgid "Edit"
 msgstr "Bearbeiten"
 
@@ -86,8 +86,7 @@ msgstr "GrowBook muss neu getartet werden, um die Änderungen anzuwenden."
 msgid ""
 "GrowBook needs to be restarted for Database-settings changes to take effect!"
 msgstr ""
-"GrowBook muss neu gestartet werden um die Datenbank-Einstellungen "
-"anzuwenden!"
+"GrowBook muss neu gestartet werden um die Datenbank-Einstellungen anzuwenden!"
 
 #. ******************************************************************************
 #. * BreederDialog
@@ -141,92 +140,92 @@ msgstr "Name"
 #: ../src/breederdialog.cc:331
 msgid "Strain already exists. Do you want to overwrite existing strain?"
 msgstr ""
-"Die Sorte existiert bereits. Wollen sie die existierende Sorte "
-"überschreiben?"
+"Die Sorte existiert bereits. Wollen sie die existierende Sorte überschreiben?"
 
 #: ../src/breederdialog.cc:404 ../src/strainselector.cc:326
 msgid "Do you really want to delete the selected strain?"
 msgstr "Wollen Sie wirklich die ausgewählte Sorte löschen?"
 
-#: ../src/database-postgresql.cc:146
+#: ../src/database-postgresql.cc:148
 msgid "Unable to connect to database"
 msgstr "Konnte mich nicht mit der Datenbank verbinden"
 
-#: ../src/database-postgresql.cc:185
+#: ../src/database-postgresql.cc:187
 msgid "Unable to create GrowBook database!"
 msgstr "Konnte GrowBook Datenbank nicht erstellen!"
 
-#: ../src/database-postgresql.cc:205 ../src/database-sqlite3.cc:197
-#: ../src/settings.cc:352
+#: ../src/database-postgresql.cc:207 ../src/database-sqlite3.cc:197
+#: ../src/settings.cc:352 ../src/database-mariadb.cc:128
 msgid "Unable to start a transaction!"
 msgstr "Konnte keine Transaktion starten!"
 
-#: ../src/database-postgresql.cc:222 ../src/database-sqlite3.cc:231
+#: ../src/database-postgresql.cc:224 ../src/database-sqlite3.cc:231
 #: ../src/settings.cc:370
 msgid "Unable to commit changes!"
 msgstr "Konnte Änderungen nicht anwenden!"
 
-#: ../src/database-postgresql.cc:240 ../src/database-sqlite3.cc:214
+#: ../src/database-postgresql.cc:242 ../src/database-sqlite3.cc:214
 msgid "Unable to rollback changes!"
 msgstr "Konnte Änderungen nicht zurücksetzen!"
 
-#: ../src/database-postgresql.cc:342 ../src/database-sqlite3.cc:352
+#: ../src/database-postgresql.cc:344 ../src/database-sqlite3.cc:352
 msgid "Unable to update breeder!"
 msgstr "Konnte Züchter nicht aktualisieren!"
 
-#: ../src/database-postgresql.cc:361
+#: ../src/database-postgresql.cc:363
 msgid "Unable to insert breeder!"
 msgstr "Konnte Züchter nicht einfügen!"
 
-#: ../src/database-postgresql.cc:388 ../src/database-sqlite3.cc:423
+#: ../src/database-postgresql.cc:390 ../src/database-sqlite3.cc:423
+#: ../src/database-mariadb.cc:435
 msgid "Unable to delete breeder from database!"
 msgstr "Konnte Züchter nicht aus der Datenbank entfernen!"
 
-#: ../src/database-postgresql.cc:438
+#: ../src/database-postgresql.cc:440
 msgid "Looking up strains for breeder failed!"
 msgstr "Nachschlagen von Sorte für Züchter fehlgeschlagen!"
 
-#: ../src/database-postgresql.cc:562 ../src/database-sqlite3.cc:630
+#: ../src/database-postgresql.cc:564 ../src/database-sqlite3.cc:630
 msgid "Unable to update strain!"
 msgstr "Konnte Sorte nicht aktualisieren!"
 
-#: ../src/database-postgresql.cc:590 ../src/database-sqlite3.cc:649
+#: ../src/database-postgresql.cc:592 ../src/database-sqlite3.cc:649
 msgid "Unable to insert strain into database!"
 msgstr "Konnte Sorte nicht in die Datenbank einfügen!"
 
-#: ../src/database-postgresql.cc:615 ../src/database-sqlite3.cc:691
+#: ../src/database-postgresql.cc:617 ../src/database-sqlite3.cc:691
 msgid "Unable to delete strain from database!"
 msgstr "Konnte Sorte nicht aus der Datenbank löschen!"
 
-#: ../src/database-postgresql.cc:905 ../src/database-sqlite3.cc:1110
+#: ../src/database-postgresql.cc:907 ../src/database-sqlite3.cc:1110
 msgid "Updating growlog failed!"
 msgstr "Aktualisieren des Glowlogs fehlgeschlagen."
 
-#: ../src/database-postgresql.cc:942 ../src/database-sqlite3.cc:1148
+#: ../src/database-postgresql.cc:944 ../src/database-sqlite3.cc:1148
 msgid "Inserting growlog into database failed!"
 msgstr "Einfügen des Growlogs in die Datenbank fehlgeschlagen!"
 
-#: ../src/database-postgresql.cc:969 ../src/database-sqlite3.cc:1186
+#: ../src/database-postgresql.cc:971 ../src/database-sqlite3.cc:1186
 msgid "Deleting growlog failed!"
 msgstr "Löschen des Growlogs fehlgeschlagen!"
 
-#: ../src/database-postgresql.cc:1059 ../src/database-sqlite3.cc:1302
+#: ../src/database-postgresql.cc:1062 ../src/database-sqlite3.cc:1302
 msgid "Updating growlog-entry failed!"
 msgstr "Aktualisieren des Growlog-Eintrags fehlgeschlagen!"
 
-#: ../src/database-postgresql.cc:1079 ../src/database-sqlite3.cc:1329
+#: ../src/database-postgresql.cc:1082 ../src/database-sqlite3.cc:1329
 msgid "Inserting growlog-entry failed!"
 msgstr "Einfügen des Growlog-Eintrags in die Datenbank fehlgeschlagen!"
 
-#: ../src/database-postgresql.cc:1107 ../src/database-sqlite3.cc:1367
+#: ../src/database-postgresql.cc:1109 ../src/database-sqlite3.cc:1367
 msgid "Deleting growlog-entry failed!"
 msgstr "Löschen des Growlog-Eintrags fehlgeschlagen!"
 
-#: ../src/database-postgresql.cc:1139
+#: ../src/database-postgresql.cc:1141
 msgid "INSERTING into growlog_strain failed!"
 msgstr "Einfügen in 'growlog_strain' fehlgeschlagen!"
 
-#: ../src/database-postgresql.cc:1168 ../src/database-postgresql.cc:1194
+#: ../src/database-postgresql.cc:1170 ../src/database-postgresql.cc:1196
 msgid "Deleting from 'growlog_strain' failed!"
 msgstr "Löschen von 'growlog_strain' fehlgeschlagen!"
 
@@ -289,7 +288,7 @@ msgstr "GrowBook: Datenbank"
 msgid "Successfully connected to database!"
 msgstr "Erfolgreich mit der Datenbank verbunden!"
 
-#: ../src/databasesettingsdialog.cc:406
+#: ../src/databasesettingsdialog.cc:406 ../src/database-mariadb.cc:226
 msgid "Connecting to database failed!"
 msgstr "Verbinden mit der Datenbank fehlgeschlagen!"
 
@@ -350,7 +349,8 @@ msgid "Deleting strain from database failed!"
 msgstr "Löschen der Sorte aus der Datenbank fehlgeschlagen!"
 
 #: ../src/database-sqlite3.cc:730 ../src/database-sqlite3.cc:784
-#: ../src/database-sqlite3.cc:838
+#: ../src/database-sqlite3.cc:838 ../src/database-mariadb.cc:732
+#: ../src/database-mariadb.cc:780 ../src/database-mariadb.cc:828
 msgid "Unable to fetch growlogs from database!"
 msgstr "Konnte Growlogs nicht aus der Datenbank holen!"
 
@@ -395,7 +395,7 @@ msgstr "Konnte Growlog-Eitnrag nicht in die Datenbank einfügen!"
 msgid "Unable to delete growlog_entry!"
 msgstr "Konnte Growlog-Eintrag nicht löschen!"
 
-#: ../src/database-sqlite3.cc:1394
+#: ../src/database-sqlite3.cc:1394 ../src/database-mariadb.cc:1286
 msgid "Unable to insert into growlog_strain!"
 msgstr "Konnte nicht in 'growlog_strain' einfügen!"
 
@@ -430,11 +430,11 @@ msgstr "Titel:"
 msgid "Growlog"
 msgstr "Growlog"
 
-#: ../src/growlogdialog.cc:182 ../src/growlogview.cc:93
+#: ../src/growlogdialog.cc:182 ../src/growlogview.cc:94
 msgid "Breeder"
 msgstr "Züchter"
 
-#: ../src/growlogdialog.cc:189 ../src/growlogview.cc:94
+#: ../src/growlogdialog.cc:189 ../src/growlogview.cc:95
 #: ../src/straindialog.cc:112
 msgid "Strain"
 msgstr "Sorte"
@@ -451,7 +451,7 @@ msgstr "Growlog:"
 msgid "Created on:"
 msgstr "Erstellt am:"
 
-#: ../src/growlogselector.cc:57 ../src/growlogview.cc:262
+#: ../src/growlogselector.cc:57 ../src/growlogview.cc:276
 #: ../src/strainselector.cc:61
 msgid "Refresh"
 msgstr "Aktualisieren"
@@ -484,75 +484,89 @@ msgstr "Beendete Growlogs"
 msgid "Do you really want to delete the selected  growlog?"
 msgstr "Wollen Sie wirklich den ausgewählten Growlog löschen?"
 
-#: ../src/growlogview.cc:202
+#: ../src/growlogview.cc:216
 msgid "Age [days]: "
 msgstr "Alter [Tage]:"
 
-#: ../src/growlogview.cc:206
+#: ../src/growlogview.cc:220
 msgid "Flowering [days]: "
 msgstr "Blüte [Tage]:"
 
-#: ../src/growlogview.cc:264
+#: ../src/growlogview.cc:278
 msgid "Add log-entry"
 msgstr "Log-Eintrag hinzufügen"
 
-#: ../src/growlogview.cc:265
+#: ../src/growlogview.cc:279
 msgid "Edit log-entry"
 msgstr "Log-Eintrag bearbeiten"
 
-#: ../src/growlogview.cc:266
+#: ../src/growlogview.cc:280
 msgid "Remove log-entry"
 msgstr "Log-Eintrag entfernen"
 
-#: ../src/growlogview.cc:278
+#: ../src/growlogview.cc:292
 msgid "Refresh view."
 msgstr "Ansicht Aktualisieren."
 
-#: ../src/growlogview.cc:285
+#: ../src/growlogview.cc:299
 msgid "Edit Growlog."
 msgstr "Growlog bearbeiten."
 
-#: ../src/growlogview.cc:308
+#: ../src/growlogview.cc:322
 msgid "Add Growlog-entry."
 msgstr "Growlog-Eintrag hinzufügen."
 
-#: ../src/growlogview.cc:313
+#: ../src/growlogview.cc:327
 msgid "Edit selected Growlog-entry."
 msgstr "Ausgwählten Growlog-Eintrag bearbeiten."
 
-#: ../src/growlogview.cc:318
+#: ../src/growlogview.cc:332
 msgid "Delete selected Growlog-entry."
 msgstr "Ausgewählten Growlog-Eintrag löschen."
 
-#: ../src/growlogview.cc:384
+#: ../src/growlogview.cc:400
 msgid "Created on: "
 msgstr "Erstellt am:"
 
-#: ../src/growlogview.cc:393
+#: ../src/growlogview.cc:409
 msgid "Started flowering on: "
 msgstr "Blüte gestartet am:"
 
-#: ../src/growlogview.cc:396
+#: ../src/growlogview.cc:412
 msgid "Flowering-days: "
 msgstr "Blütetage:"
 
-#: ../src/growlogview.cc:411
+#: ../src/growlogview.cc:427
 msgid "Finished on: "
 msgstr "Beendet am:"
 
-#: ../src/growlogview.cc:417
+#: ../src/growlogview.cc:433
 msgid "Age: "
 msgstr "Alter:"
 
-#: ../src/growlogview.cc:419
+#: ../src/growlogview.cc:435
 msgid " day(s)"
 msgstr "Tag(e)"
 
-#: ../src/growlogview.cc:422 ../src/straindialog.cc:126
+#: ../src/growlogview.cc:438 ../src/straindialog.cc:126
 msgid "Description"
 msgstr "Beschreibung"
 
-#: ../src/growlogview.cc:538
+#: ../src/growlogview.cc:486
+msgid "Do you really want to start flowering?"
+msgstr "Wollen sie wirklich die Blüte einleiten?"
+
+#: ../src/growlogview.cc:508
+msgid "Do you really want to finish growlog?"
+msgstr "Wollen sie wirklich den Growlog beenden?"
+
+#: ../src/growlogview.cc:513
+msgid "After finishing you will not be able to add or change entries!"
+msgstr ""
+"Nach dem Beenden werden sie nicht mehr in der Lage sein Einträge "
+"hinzuzufügen oder zu ändern!"
+
+#: ../src/growlogview.cc:598
 msgid "Do you really want to delete the selected growlog-entry?"
 msgstr "Wollen Sie wirklich den ausgewählten Growlog-Eintrag löschen?"
 
@@ -565,7 +579,7 @@ msgstr ""
 "Konnte Konfigurations-Datenabnk nicht öffnen! Ihre Einstellungen werden "
 "nicht gespeichert!\n"
 
-#: ../src/settings.cc:388
+#: ../src/settings.cc:388 ../src/database-mariadb.cc:140
 msgid "Unable to rollback transaction!"
 msgstr "Konnte Transaktion nicht zurücksetzen!"
 
@@ -668,6 +682,109 @@ msgstr "Info\n"
 msgid "Description\n"
 msgstr "Beschreibung\n"
 
-#: ../src/strainview.cc:222 ../src/strainview.cc:249 ../src/strainview.cc:280
+#: ../src/strainview.cc:226 ../src/strainview.cc:253 ../src/strainview.cc:284
 msgid "Unable to open URI!"
 msgstr "Konnte URI nicht öffnen!"
+
+#. ******************************************************************************
+#. * DatabaseMariaDB
+#. *****************************************************************************
+#: ../src/database-mariadb.cc:80
+msgid "Getting result for query failed!"
+msgstr "Erhalten des Ergebnisses für Abfrage fehlgeschlagen!"
+
+#: ../src/database-mariadb.cc:152
+msgid "Unable to commit transaction!"
+msgstr "Kann Transaktion nicht bestätigen!"
+
+#: ../src/database-mariadb.cc:199
+msgid "Reconnecting to database failed!"
+msgstr "Erneutes Verbinden mit der Datenbank fehlgeschlagen!"
+
+#: ../src/database-mariadb.cc:210
+msgid "Unable to create database-handle!"
+msgstr "Konnte Datenbank-Handle nicht erstellen!"
+
+#: ../src/database-mariadb.cc:265
+msgid "Creating database failed!"
+msgstr "Erstellen der Datenbank fehlgeschlagen!"
+
+#: ../src/database-mariadb.cc:283
+msgid "Unable to fetch breeders from database!"
+msgstr "Konnte Züchter nicht aus der Datenbank holen!"
+
+#: ../src/database-mariadb.cc:319
+msgid "Unable to get breeder from database!"
+msgstr "Konnte Züchter nicht aus der Datenbank holen!"
+
+#: ../src/database-mariadb.cc:350
+msgid "Unable to fetch breeder from Database!"
+msgstr "Konnte Züchter nicht aus der Datenbank holen!"
+
+#: ../src/database-mariadb.cc:416
+msgid "Unable to add breeder to database!"
+msgstr "Konnte Züchter nicht in die Datenbank einfügen!"
+
+#: ../src/database-mariadb.cc:456
+msgid "Unable to fetch strains for breeder from database!"
+msgstr "Konnte Sorten für Züchter nicht aus der Datenbank holen!"
+
+#: ../src/database-mariadb.cc:501
+msgid "Unable to fetch strains for growlog!"
+msgstr "Konnte Sorten für Growlog nicht aus der Datenbank holen!"
+
+#: ../src/database-mariadb.cc:537
+msgid "Unable to lookup strain!"
+msgstr "Konnte Sorte nicht nachschlagen!"
+
+#: ../src/database-mariadb.cc:581
+msgid "Unable to fetch strain from database!"
+msgstr "Konnte Sorte nicht aus der Datenbank holen!"
+
+#: ../src/database-mariadb.cc:695
+msgid "Unable to add strain to database!"
+msgstr "Konnte Sorte nicht in die Datenbank einfügen!"
+
+#: ../src/database-mariadb.cc:716
+msgid "Unable to delete strain!"
+msgstr "Konnte Sorte nicht löschen!"
+
+#: ../src/database-mariadb.cc:882
+msgid "Unable to lookup growlogs for strain!"
+msgstr "Konnte Growlog für Sorte nicht nachschlagen!"
+
+#: ../src/database-mariadb.cc:919
+msgid "Unable to lookup growlog by id!"
+msgstr "Konnte Growlog für 'id' nicht nachschlagen!"
+
+#: ../src/database-mariadb.cc:973
+msgid "Unable to lookup growlog by title!"
+msgstr "Konnte Growlog für Titel nicht aktualisieren!"
+
+#: ../src/database-mariadb.cc:1095
+msgid "Unable to add growlog!"
+msgstr "Konnte Growlog nicht hinzufügen!"
+
+#: ../src/database-mariadb.cc:1115
+msgid "Unable to delete growlog!"
+msgstr "Konnte Growlog nicht löschen!"
+
+#: ../src/database-mariadb.cc:1137
+msgid "Unable to lookup growlog-entries!"
+msgstr "Konnte Growlog-Einträge nicht nachschalgen!"
+
+#: ../src/database-mariadb.cc:1174
+msgid "Unable to lookup growlog-entry!"
+msgstr "Konnte Growlog-Eintrag nicht nachschlagen!"
+
+#: ../src/database-mariadb.cc:1241
+msgid "Unable to add growlog-entry!"
+msgstr "Konnte Growlog-Eintrag nicht hinzufügen!"
+
+#: ../src/database-mariadb.cc:1262
+msgid "Unable to delete growlog-entry!"
+msgstr "Konnte Growlog-Eintrag nicht löschen!"
+
+#: ../src/database-mariadb.cc:1329
+msgid "Unable to delete from 'growlog_strain'!"
+msgstr "Konnte nicht von 'growlog_strain' löschen!"

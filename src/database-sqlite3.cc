@@ -583,7 +583,7 @@ DatabaseSqlite3::get_strain_vfunc(const Glib::ustring &breeder_name,
 		throw DatabaseError(err,msg);
 	}
 	sqlite3_bind_text(stmt,1,breeder_name.c_str(),-1,0);
-	sqlite3_bind_text(stmt,1,strain_name.c_str(),-1,0);
+	sqlite3_bind_text(stmt,2,strain_name.c_str(),-1,0);
 	
 	if (sqlite3_step(stmt) == SQLITE_ROW) {
 		uint64_t id = static_cast<uint64_t>(sqlite3_column_int64(stmt,0));
