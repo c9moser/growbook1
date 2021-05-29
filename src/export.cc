@@ -251,8 +251,10 @@ ExportDialog::_configure()
 	std::string filename = date;
 	filename += ".growbook";
 
+	
 	set_filename(Glib::build_filename(Glib::get_user_special_dir (Glib::USER_DIRECTORY_DOCUMENTS),
 	                                  filename));
+	set_current_name(filename);
 }
 
 Glib::RefPtr<Exporter>

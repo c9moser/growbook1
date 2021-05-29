@@ -76,7 +76,9 @@ growbook_SOURCES = \
 	database-mariadb.cc \
 	database-mariadb.h \
 	export.cc \
-	export.h 
+	export.h \
+	import.cc \
+	import.h 
 
 growbook_LDFLAGS = 
 
