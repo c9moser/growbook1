@@ -28,6 +28,7 @@
 #include <glibmm.h>
 
 #include "application.h"
+
 AboutDialog::AboutDialog()
 {
 	set_program_name ("GrowBook");
@@ -36,6 +37,7 @@ AboutDialog::AboutDialog()
 	set_license_type(Gtk::LICENSE_GPL_3_0);
 	set_authors(_get_authors());
 
+	set_logo_icon_name ("emoji-nature-symbolic");
 	set_translator_credits (_get_translator_credits ());
 	show_all();
 }
