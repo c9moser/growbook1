@@ -29,9 +29,19 @@
 
 
 #include <gtkmm/filechooserdialog.h>
-
+#include <map>
 #include "refclass.h"
 #include "database.h"
+
+enum ImportResponseID {
+	 RESPONSE_NONE = 0,
+	 RESPONSE_UPDATE,
+	 RESPONSE_UPDATE_ALL,
+	 RESPONSE_MERGE,
+	 RESPONSE_MERGE_ALL,
+	 RESPONSE_EDIT,
+	 RESPONSE_IGNORE
+};
 
 class Importer:
 	public RefClass
@@ -39,6 +49,11 @@ class Importer:
 	 private:
 		 Glib::RefPtr<Database> m_database_;
 		 std::string m_filename_;
+
+		std::map<uint64_t,uint64_t> m_breeder_map_;
+		std::map<uint64_t,uint64_t> m_strain_map_;
+		std::map<uint64_t,uint64_t> m_growlog_map_;
+		
 
 	private:
 		 Importer(const Importer &src) = delete;
