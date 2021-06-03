@@ -1,2 +1,8 @@
+0.1.2:
+	* Added Importer (experimantal)
+	* bugfixes
 
-
+0.1.1: 
+  	* Added Exporter (experimental)
+	* Fixed growbook.mariadb.sql
+	* bugfixes

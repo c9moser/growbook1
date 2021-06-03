@@ -1,14 +1,14 @@
 BEGIN;
 
-CREATE TABLE breeder (
+CREATE TABLE IF NOT EXISTS breeder (
 	id SERIAL PRIMARY KEY,
 	name VARCHAR(256) UNIQUE NOT NULL,
 	homepage VARCHAR(1024) DEFAULT ''
 );
 
-CREATE INDEX idx_breeder_name ON breeder (name);
+CREATE INDEX IF NOT EXISTS idx_breeder_name ON breeder (name);
 
-CREATE TABLE strain (
+CREATE TABLE IF NOT EXISTS strain (
 	id SERIAL PRIMARY KEY,
 	breeder BIGINT UNSIGNED NOT NULL,
 	name VARCHAR(256) NOT NULL,
@@ -21,22 +21,22 @@ CREATE TABLE strain (
 		ON UPDATE CASCADE
 		ON DELETE RESTRICT	
 );
-CREATE INDEX idx_strain_breeder ON strain (breeder);
-CREATE INDEX idx_strain_name ON strain (name); 
+CREATE INDEX IF NOT EXISTS idx_strain_breeder ON strain (breeder);
+CREATE INDEX IF NOT EXISTS idx_strain_name ON strain (name); 
 
-CREATE VIEW strain_view AS
-	SELECT	t1.id AS id,
-			t1.breeder AS breeder_id,
-			t2.name AS breeder_name,
-			t1.name AS name,
-			t1.info AS info,
-			t1.description AS description,
-			t1.homepage AS homepage,
-			t1.seedfinder AS seedfinder
-		FROM strain AS t1 JOIN breeder AS t2
-			ON t1.breeder = t2.id;
+CREATE VIEW IF NOT EXISTS strain_view AS
+	SELECT	strain.id AS id,
+			breeder.id AS breeder_id,
+			breeder.name AS breeder_name,
+			strain.name AS name,
+			strain.info AS info,
+			strain.description AS description,
+			strain.homepage AS homepage,
+			strain.seedfinder AS seedfinder
+		FROM strain JOIN breeder
+			ON strain.breeder = breeder.id;
 
-CREATE TABLE growlog (
+CREATE TABLE IF NOT EXISTS growlog (
 	id SERIAL PRIMARY KEY,
 	title VARCHAR(512) UNIQUE NOT NULL,
 	description MEDIUMTEXT,
@@ -44,9 +44,9 @@ CREATE TABLE growlog (
 	flower_on DATE,
 	finished_on TIMESTAMP
 );
-CREATE INDEX idx_growlog_title ON growlog(title);
+CREATE INDEX IF NOT EXISTS idx_growlog_title ON growlog(title);
 
-CREATE TABLE growlog_entry (
+CREATE TABLE IF NOT EXISTS growlog_entry (
 	id SERIAL PRIMARY KEY,
 	growlog BIGINT UNSIGNED NOT NULL,
 	entry MEDIUMTEXT NOT NULL,
@@ -55,9 +55,9 @@ CREATE TABLE growlog_entry (
 		ON UPDATE CASCADE
 		ON DELETE RESTRICT
 );
-CREATE INDEX idx_growlog_entry_growlog ON growlog_entry(growlog);
+CREATE INDEX IF NOT EXISTS idx_growlog_entry_growlog ON growlog_entry(growlog);
 
-CREATE TABLE growlog_strain (
+CREATE TABLE IF NOT EXISTS growlog_strain (
 	id SERIAL PRIMARY KEY,
 	growlog BIGINT UNSIGNED NOT NULL,
 	strain BIGINT USIGNED NOT NULL,
@@ -69,7 +69,7 @@ CREATE TABLE growlog_strain (
 		ON UPDATE CASCADE
 		ON DELETE RESTRICT
 );
-CREATE INDEX idx_growlog_strain_growlog ON growlog_strain(growlog);
-CREATE INDEX idx_growlog_strain_strain ON growlog_strain(strain);
+CREATE INDEX IF NOT EXISTS idx_growlog_strain_growlog ON growlog_strain(growlog);
+CREATE INDEX IF NOT EXISTS idx_growlog_strain_strain ON growlog_strain(strain);
 
 COMMIT;
