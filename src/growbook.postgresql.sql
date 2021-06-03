@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS strain (
 CREATE INDEX IF NOT EXISTS idx_strain_breeder ON strain (breeder);
 CREATE INDEX IF NOT EXISTS idx_strain_name ON strain (name); 
 
-CREATE VIEW IF NOT EXISTS strain_view AS
+CREATE OR REPLACE VIEW strain_view AS
 	SELECT	t1.id AS id,
 			t1.breeder AS breeder_id,
 			t2.name AS breeder_name,
