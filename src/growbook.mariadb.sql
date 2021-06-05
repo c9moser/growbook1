@@ -24,18 +24,6 @@ CREATE TABLE IF NOT EXISTS strain (
 CREATE INDEX IF NOT EXISTS idx_strain_breeder ON strain (breeder);
 CREATE INDEX IF NOT EXISTS idx_strain_name ON strain (name); 
 
-CREATE VIEW IF NOT EXISTS strain_view AS
-	SELECT	strain.id AS id,
-			breeder.id AS breeder_id,
-			breeder.name AS breeder_name,
-			strain.name AS name,
-			strain.info AS info,
-			strain.description AS description,
-			strain.homepage AS homepage,
-			strain.seedfinder AS seedfinder
-		FROM strain JOIN breeder
-			ON strain.breeder = breeder.id;
-
 CREATE TABLE IF NOT EXISTS growlog (
 	id SERIAL PRIMARY KEY,
 	title VARCHAR(512) UNIQUE NOT NULL,

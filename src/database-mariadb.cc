@@ -443,10 +443,13 @@ std::list<Glib::RefPtr<Strain> >
 DatabaseMariaDB::get_strains_for_breeder_vfunc(uint64_t breeder_id) const
 {
 	assert(m_db_);
-	
-	const char *sql = "SELECT id,breeder_name,name,info,description,homepage,seedfinder FROM strain_view WHERE breeder_id=%s;";
-	std::list<Glib::RefPtr<Strain> > ret;
 
+	const char *sql = "SELECT id,name,info,description,homepage,seedfinder FROM strain WHERE breeder=%s;";
+	std::list<Glib::RefPtr<Strain> > ret;
+	Glib::RefPtr<Breeder> breeder = get_breeder(breeder_id);
+	if (!breeder)
+		return ret;
+	
 	std::string breeder_id_str = std::to_string(breeder_id);
 	size_t len = strlen(sql) + breeder_id_str.size() + 1;
 	std::unique_ptr<char[]> buffer(new char[len]);
@@ -462,16 +465,15 @@ DatabaseMariaDB::get_strains_for_breeder_vfunc(uint64_t breeder_id) const
 	MYSQL_ROW row;
 	while ((row = mysql_fetch_row(result))) {
 		uint64_t id = std::stoull(row[0]);
-		Glib::ustring breeder_name(row[1]);
-		Glib::ustring name(row[2]);
-		Glib::ustring info(row[3] ? row[3] : "");
-		Glib::ustring desc(row[4] ? row[4] : "");
-		std::string homepage(row[5] ? row[5] : "");
-		std::string seedfinder(row[6] ? row[6] : "");
+		Glib::ustring name(row[1]);
+		Glib::ustring info(row[2] ? row[2] : "");
+		Glib::ustring desc(row[3] ? row[3] : "");
+		std::string homepage(row[4] ? row[4] : "");
+		std::string seedfinder(row[5] ? row[5] : "");
 
 		Glib::RefPtr<Strain> strain = Strain::create(id,
 		                                             breeder_id,
-		                                             breeder_name,
+		                                             breeder->get_name(),
 		                                             name,
 		                                             info,
 		                                             desc,
@@ -525,7 +527,7 @@ DatabaseMariaDB::get_strain_vfunc(uint64_t id) const
 {
 	assert(m_db_);
 	
-	const char *sql = "SELECT breeder_id,breeder_name,name,info,description,homepage,seedfinder FROM strain_view WHERE id=%s;";
+	const char *sql = "SELECT breeder,name,info,description,homepage,seedfinder FROM strain WHERE id=%s;";
 	Glib::RefPtr<Strain> strain;
 	
 	std::string id_str = std::to_string(id);
@@ -542,14 +544,17 @@ DatabaseMariaDB::get_strain_vfunc(uint64_t id) const
 
 	MYSQL_ROW row = mysql_fetch_row(result);
 	if (row) {
+		Glib::RefPtr<Breeder> breeder = get_breeder(std::stoull(row[0]));
+		assert(breeder);
+		
 		strain = Strain::create(id,
-		                        std::stoull(row[0]),
+		                        breeder->get_id(),
+		                        breeder->get_name(),
 		                        row[1],
-		                        row[2],
+		                        row[2] ? row[2] : "",
 		                        row[3] ? row[3] : "",
 		                        row[4] ? row[4] : "",
-		                        row[5] ? row[5] : "",
-		                        row[6] ? row[6] : "");
+		                        row[5] ? row[5] : "");
 	}
 	mysql_free_result(result);
 	return strain;
@@ -562,12 +567,15 @@ DatabaseMariaDB::get_strain_vfunc(const Glib::ustring &breeder_name,
 {
 	assert(m_db_);
 
-	const char *sql = "SELECT id,breeder_id,info,description,homepage,seedfinder FROM strain_view WHERE breeder_name='%s' AND name='%s';";
+	const char *sql = "SELECT id,info,description,homepage,seedfinder FROM strain WHERE breeder=%s AND name='%s';";
 	Glib::RefPtr<Strain> strain;
-
-	size_t breeder_len = breeder_name.bytes() * 2 + 1;
-	std::unique_ptr<char[]> breeder_buffer(new char[breeder_len]);
-	mysql_real_escape_string(m_db_,breeder_buffer.get(),breeder_name.c_str(),breeder_name.bytes());
+	Glib::RefPtr<Breeder> breeder = get_breeder(breeder_name);
+	if (!breeder)
+		return strain;
+	
+	
+	std::string breeder_id_str = std::to_string(breeder->get_id()); 
+	size_t breeder_len=breeder_id_str.size();
 
 	size_t strain_len = strain_name.bytes() * 2 + 1;
 	std::unique_ptr<char[]> strain_buffer(new char[strain_len]);
@@ -575,7 +583,7 @@ DatabaseMariaDB::get_strain_vfunc(const Glib::ustring &breeder_name,
 
 	size_t len = strlen(sql) + breeder_len + strain_len;
 	std::unique_ptr<char[]> buffer(new char[len]);
-	snprintf(buffer.get(),len,sql,breeder_name.c_str(),strain_name.c_str());
+	snprintf(buffer.get(),len,sql,breeder_id_str.c_str(),strain_buffer.get());
 
 	if (mysql_query(m_db_,buffer.get()))
 		database_error(_("Unable to fetch strain from database!"));
@@ -587,13 +595,13 @@ DatabaseMariaDB::get_strain_vfunc(const Glib::ustring &breeder_name,
 	MYSQL_ROW row = mysql_fetch_row(result);
 	if (row) {
 		strain = Strain::create(std::stoull(row[0]),
-		                        std::stoull(row[1]),
+		                        breeder->get_id(),
 		                        breeder_name,
 		                        strain_name,
+		                        row[1] ? row[1] : "",
 		                        row[2] ? row[2] : "",
 		                        row[3] ? row[3] : "",
-		                        row[4] ? row[4] : "",
-		                        row[5] ? row[5] : "");
+		                        row[4] ? row[4] : "");
 	}
 	mysql_free_result(result);
 	return strain;
