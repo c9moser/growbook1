@@ -95,76 +95,60 @@ Importer::import_db(Gtk::Window &parent)
 		return;
 	}
 
+	import_strains(parent,import_db);
+	import_growlogs(parent,import_db);
+}
+
+
+void
+Importer::import_strains(Gtk::Window &parent,
+                         const Glib::RefPtr<Database> &import_db)
+{
+	assert(import_db);
+
 	int response = RESPONSE_NONE;
-	
-	//// import breeders ///////////////////////////////////////////////////////
-	std::list<Glib::RefPtr<Breeder> > breeder_list = import_db->get_breeders();
-	for (auto breeder_iter = breeder_list.begin(); breeder_iter != breeder_list.end(); ++breeder_iter) {
+
+	std::list<Glib::RefPtr<Breeder> > breeders{import_db->get_breeders()};
+	for (auto breeder_iter = breeders.begin(); breeder_iter != breeders.end(); ++breeder_iter) {
 		Glib::RefPtr<Breeder> import_breeder = *breeder_iter;
 		Glib::RefPtr<Breeder> breeder = m_database_->get_breeder(import_breeder->get_name());
 
-		if (breeder && response != RESPONSE_UPDATE_ALL && response != RESPONSE_MERGE_ALL) {
+		if (breeder && response != RESPONSE_UPDATE_ALL && !response != RESPONSE_MERGE_ALL) {
 			Gtk::MessageDialog dialog(parent,
-			                          _("Breeder already exists! How do you want to proceed?"),
+			                          "Breeder already exists! How do you want to perceed?",
 			                          false,
 			                          Gtk::MESSAGE_QUESTION,
 			                          Gtk::BUTTONS_NONE,
 			                          true);
-			dialog.add_button(_("Update"),RESPONSE_UPDATE);
-			dialog.add_button(_("Update all"),RESPONSE_UPDATE_ALL);
 			dialog.add_button(_("Merge"), RESPONSE_MERGE);
-			dialog.add_button(_("Merge all"), RESPONSE_MERGE_ALL);
-
-			do {
-				response = dialog.run();
-			} while (response == Gtk::RESPONSE_DELETE_EVENT);
+			dialog.add_button(_("Merge All"), RESPONSE_MERGE_ALL);
+			dialog.add_button(_("Update"), RESPONSE_UPDATE);
+			dialog.add_button(_("Update All"), RESPONSE_UPDATE_ALL);
+			
+			response = dialog.run();
+			dialog.hide();
+			if (response == Gtk::RESPONSE_DELETE_EVENT)
+				return;
 		}
-		if (breeder) {
-			switch (response) {
-				case RESPONSE_UPDATE:
-				case RESPONSE_UPDATE_ALL:
-					breeder->set_homepage(import_breeder->get_homepage());
-					m_database_->add_breeder(breeder);
-					break;
-				case RESPONSE_MERGE:
-				case RESPONSE_MERGE_ALL:
-					/* do nothing */
-					break;
-				default:
-					/*should never be reached */
-					break;
-			}
-		} else {
+		if (!breeder) {
 			breeder = Breeder::create(import_breeder->get_name(),
-			                          import_breeder->get_homepage());
+			                         import_breeder->get_homepage());
 			m_database_->add_breeder(breeder);
-			breeder = m_database_->get_breeder(breeder->get_name());
+			breeder = m_database_->get_breeder(import_breeder->get_name());
+			assert(breeder);
+		} if (response == RESPONSE_UPDATE || response == RESPONSE_UPDATE_ALL) {
+			breeder->set_homepage(import_breeder->get_homepage());
+			m_database_->add_breeder(breeder);
 		}
-		m_breeder_map_[import_breeder->get_id()] = breeder->get_id();
+		assert(breeder);
+		m_breeder_map_[import_breeder->get_id()] = breeder;
 
-		std::list<Glib::RefPtr<Strain> > strain_list{import_db->get_strains_for_breeder (import_breeder->get_id())};
-		for (auto strain_iter = strain_list.begin(); strain_iter != strain_list.end(); ++strain_iter) {
+		std::list<Glib::RefPtr<Strain> > strains = import_db->get_strains_for_breeder(import_breeder);
+
+		for (auto strain_iter = strains.begin(); strain_iter != strains.end(); ++strain_iter) {
 			Glib::RefPtr<Strain> import_strain = *strain_iter;
-			Glib::RefPtr<Strain> strain = m_database_->get_strain(import_strain->get_breeder_name(),
-			                                                      import_strain->get_name());
-			if (strain) {
-				switch (response) {
-					case RESPONSE_UPDATE:
-					case RESPONSE_UPDATE_ALL:
-						strain->set_info(import_strain->get_info());
-						strain->set_description(import_strain->get_description());
-						strain->set_homepage(import_strain->get_homepage());
-						strain->set_seedfinder(import_strain->get_seedfinder());
-						m_database_->add_strain(strain);
-						break;
-					case RESPONSE_MERGE:
-					case RESPONSE_MERGE_ALL:
-						break;
-					default:
-					 /*should never be reached */
-					  break;
-				}
-			} else {
+			Glib::RefPtr<Strain> strain = m_database_->get_strain(breeder->get_name(),import_strain->get_name());
+			if (!strain) {
 				strain = Strain::create(breeder->get_id(),
 				                        breeder->get_name(),
 				                        import_strain->get_name(),
@@ -173,91 +157,85 @@ Importer::import_db(Gtk::Window &parent)
 				                        import_strain->get_homepage(),
 				                        import_strain->get_seedfinder());
 				m_database_->add_strain(strain);
-				strain = m_database_->get_strain(breeder->get_name(),strain->get_name());
-				assert(strain);
+				strain = m_database_->get_strain(breeder->get_name(),
+				                                 import_strain->get_name());
+			} else if (response == RESPONSE_UPDATE || response == RESPONSE_UPDATE_ALL) {
+				strain->set_info(import_strain->get_info());
+				strain->set_description(import_strain->get_description());
+				strain->set_homepage(import_strain->get_homepage());
+				strain->set_seedfinder(import_strain->get_seedfinder());
+				m_database_->add_strain(strain);
 			}
-			m_strain_map_[import_strain->get_id()] = strain->get_id();
-		}		
+			assert(strain);
+			m_strain_map_[import_strain->get_id()] = strain;
+		}
 	}
+}
 
-	//// import Growlogs ///////////////////////////////////////////////////////
-	std::list<Glib::RefPtr<Growlog> > growlog_list{import_db->get_growlogs()};
-
-	response = RESPONSE_NONE;
-	
-	for (auto growlog_iter = growlog_list.begin(); growlog_iter != growlog_list.end(); ++growlog_iter) {
+void
+Importer::import_growlogs(Gtk::Window &parent,
+                          const Glib::RefPtr<Database> &import_db)
+{
+	int response = RESPONSE_NONE;
+	std::list<Glib::RefPtr<Growlog> > growlogs = import_db->get_growlogs();
+	for (auto growlog_iter = growlogs.begin(); growlog_iter != growlogs.end(); ++growlog_iter) {
 		Glib::RefPtr<Growlog> import_growlog = *growlog_iter;
 		Glib::RefPtr<Growlog> growlog = m_database_->get_growlog(import_growlog->get_title());
-
-		if (growlog) {
+		if (growlog && response != RESPONSE_IGNORE_ALL) {
 			Gtk::MessageDialog dialog(parent,
-			                          _("Growlog already exists! How do you want to proceed?"),
+			                          _("Growlog exists already! How do you want to perceed?"),
 			                          false,
 			                          Gtk::MESSAGE_QUESTION,
 			                          Gtk::BUTTONS_NONE,
 			                          true);
 			dialog.add_button(_("Edit"), RESPONSE_EDIT);
 			dialog.add_button(_("Ignore"), RESPONSE_IGNORE);
-			do {
-				response = dialog.run();
-			} while (Gtk::RESPONSE_DELETE_EVENT);
+			dialog.add_button(_("Ignore All"), RESPONSE_IGNORE_ALL);
 
-			if (response == RESPONSE_IGNORE) {
-				response = RESPONSE_NONE;
-				continue;
-			} else if (response = RESPONSE_EDIT) {
-				GrowlogDialog growlog_dialog(parent, import_db, import_growlog);
+			if (response == RESPONSE_EDIT) {
+				bool edit_done = false;
+				while (!edit_done) {
+					GrowlogDialog growlog_dialog{import_db,import_growlog};
+					growlog_dialog.set_update_database(false);
 
-				do {
-					response = growlog_dialog.run();
-					if (response == Gtk::RESPONSE_APPLY) {
+					int res = growlog_dialog.run();
+					growlog_dialog.hide();
+					if (res == Gtk::RESPONSE_APPLY) {
 						import_growlog = growlog_dialog.get_growlog();
 						growlog = m_database_->get_growlog(import_growlog->get_title());
-					} else if (response == Gtk::RESPONSE_CANCEL) {
-						response = RESPONSE_IGNORE;
-						growlog = Glib::RefPtr<Growlog>();
+						if (!growlog)
+							edit_done = true;
 					}
-				} while (growlog || response == Gtk::RESPONSE_DELETE_EVENT);
-				if (response == RESPONSE_IGNORE) {
-					response = RESPONSE_NONE;
-					continue;
 				}
-				growlog = Growlog::create(import_growlog->get_title(),
-				                          import_growlog->get_description(),
-				                          import_growlog->get_created_on(),
-				                          import_growlog->get_flower_on(),
-				                          import_growlog->get_finished_on());
-				m_database_->add_growlog(growlog);
-				growlog = m_database_->get_growlog(growlog->get_title());
-				assert(growlog);
-			}			
-		} else {
-			growlog = Growlog::create(import_growlog->get_title(),
-			                          import_growlog->get_description(),
-			                          import_growlog->get_created_on(),
-			                          import_growlog->get_flower_on(),
-			                          import_growlog->get_finished_on());
-			m_database_->add_growlog(growlog);
-			growlog = m_database_->get_growlog(growlog->get_title());
-			assert(growlog);
+			} else if (response == RESPONSE_IGNORE || response == RESPONSE_IGNORE_ALL) {
+				continue;
+			}
 		}
-
-		m_growlog_map_[import_growlog->get_id()] = growlog->get_id();
+		growlog = Growlog::create(import_growlog->get_title(),
+		                          import_growlog->get_description(),
+		                          import_growlog->get_created_on(),
+		                          import_growlog->get_flower_on(),
+		                          import_growlog->get_finished_on());
+		m_database_->add_growlog(growlog);
+		growlog = m_database_->get_growlog(import_growlog->get_title());
+		assert(growlog);
 		
-		std::list<Glib::RefPtr<Strain> > strain_list{import_db->get_strains_for_growlog(import_growlog)};
-		for (auto strain_iter = strain_list.begin(); strain_iter != strain_list.end(); ++strain_iter) {
-			Glib::RefPtr<Strain> import_strain = *strain_iter;
-			m_database_->add_strain_for_growlog (growlog->get_id(),
-			                                     m_strain_map_[import_strain->get_id()]);
-		}
+		m_growlog_map_[import_growlog->get_id()] = growlog;
 
-		std::list<Glib::RefPtr<GrowlogEntry> > entry_list{import_db->get_growlog_entries(import_growlog->get_id())};
-		for (auto entry_iter = entry_list.begin(); entry_iter != entry_list.end(); ++entry_iter) {
+		std::list<Glib::RefPtr<GrowlogEntry> > entries = import_db->get_growlog_entries(import_growlog->get_id());
+		for (auto entry_iter = entries.begin(); entry_iter != entries.end(); ++entry_iter) {
 			Glib::RefPtr<GrowlogEntry> import_entry = *entry_iter;
 			Glib::RefPtr<GrowlogEntry> entry = GrowlogEntry::create(growlog->get_id(),
 			                                                        import_entry->get_text(),
 			                                                        import_entry->get_created_on());
 			m_database_->add_growlog_entry(entry);
+		}
+
+		std::list<Glib::RefPtr<Strain> > strains = import_db->get_strains_for_growlog(import_growlog);
+		for (auto strain_iter = strains.begin(); strain_iter != strains.end(); ++strain_iter) {
+			Glib::RefPtr<Strain> import_strain = *strain_iter;
+			Glib::RefPtr<Strain> strain = m_strain_map_[import_strain->get_id()];
+			m_database_->add_strain_for_growlog(growlog,strain);
 		}
 	}
 }

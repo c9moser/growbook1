@@ -63,6 +63,7 @@ GrowlogDialog::GrowlogDialog(const Glib::RefPtr<Database> &db,
 	Gtk::Dialog{TITLE},
 	m_database_{db},
 	m_growlog_{growlog},
+	m_update_database_{true},
 	m_deleted_strains_{},
 	m_strain_columns_{},
 	m_title_entry_{},
@@ -88,6 +89,7 @@ GrowlogDialog::GrowlogDialog(Gtk::Window &parent,
 	Gtk::Dialog{TITLE,parent},
 	m_database_{db},
 	m_growlog_{growlog},
+	m_update_database_{true},
 	m_deleted_strains_{},
 	m_strain_columns_{},
 	m_title_entry_{},
@@ -213,6 +215,18 @@ GrowlogDialog::get_growlog() const
 	return Glib::RefPtr<const Growlog>::cast_const(m_growlog_);
 }
 
+bool
+GrowlogDialog::get_update_database() const
+{
+	return m_update_database_;
+}
+
+void
+GrowlogDialog::set_update_database(bool b)
+{
+	m_update_database_ = b;
+}
+
 void
 GrowlogDialog::on_add_clicked()
 {
@@ -304,34 +318,36 @@ GrowlogDialog::on_response(int response_id)
 			m_growlog_ = Growlog::create(m_title_entry_.get_text(),
 			                             m_description_view_.get_buffer()->get_text(false));
 		}
-		try {
-			m_database_->add_growlog(m_growlog_);
-		} catch (DatabaseError &ex) {
-			Gtk::MessageDialog dialog(*this,
-			                          ex.what(),
-			                          false,
-			                          Gtk::MESSAGE_ERROR,
-			                          Gtk::BUTTONS_OK,
-			                          false);
-			dialog.run();
-			dialog.hide();
-			return;
-		}
-		if (!m_growlog_->get_id()) {
-			m_growlog_ = m_database_->get_growlog(m_growlog_->get_title());
-		}
-		for (auto iter = m_deleted_strains_.begin(); iter != m_deleted_strains_.end(); ++iter) {
-			m_database_->remove_strain_for_growlog(m_growlog_->get_id(),*iter);
-		}
+		if (m_update_database_) {
+			try {
+				m_database_->add_growlog(m_growlog_);
+			} catch (DatabaseError &ex) {
+				Gtk::MessageDialog dialog(*this,
+				                          ex.what(),
+				                          false,
+				                          Gtk::MESSAGE_ERROR,
+				                          Gtk::BUTTONS_OK,
+				                          false);
+				dialog.run();
+				dialog.hide();
+				return;
+			}
+			if (!m_growlog_->get_id()) {
+				m_growlog_ = m_database_->get_growlog(m_growlog_->get_title());
+			}
+			for (auto iter = m_deleted_strains_.begin(); iter != m_deleted_strains_.end(); ++iter) {
+				m_database_->remove_strain_for_growlog(m_growlog_->get_id(),*iter);
+			}
 
-		Glib::RefPtr<Gtk::ListStore> model = Glib::RefPtr<Gtk::ListStore>::cast_dynamic(m_strain_view_.get_model());
-		Children children = model->children();
-		for (Children::iterator iter = children.begin(); iter != children.end(); ++iter) {
-			Gtk::TreeModel::Row row = *iter;
-			bool changed = row[m_strain_columns_.column_changed];
-			if (changed) {
-				uint64_t strain_id = row[m_strain_columns_.column_id];
-				m_database_->add_strain_for_growlog (m_growlog_->get_id(),strain_id);
+			Glib::RefPtr<Gtk::ListStore> model = Glib::RefPtr<Gtk::ListStore>::cast_dynamic(m_strain_view_.get_model());
+			Children children = model->children();
+			for (Children::iterator iter = children.begin(); iter != children.end(); ++iter) {
+				Gtk::TreeModel::Row row = *iter;
+				bool changed = row[m_strain_columns_.column_changed];
+				if (changed) {
+					uint64_t strain_id = row[m_strain_columns_.column_id];
+					m_database_->add_strain_for_growlog (m_growlog_->get_id(),strain_id);
+				}
 			}
 		}
 	}

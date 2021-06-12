@@ -40,7 +40,8 @@ enum ImportResponseID {
 	 RESPONSE_MERGE,
 	 RESPONSE_MERGE_ALL,
 	 RESPONSE_EDIT,
-	 RESPONSE_IGNORE
+	 RESPONSE_IGNORE,
+	 RESPONSE_IGNORE_ALL		 
 };
 
 class Importer:
@@ -50,9 +51,9 @@ class Importer:
 		 Glib::RefPtr<Database> m_database_;
 		 std::string m_filename_;
 
-		std::map<uint64_t,uint64_t> m_breeder_map_;
-		std::map<uint64_t,uint64_t> m_strain_map_;
-		std::map<uint64_t,uint64_t> m_growlog_map_;
+		std::map<uint64_t,Glib::RefPtr<Breeder> > m_breeder_map_;
+		std::map<uint64_t,Glib::RefPtr<Strain> > m_strain_map_;
+		std::map<uint64_t,Glib::RefPtr<Growlog> > m_growlog_map_;
 		
 
 	private:
@@ -72,6 +73,11 @@ class Importer:
 	public:
 		 void import_db();
 		 void import_db(Gtk::Window &parent);
+
+		 void import_strains(Gtk::Window &parent,
+		                     const Glib::RefPtr<Database> &import_from);
+		 void import_growlogs(Gtk::Window &parent,
+		                      const Glib::RefPtr<Database> &import_from);
 };
 
 class ImportDialog:
@@ -91,7 +97,7 @@ class ImportDialog:
 	private:
 		void _add_buttons();
 		void _configure();
-
+		
 	 public:
 		Glib::RefPtr<Importer> get_importer();
 };
