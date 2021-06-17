@@ -206,11 +206,15 @@ Importer::import_growlogs(Gtk::Window &parent,
 						if (!growlog)
 							edit_done = true;
 					}
-				}
-			} else if (response == RESPONSE_IGNORE || response == RESPONSE_IGNORE_ALL) {
-				continue;
+				} 
+			} else if (response == RESPONSE_IGNORE
+				       || response == RESPONSE_IGNORE_ALL) {
+					continue;
 			}
+		} else if (growlog && response == RESPONSE_IGNORE_ALL) {
+				continue;
 		}
+		
 		growlog = Growlog::create(import_growlog->get_title(),
 		                          import_growlog->get_description(),
 		                          import_growlog->get_created_on(),

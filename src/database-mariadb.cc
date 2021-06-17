@@ -47,7 +47,7 @@
  ******************************************************************************/
 
 DatabaseModuleMariaDB::DatabaseModuleMariaDB():
-	DatabaseModule{DatabaseSettings::create("MariaDB",
+	DatabaseModule{DatabaseSettings::create(DatabaseMariaDB::ENGINE,
 	                                        "mysql",
 	                                        "localhost",
 	                                        3306,
@@ -78,12 +78,13 @@ DatabaseModuleMariaDB::create_database_vfunc(const Glib::RefPtr<DatabaseSettings
  * DatabaseMariaDB
  ******************************************************************************/
 const char DatabaseMariaDB::RESULT_ERROR[] = N_("Getting result for query failed!");
+const char DatabaseMariaDB::ENGINE[] = "MariaDB (experimental)";
 
 DatabaseMariaDB::DatabaseMariaDB(const Glib::RefPtr<DatabaseSettings> &settings):
 	Database{settings},
 	m_db_{nullptr}
 {
-	assert(settings->get_engine() == "MariaDB");
+	assert(settings->get_engine() == ENGINE);
 }
 
 DatabaseMariaDB::~DatabaseMariaDB()
