@@ -45,9 +45,15 @@ class Exporter:
 		 std::map<uint64_t,Glib::RefPtr<Strain> > m_strain_map_;
 		 std::map<uint64_t,Glib::RefPtr<Growlog> > m_growlog_map_;
 		 
-	 public:
+
+	private:
+		 Exporter(const Exporter &src) = delete;
+		 Exporter& operator = (const Exporter &src) = delete;
+		 
+	protected:
 	 	Exporter(const Glib::RefPtr<Database> &db,
 	    	      const std::string &filename);
+	public:
 	 	virtual ~Exporter();
 
 	public:

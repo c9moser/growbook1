@@ -65,6 +65,8 @@ class GrowlogDialog:
 		 Glib::RefPtr<Database> m_database_;
 		 Glib::RefPtr<Growlog> m_growlog_;
 
+		 bool m_update_database_;
+
 		 std::list<uint64_t> m_deleted_strains_;
 		
 		 StrainColumns m_strain_columns_;
@@ -99,6 +101,9 @@ class GrowlogDialog:
 	public:
 		Glib::RefPtr<Growlog> get_growlog();
 		Glib::RefPtr<const Growlog> get_growlog() const;
+
+		bool get_update_database() const;
+		void set_update_database(bool set_update = true);
 };
 
 #endif /* __GROWLOGDIALOG_H__ */

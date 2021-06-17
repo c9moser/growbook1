@@ -403,7 +403,21 @@ GrowlogView::_create_textbuffer()
 
 	time_t current_time = time(nullptr);
 	time_t day = 24*60*60;
-	
+	time_t age;
+
+	if (m_growlog_->get_finished_on()) {
+		age = (m_growlog_->get_finished_on()/day - m_growlog_->get_created_on()/day);
+
+		buffer->insert_with_tag(buffer->end(),_("Finished on: "),bold_tag);
+		buffer->insert(buffer->end(),m_growlog_->get_finished_on_format(app->get_settings()->get_datetime_format()));
+		buffer->insert(buffer->end(),"\n");
+	} else {
+		age = current_time/day - m_growlog_->get_created_on()/day;
+	}
+	buffer->insert_with_tag(buffer->end(),_("Age: "),bold_tag);
+	buffer->insert(buffer->end(),std::to_string(age));
+	buffer->insert(buffer->end(),_(" day(s)"));
+	buffer->insert(buffer->end(),"\n");
 
 	if (m_growlog_->get_flower_on()) {
 		buffer->insert_with_tag(buffer->end(),_("Started flowering on: "),bold_tag);
@@ -420,20 +434,7 @@ GrowlogView::_create_textbuffer()
 		buffer->insert(buffer->end(),"\n");
 	}
 
-	time_t age;
-	if (m_growlog_->get_finished_on()) {
-		age = (m_growlog_->get_finished_on()/day - m_growlog_->get_created_on()/day);
-
-		buffer->insert_with_tag(buffer->end(),_("Finished on: "),bold_tag);
-		buffer->insert(buffer->end(),m_growlog_->get_finished_on_format(app->get_settings()->get_datetime_format()));
-		buffer->insert(buffer->end(),"\n");
-	} else {
-		age = current_time/day - m_growlog_->get_created_on()/day;
-	}
-	buffer->insert_with_tag(buffer->end(),_("Age: "),bold_tag);
-	buffer->insert(buffer->end(),std::to_string(age));
-	buffer->insert(buffer->end(),_(" day(s)"));
-	buffer->insert(buffer->end(),"\n\n");
+	buffer->insert(buffer->end(),"\n");
 
 	buffer->insert_with_tag(buffer->end(),_("Description"),paragraph_tag);
 	buffer->insert(buffer->end(),"\n");

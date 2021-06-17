@@ -56,6 +56,8 @@ class DatabaseModuleMariaDB:
 class DatabaseMariaDB:
 	public Database
 {
+	public:
+		static const char ENGINE[];
 	private:
 		static const char RESULT_ERROR[];
 		

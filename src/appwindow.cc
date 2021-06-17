@@ -40,7 +40,8 @@
 #include "aboutdialog.h"
 #include "growlogview.h"
 #include "application.h"
-#include "export.h" 
+#include "export.h"
+#include "import.h"
 
 #include <iostream>
 
@@ -82,6 +83,8 @@ AppWindow::AppWindow(const Glib::RefPtr<Settings> &settings,
 	paned->add2(m_browser_notebook_);
 	
 	box->pack_start(*paned,true,true,0);
+
+	set_icon_name("emoji-nature-symbolic");
 	
 	add(*box);
 	set_title(_("GrowBook"));
@@ -296,5 +299,14 @@ AppWindow::on_export()
 void
 AppWindow::on_import()
 {
+	ImportDialog dialog(*this,m_database_);
+	int response = dialog.run();
+	dialog.hide();
+	if (response == Gtk::RESPONSE_APPLY) {
+		Glib::RefPtr<Importer> importer = dialog.get_importer();
+		if (!importer)
+			return;
+		importer->import_db(*this);
+	}
 }
 
