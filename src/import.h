@@ -29,7 +29,6 @@
 
 
 #include <gtkmm/filechooserdialog.h>
-#include <libxml++/libxml++.h>
 #include <map>
 #include "refclass.h"
 #include "database.h"

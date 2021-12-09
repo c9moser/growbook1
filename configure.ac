@@ -55,7 +55,7 @@ dnl ***************************************************************************
 dnl Check for Packages
 dnl ***************************************************************************
 
-PKG_CHECK_MODULES(GROWBOOK, [gtkmm-3.0 >= 3.24 libxml++-2.6])
+PKG_CHECK_MODULES(GROWBOOK, [gtkmm-3.0 >= 3.24])
 AC_CHECK_HEADER(sqlite3.h, 
 				[AC_DEFINE(HAVE_SQLITE3_H,1,[define 1 if we have sqlite3])],
 				AC_MSG_ERROR([No sqlite3 header found!],1))
