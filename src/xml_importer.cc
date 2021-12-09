@@ -23,6 +23,9 @@
 # include "config.h"
 #endif
 #include <glibmm/i18n.h>
+#ifdef NATIVE_WINDOWS
+# include "strptime.h"
+#endif
 
 #include "xml_importer.h"
 #include <glibmm/markup.h>
