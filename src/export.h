@@ -37,37 +37,94 @@
 class Exporter:
 	public RefClass
 {
-	 public:
+	 private:
 		 Glib::RefPtr<Database> m_database_;
 		 std::string m_filename_;
 
+	private:
+		 Exporter(const Exporter &src) = delete;
+		 Exporter& operator=(const Exporter &src) = delete;
+
+	protected:
+		 Exporter(const Glib::RefPtr<Database> &database,
+		          const std::string &filename=std::string());
+
+	public:
+		 virtual ~Exporter();
+
+	public:
+		 std::string get_filename() const;
+		 void set_filename(const std::string &filename);
+		 bool file_exists() const;
+
+		 Glib::RefPtr<Database> get_database();
+		 Glib::RefPtr<const Database> get_database() const;
+
+		 void export_db();
+		 void export_db(Gtk::Window &parent);
+
+	protected:
+		 virtual void export_vfunc(Gtk::Window &parent) = 0;
+		 
+};
+
+/******************************************************************************/
+
+class XML_Exporter:
+	public Exporter
+{
+	 private:
+		 Glib::RefPtr<Database> m_database_;
+		 std::string m_filename_;
+
+	private:
+		 XML_Exporter(const XML_Exporter &src) = delete;
+		 XML_Exporter& operator = (const XML_Exporter &src) = delete;
+
+	protected:
+		 XML_Exporter(const Glib::RefPtr<Database> &db,
+		              const std::string &filename);
+
+	public:
+		 virtual ~XML_Exporter();
+
+		 static Glib::RefPtr<XML_Exporter> create(const Glib::RefPtr<Database> &db,
+		                                          const std::string &filename);
+
+	protected:
+		virtual void export_vfunc(Gtk::Window &parent);
+
+	private:
+		Glib::ustring escape_text(const Glib::ustring &text) const;
+};
+
+/******************************************************************************/
+class DB_Exporter:
+	public Exporter
+{
+	 public:
 		 std::map<uint64_t,Glib::RefPtr<Breeder> > m_breeder_map_;
 		 std::map<uint64_t,Glib::RefPtr<Strain> > m_strain_map_;
 		 std::map<uint64_t,Glib::RefPtr<Growlog> > m_growlog_map_;
 		 
 
 	private:
-		 Exporter(const Exporter &src) = delete;
-		 Exporter& operator = (const Exporter &src) = delete;
+		 DB_Exporter(const Exporter &src) = delete;
+		 DB_Exporter& operator = (const Exporter &src) = delete;
 		 
 	protected:
-	 	Exporter(const Glib::RefPtr<Database> &db,
-	    	      const std::string &filename);
+	 	DB_Exporter(const Glib::RefPtr<Database> &db,
+	    	        const std::string &filename);
 	public:
-	 	virtual ~Exporter();
+	 	virtual ~DB_Exporter();
 
 	public:
-		 static Glib::RefPtr<Exporter> create(const Glib::RefPtr<Database> &database,
-		                                      const std::string &filename);
-	public:
-		bool file_exists() const;
-
-		std::string get_filename() const;
-		void set_filename(const std::string &filename);
-		 
-	 	void export_db();
-		void export_db(Gtk::Window &parent);
-
+		 static Glib::RefPtr<DB_Exporter> create(const Glib::RefPtr<Database> &database,
+		                        	             const std::string &filename);
+	
+	protected:
+		virtual void export_vfunc(Gtk::Window &parent);
+		
 	private:
 		 void _export_strains(Gtk::Window &parent,
 		                      const Glib::RefPtr<Database> &export_database);

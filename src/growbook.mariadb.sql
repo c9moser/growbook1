@@ -28,9 +28,9 @@ CREATE TABLE IF NOT EXISTS growlog (
 	id SERIAL PRIMARY KEY,
 	title VARCHAR(512) UNIQUE NOT NULL,
 	description MEDIUMTEXT,
-	created_on TIMESTAMP NOT NULL,
+	created_on DATETIME NOT NULL,
 	flower_on DATE,
-	finished_on TIMESTAMP
+	finished_on DATETIME
 );
 CREATE INDEX IF NOT EXISTS idx_growlog_title ON growlog(title);
 
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS growlog_entry (
 	id SERIAL PRIMARY KEY,
 	growlog BIGINT UNSIGNED NOT NULL,
 	entry MEDIUMTEXT NOT NULL,
-	created_on TIMESTAMP NOT NULL,
+	created_on DATETIME NOT NULL,
 	FOREIGN KEY (growlog) REFERENCES growlog(id)
 		ON UPDATE CASCADE
 		ON DELETE RESTRICT

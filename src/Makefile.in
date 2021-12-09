@@ -117,7 +117,7 @@ am_growbook_OBJECTS = main.$(OBJEXT) application.$(OBJEXT) \
 	strptime.$(OBJEXT) growlogselector.$(OBJEXT) \
 	growlogview.$(OBJEXT) growlogdialog.$(OBJEXT) \
 	growlogentrydialog.$(OBJEXT) database-mariadb.$(OBJEXT) \
-	export.$(OBJEXT) import.$(OBJEXT)
+	export.$(OBJEXT) import.$(OBJEXT) xml_importer.$(OBJEXT)
 growbook_OBJECTS = $(am_growbook_OBJECTS)
 am__DEPENDENCIES_1 =
 growbook_DEPENDENCIES = $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1) \
@@ -158,7 +158,8 @@ am__depfiles_remade = ./$(DEPDIR)/aboutdialog.Po \
 	./$(DEPDIR)/refclass.Po ./$(DEPDIR)/settings.Po \
 	./$(DEPDIR)/settingsdialog.Po ./$(DEPDIR)/strainchooser.Po \
 	./$(DEPDIR)/straindialog.Po ./$(DEPDIR)/strainselector.Po \
-	./$(DEPDIR)/strainview.Po ./$(DEPDIR)/strptime.Po
+	./$(DEPDIR)/strainview.Po ./$(DEPDIR)/strptime.Po \
+	./$(DEPDIR)/xml_importer.Po
 am__mv = mv -f
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -485,7 +486,9 @@ growbook_SOURCES = \
 	export.cc \
 	export.h \
 	import.cc \
-	import.h 
+	import.h \
+	xml_importer.cc \
+	xml_importer.h 
 
 growbook_LDFLAGS = $(am__append_1)
 growbook_LDADD = $(GROWBOOK_LIBS) $(PGSQL_LIBS) $(MARIADB_LIBS)
@@ -611,6 +614,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/strainselector.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/strainview.Po@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/strptime.Po@am__quote@ # am--include-marker
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/xml_importer.Po@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
 	@$(MKDIR_P) $(@D)
@@ -841,6 +845,7 @@ distclean: distclean-am
 	-rm -f ./$(DEPDIR)/strainselector.Po
 	-rm -f ./$(DEPDIR)/strainview.Po
 	-rm -f ./$(DEPDIR)/strptime.Po
+	-rm -f ./$(DEPDIR)/xml_importer.Po
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -913,6 +918,7 @@ maintainer-clean: maintainer-clean-am
 	-rm -f ./$(DEPDIR)/strainselector.Po
 	-rm -f ./$(DEPDIR)/strainview.Po
 	-rm -f ./$(DEPDIR)/strptime.Po
+	-rm -f ./$(DEPDIR)/xml_importer.Po
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 

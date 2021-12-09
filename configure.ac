@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl Created by Anjuta application wizard.
 
-AC_INIT(growbook, 0.1.3)
+AC_INIT(growbook, 0.1.4)
 
 AC_CONFIG_HEADERS([config.h])
 
@@ -55,7 +55,7 @@ dnl ***************************************************************************
 dnl Check for Packages
 dnl ***************************************************************************
 
-PKG_CHECK_MODULES(GROWBOOK, [gtkmm-3.0 ])
+PKG_CHECK_MODULES(GROWBOOK, [gtkmm-3.0 >= 3.24 libxml++-2.6])
 AC_CHECK_HEADER(sqlite3.h, 
 				[AC_DEFINE(HAVE_SQLITE3_H,1,[define 1 if we have sqlite3])],
 				AC_MSG_ERROR([No sqlite3 header found!],1))
@@ -64,10 +64,14 @@ AC_CHECK_LIB([sqlite3],[sqlite3_open],[],
 
 AC_CHECK_LIB(sqlite3,sqlite3_open)
 
+PSQL_CFLAGS=""
+PSQL_LIBS=""
 PKG_CHECK_MODULES(PGSQL, [libpq],
 				  AC_DEFINE(HAVE_LIBPQ,1,[define 1 if we have libpq (PostgreSQL) installed.]),
 				  [])
 
+MARIADB_CFLAGS=""
+MARIADB_LIBS=""
 PKG_CHECK_MODULES(MARIADB, [libmariadb],
 				  AC_DEFINE(HAVE_MARIADB,1,[define 1 if we have MariaDB client installed.]),
 				  [])
