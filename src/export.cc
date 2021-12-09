@@ -310,7 +310,7 @@ DB_Exporter::export_vfunc(Gtk::Window &parent)
 
 	if (this->file_exists())
 #ifdef NATIVE_WINDOWS
-		_unlink(m_filename_.c_str());
+		_unlink(get_filename().c_str());
 #else
 		unlink(get_filename().c_str());
 #endif
