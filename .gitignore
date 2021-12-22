@@ -5,3 +5,6 @@ Debug/*
 *.temp
 *.log
 *.swp
+build
+build/*
+*.o
