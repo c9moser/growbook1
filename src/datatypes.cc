@@ -397,7 +397,7 @@ Growlog::get_created_on_format(const Glib::ustring &format) const
 void
 Growlog::set_created_on(time_t t)
 {
-	if (time > 0)
+	if (t > 0)
 		m_created_on_ = t;
 }
 

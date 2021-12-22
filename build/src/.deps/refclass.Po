@@ -1,0 +1,2 @@
+refclass.o: ../../src/refclass.cc ../../src/refclass.h
+../../src/refclass.h:

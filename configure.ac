@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl Created by Anjuta application wizard.
 
-AC_INIT(growbook, 0.1.4)
+AC_INIT([growbook],[0.1.4])
 
 AC_CONFIG_HEADERS([config.h])
 
@@ -15,7 +15,7 @@ AC_PROG_CXX
 dnl ***************************************************************************
 dnl Internationalization
 dnl ***************************************************************************
-IT_PROG_INTLTOOL([0.35.0])
+#IT_PROG_INTLTOOL([0.35.0])
 
 GETTEXT_PACKAGE=growbook
 AC_SUBST(GETTEXT_PACKAGE)
@@ -76,8 +76,9 @@ PKG_CHECK_MODULES(MARIADB, [libmariadb],
 				  AC_DEFINE(HAVE_MARIADB,1,[define 1 if we have MariaDB client installed.]),
 				  [])
 
-AC_OUTPUT([
+AC_CONFIG_FILES([
 Makefile
 src/Makefile
 po/Makefile.in
 ])
+AC_OUTPUT
