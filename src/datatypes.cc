@@ -394,6 +394,13 @@ Growlog::get_created_on_format(const Glib::ustring &format) const
 #endif /*! NATIVE_WINDOWS */
 }
 
+void
+Growlog::set_created_on(time_t t)
+{
+	if (time > 0)
+		m_created_on_ = t;
+}
+
 time_t
 Growlog::get_flower_on() const
 {

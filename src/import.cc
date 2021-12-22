@@ -325,6 +325,7 @@ const char ImportDialog::TITLE[] = N_("GrowBook: Import");
 
 ImportDialog::ImportDialog(const Glib::RefPtr<Database> &db):
 	Gtk::FileChooserDialog{_(TITLE),Gtk::FILE_CHOOSER_ACTION_OPEN},
+	m_parent_{nullptr},
 	m_database_{db}
 {
 	assert(m_database_);
@@ -338,6 +339,7 @@ ImportDialog::ImportDialog(const Glib::RefPtr<Database> &db):
 ImportDialog::ImportDialog(Gtk::Window &parent,
                            const Glib::RefPtr<Database> &db):
 	Gtk::FileChooserDialog{parent,_(TITLE),Gtk::FILE_CHOOSER_ACTION_OPEN},
+	m_parent_{&parent},
 	m_database_{db}
 {
 	assert(m_database_);
@@ -383,6 +385,13 @@ ImportDialog::_configure()
 	set_current_folder(Glib::get_user_special_dir(Glib::USER_DIRECTORY_DOCUMENTS));	
 }
 
+static bool _has_ending(const std::string &s,const std::string &end)
+{
+	if (s.length() >= end.length()) 
+		return (0 == s.compare(s.length() - end.length(), end.length(), end));
+	return false;
+}
+
 Glib::RefPtr<Importer>
 ImportDialog::get_importer()
 {
@@ -390,5 +399,31 @@ ImportDialog::get_importer()
 	if (filename.empty())
 		return Glib::RefPtr<Importer>();
 
-	return DB_Importer::create(m_database_,filename);
+	
+	if (_has_ending(filename, ".growbook")) {
+		return XML_Importer::create(m_database_,filename);
+	} else if (_has_ending(filename,".db")) {
+		return DB_Importer::create(m_database_,filename);
+	} else {
+		const char MESSAGE[] = N_("Unable to import file!\n(Unknown file format!)");
+		if (m_parent_) {
+			Gtk::MessageDialog dialog(*m_parent_,
+			                          _(MESSAGE),
+			                          false,
+			                          Gtk::MESSAGE_ERROR,
+			                          Gtk::BUTTONS_OK,
+			                          true);
+			dialog.run();
+			dialog.hide();
+		} else {
+			Gtk::MessageDialog dialog(_(MESSAGE),
+			                          false,
+			                          Gtk::MESSAGE_ERROR,
+			                          Gtk::BUTTONS_OK,
+			                          true);
+			dialog.run();
+			dialog.hide();
+		}
+	}
+	return Glib::RefPtr<Importer>();
 }

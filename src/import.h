@@ -135,6 +135,7 @@ class ImportDialog:
 		static const char TITLE[];
 
 	private:
+		Gtk::Window *m_parent_;
 		Glib::RefPtr<Database> m_database_;
 		
 	public:

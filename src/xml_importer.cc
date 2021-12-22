@@ -26,6 +26,7 @@
 #ifdef NATIVE_WINDOWS
 # include "strptime.h"
 #endif
+#include "debug.h"
 
 #include "xml_importer.h"
 #include <glibmm/markup.h>
@@ -125,18 +126,24 @@ class MarkupParser:
 		void _create_growlog();
 		time_t _parse_date(const Glib::ustring &date);
 		time_t _parse_datetime(const Glib::ustring &datetime);
+
+		bool _startswith(const Glib::ustring &s,const Glib::ustring &ending);
+		bool _endswith(const Glib::ustring &s,const Glib::ustring &ending);
+		
+		Glib::ustring _strip_cdata(const Glib::ustring &s); 
 		
 	protected:
 		virtual void on_start_element(Glib::Markup::ParseContext &context,
-		                              const Glib::ustring &element_name);
+		                              const Glib::ustring &element_name,
+		                              const Glib::Markup::Parser::AttributeMap &attributes) override;
 		virtual void on_end_element(Glib::Markup::ParseContext &context,
-		                            const Glib::ustring &emelent_name);
+		                            const Glib::ustring &emelent_name) override;
 		virtual void on_text(Glib::Markup::ParseContext &context,
-		                     const Glib::ustring &text);
+		                     const Glib::ustring &text) override;
 		virtual void on_passthrough(Glib::Markup::ParseContext &context,
-		                            const Glib::ustring &passthrough_text);
+		                            const Glib::ustring &passthrough_text) override;
 		virtual void on_error(Glib::Markup::ParseContext &context,
-		                      const Glib::MarkupError &error);
+		                      const Glib::MarkupError &error) override;
 };
 
 /******************************************************************************/
@@ -181,6 +188,8 @@ RenameGrowlogDialog::RenameGrowlogDialog(Gtk::Window &parent,
 	get_content_area()->pack_start(*hbox);
 
 	add_button(_("OK"), Gtk::RESPONSE_OK);
+
+	show_all();
 }
                                          
 RenameGrowlogDialog::~RenameGrowlogDialog()
@@ -216,7 +225,7 @@ MarkupParser::MarkupParser(Gtk::Window &parent,
 	Glib::Markup::Parser(),
 	m_parent_(&parent),
 	m_database_(db),
-	m_node_(new MarkupNode),
+	m_node_(new MarkupNode()),
 	m_breeder_exists_(false),
 	m_breeder_mode_(BREEDER_MODE_UNKNOWN),
 	m_breeder_(),
@@ -234,6 +243,11 @@ MarkupParser::MarkupParser(Gtk::Window &parent,
 
 MarkupParser::~MarkupParser()
 {
+	while (m_node_) {
+		MarkupNode *node = m_node_;
+		m_node_ = node->parent;
+		delete node;
+	}
 }
 
 Glib::ustring
@@ -270,6 +284,36 @@ MarkupParser::_parse_date(const Glib::ustring &d)
 	return mktime(&datetime);
 }
 
+bool
+MarkupParser::_startswith(const Glib::ustring &s, const Glib::ustring &e)
+{
+	if (s.length() >= e.length())
+		return (s.compare(0,e.length(),e) == 0);
+	return false;
+}
+
+bool
+MarkupParser::_endswith(const Glib::ustring &s, const Glib::ustring &e)
+{
+	if (s.length() >= e.length())
+		return (s.compare(s.length() - e.length(),e.length(), e) == 0);
+	return false;
+}
+
+Glib::ustring
+MarkupParser::_strip_cdata(const Glib::ustring &s)
+{
+	bool cdata_start = _startswith(s,"<![CDATA[");
+	bool cdata_end = _endswith(s,"]]>");
+
+	size_t start = cdata_start ? 9 : 0;
+	size_t len = cdata_start ? (s.length() - 9) : s.length();
+	if (cdata_end)
+		len -= 3; 
+
+	return Glib::ustring(s,start,len); 
+}
+ 
 void
 MarkupParser::_create_growlog()
 {
@@ -289,7 +333,8 @@ MarkupParser::_create_growlog()
 
 void
 MarkupParser::on_start_element(Glib::Markup::ParseContext &context,
-                               const Glib::ustring &element)
+                               const Glib::ustring &element,
+                               const Glib::Markup::Parser::AttributeMap &attributes)
 {
 	switch (m_node_->element) {
 		case MARKUP_NONE:
@@ -359,7 +404,10 @@ MarkupParser::on_start_element(Glib::Markup::ParseContext &context,
 				m_node_ = new MarkupNode(MARKUP_UNKNOWN,m_node_);
 			}
 		case MARKUP_GB_GROWLOGS_GROWLOG:
-			if (element == "title") {
+			DEBUG("ELEMENT: /growbook/growlogs/growlog/<%s>\n",element.c_str());
+			if (element == "growlog") {
+				m_node_ = new MarkupNode(MARKUP_GB_GROWLOGS_GROWLOG,m_node_);
+			} else if (element == "title") {
 				m_node_ = new MarkupNode(MARKUP_GB_GROWLOGS_GROWLOG_TITLE,
 				                         m_node_);
 			} else if (element == "created_on") {
@@ -391,6 +439,11 @@ MarkupParser::on_start_element(Glib::Markup::ParseContext &context,
 			} else {
 				m_node_ = new MarkupNode(MARKUP_UNKNOWN,m_node_);
 			}
+			if (!m_growlog_ignore_ && !m_growlog_->get_id()) {
+				m_database_->add_growlog(m_growlog_);
+				m_growlog_ = m_database_->get_growlog(m_growlog_->get_title());
+				assert(m_growlog_);
+			}
 			break;
 		case MARKUP_GB_GROWLOGS_GROWLOG_STRAINS_STRAIN:
 			if (element == "breeder") {
@@ -409,6 +462,10 @@ MarkupParser::on_start_element(Glib::Markup::ParseContext &context,
 				                         m_node_);
 			} else {
 				m_node_ = new MarkupNode(MARKUP_UNKNOWN,m_node_);
+			}
+			if (!m_growlog_ignore_ && !m_growlog_->get_id()) {
+				m_database_->add_growlog(m_growlog_);
+				m_growlog_ = m_database_->get_growlog(m_growlog_->get_title());
 			}
 			break;
 		case MARKUP_GB_GROWLOGS_GROWLOG_ENTRIES_ENTRY:
@@ -432,6 +489,8 @@ void
 MarkupParser::on_end_element(Glib::Markup::ParseContext &context,
                              const Glib::ustring &element)
 {
+	DEBUG("END ELEMENT: %s\n",element.c_str());
+	
 	switch (m_node_->element) {
 		case MARKUP_GB_BREEDERS_BREEDER:
 			assert(element == "breeder");
@@ -462,10 +521,12 @@ MarkupParser::on_end_element(Glib::Markup::ParseContext &context,
 		case MARKUP_GB_GROWLOGS_GROWLOG:
 			if (!m_growlog_ignore_ && m_growlog_)
 				m_database_->add_growlog(m_growlog_);
-			m_growlog_ignore_ = false;
-			m_growlog_title_.clear();
-			m_growlog_created_on_.clear();
-			m_growlog_.clear();
+			if (!m_node_->parent->element == MARKUP_GB_GROWLOGS_GROWLOG) {
+				m_growlog_ignore_ = false;
+				m_growlog_title_.clear();
+				m_growlog_created_on_.clear();
+				m_growlog_.clear();
+			}
 			break;
 		case MARKUP_GB_GROWLOGS_GROWLOG_TITLE:
 		case MARKUP_GB_GROWLOGS_GROWLOG_CREATED:
@@ -482,7 +543,10 @@ MarkupParser::on_end_element(Glib::Markup::ParseContext &context,
 			    	&& !m_growlog_strain_.empty()) {
 				Glib::RefPtr<Strain> strain = m_database_->get_strain(m_growlog_breeder_,
 				                                                      m_growlog_strain_);
-				m_database_->add_strain_for_growlog(m_growlog_,strain);
+				if (strain && strain->get_id()) {
+					m_database_->add_strain_for_growlog(m_growlog_->get_id(),
+					                                    strain->get_id());
+				}
 			}
 			m_growlog_breeder_.clear();
 			m_growlog_strain_.clear();
@@ -500,8 +564,10 @@ MarkupParser::on_end_element(Glib::Markup::ParseContext &context,
 			break;
 	}
 	MarkupNode *node = m_node_;
-	m_node_ = m_node_->parent;
-	delete node;
+	if (m_node_->parent) {
+		m_node_ = m_node_->parent;
+		delete node;
+	}
 } // MarkupParser::on_end_element()
 
 void
@@ -511,10 +577,27 @@ MarkupParser::on_text(Glib::Markup::ParseContext &context,
 	switch (m_node_->element) {
 		case MARKUP_GB_BREEDERS_BREEDER_NAME:
 			if (!m_breeder_) {
+				
+				fprintf(stderr,"DEBUG> Breeder Name: %s\n",text.c_str());
+				
 				m_breeder_ = m_database_->get_breeder(text);
 				if (!m_breeder_) {
 					Glib::RefPtr<Breeder> b = Breeder::create(text,"");
-					m_database_->add_breeder(b);
+					try {
+						m_database_->add_breeder(b);
+					} catch (DatabaseError ex) {
+						Gtk::MessageDialog dialog (*m_parent_,
+						                           _("Unable to add breeder to database!"),
+						                           false,
+						                           Gtk::MESSAGE_ERROR,
+						                           Gtk::BUTTONS_OK,
+						                           true);
+						dialog.set_secondary_text(ex.what());
+						dialog.run();
+						dialog.hide();
+
+						exit(EXIT_FAILURE);
+					}
 					m_breeder_ = m_database_->get_breeder(text);
 					m_breeder_exists_ = false;
 					if (m_breeder_mode_ == BREEDER_MODE_UNKNOWN)
@@ -581,9 +664,9 @@ MarkupParser::on_text(Glib::Markup::ParseContext &context,
 		case MARKUP_GB_BREEDERS_BREEDER_STRAINS_STRAIN_SEEDFINDER:
 			if (m_strain_)
 				m_strain_->set_seedfinder(text);
-		case MARKUP_GB_GROWLOGS_GROWLOG_TITLE:
-			m_growlog_ = m_database_->get_growlog(text);
-			if (m_growlog_) {
+		case MARKUP_GB_GROWLOGS_GROWLOG_TITLE: {
+			Glib::RefPtr<Growlog> gl = m_database_->get_growlog(text);
+			if (gl) {
 				Glib::ustring fmt = _("Growlog \"%s\" already exists!\nHow do you want to proceed?");
 				size_t msg_size = fmt.bytes() + text.bytes() + 1;
 				char *msg = new char[msg_size];
@@ -610,8 +693,11 @@ MarkupParser::on_text(Glib::Markup::ParseContext &context,
 					m_growlog_title_ = _rename_growlog(text);
 				else
 					m_growlog_ignore_ = true;
+			} else {
+				m_growlog_title_ = text;
 			}
 			break;
+		}
 		case MARKUP_GB_GROWLOGS_GROWLOG_CREATED:
 			if (!m_growlog_ignore_)
 				m_growlog_created_on_ = text;
@@ -642,17 +728,17 @@ MarkupParser::on_passthrough(Glib::Markup::ParseContext &context,
 	switch (m_node_->element) {
 		case MARKUP_GB_BREEDERS_BREEDER_STRAINS_STRAIN_INFO:
 			if (m_strain_)
-				m_strain_->set_info(text);
+				m_strain_->set_info(_strip_cdata(text));
 			break;
 		case MARKUP_GB_BREEDERS_BREEDER_STRAINS_STRAIN_DESCRIPTION:
 			if (m_strain_)
-				m_strain_->set_description(text);
+				m_strain_->set_description(_strip_cdata(text));
 			break;
 		case MARKUP_GB_GROWLOGS_GROWLOG_DESCRIPTION:
 			if (m_growlog_)
-				m_growlog_->set_description(text);
+				m_growlog_->set_description(_strip_cdata(text));
 		case MARKUP_GB_GROWLOGS_GROWLOG_ENTRIES_ENTRY_TEXT:
-			m_growlog_entry_text_ = text;
+			m_growlog_entry_text_ = _strip_cdata(text);
 		default:
 			break;
 	}
@@ -662,6 +748,15 @@ void
 MarkupParser::on_error(Glib::Markup::ParseContext &context,
                        const Glib::MarkupError &error)
 {
+	Gtk::MessageDialog dialog(*m_parent_,
+	                          _("Markup Error!"),
+	                          false,
+	                          Gtk::MESSAGE_ERROR,
+	                          Gtk::BUTTONS_OK,
+	                          true);
+	dialog.set_secondary_text (error.what());
+	dialog.run();
+	dialog.hide();	                          
 }
 
 /*******************************************************************************
@@ -693,27 +788,18 @@ XML_Importer::import_vfunc(Gtk::Window &parent)
 
 	std::ifstream is(get_filename().c_str());
 	if (is) {
-		is.seekg(0, is.end);
-		size_t len = is.tellg();
+		size_t size=0;
+		is.seekg(0,is.end);
+		size = is.tellg();
 		is.seekg(0,is.beg);
+			
+		char *buf = new char[size + 1];
+		is.read(buf,size);
+		buf[size] = 0;
 
-		size_t bufsize = 100*1024*1024;
-		if (len <= bufsize)
-			bufsize = len;
+		context.parse(buf, buf+size);
 
-		char *buf = new char[bufsize + 1];
-		buf[bufsize] = '\0';
-
-		do {
-			if (bufsize < len) {
-				is.read(buf,bufsize);
-			} else {
-				is.read(buf,len);
-				buf[len]='\0';
-			}
-			len -= is.gcount();
-
-			context.parse(buf);
-		} while (is && len > 0);
+		context.end_parse();
+		delete[] buf;
 	}
 }

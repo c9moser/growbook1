@@ -23,8 +23,12 @@
 # include "config.h"
 #endif
 
+
 #ifdef HAVE_LIBPQ
 #include "database-postgresql.h"
+
+#include "debug.h"
+
 
 #ifdef NATIVE_WINDOWS
 # include "strptime.h"
@@ -289,10 +293,12 @@ DatabasePostgresql::get_breeder_vfunc(uint64_t id) const
 	PGresult *result = PQexecParams(m_db_,sql,1,NULL,values,NULL,NULL,0);
 
 	if (PQresultStatus(result) == PGRES_TUPLES_OK) {
-		Glib::ustring name = PQgetvalue(result,0,0);
-		std::string homepage = PQgetvalue(result,0,1);
+		if (PQntuples(result) > 0) {			
+			Glib::ustring name = PQgetvalue(result,0,0);
+			std::string homepage = PQgetvalue(result,0,1);
 
-		breeder = Breeder::create(id,name,homepage);
+			breeder = Breeder::create(id,name,homepage);
+		}
 	}
 	PQclear(result);
 	
@@ -304,6 +310,8 @@ DatabasePostgresql::get_breeder_vfunc(const Glib::ustring &name) const
 {
 	assert(m_db_);
 
+	DEBUG("Breeder Name: %s\n",name.c_str());
+		
 	const char *sql = "SELECT id,homepage FROM breeder WHERE name=$1;";
 	Glib::RefPtr<Breeder> breeder;
 	const char *values[1];
@@ -311,10 +319,12 @@ DatabasePostgresql::get_breeder_vfunc(const Glib::ustring &name) const
 
 	PGresult *result = PQexecParams(m_db_,sql,1,NULL,values,NULL,NULL,0);
 	if (PQresultStatus(result) == PGRES_TUPLES_OK) {
-		uint64_t id = std::stoull(PQgetvalue(result,0,0));
-		std::string homepage = PQgetvalue(result,0,1);
+		if (PQntuples(result) > 0) {
+			uint64_t id = std::stoull(PQgetvalue(result,0,0));
+			std::string homepage = PQgetvalue(result,0,1);
 
-		breeder = Breeder::create(id,name,homepage);
+			breeder = Breeder::create(id,name,homepage);
+		}
 	}
 	PQclear(result);
 	
@@ -328,8 +338,9 @@ DatabasePostgresql::add_breeder_vfunc(const Glib::RefPtr<Breeder> &breeder)
 	assert(breeder);
 
 	begin_transaction();
+
 	
-	if (breeder->get_id()) {
+	if (breeder->get_id() > 0) {
 		const char *sql = "UPDATE breeder SET name=$1,homepage=$2 WHERE id=$3;";
 		const char *values[3];
 		std::string id_str=std::to_string(breeder->get_id());
@@ -486,15 +497,17 @@ DatabasePostgresql::get_strain_vfunc(uint64_t id) const
 
 	PGresult *result = PQexecParams(m_db_,sql,1,NULL,values,NULL,NULL,0);
 	if (PQresultStatus(result) == PGRES_TUPLES_OK) {
-		uint64_t breeder_id = std::stoull(PQgetvalue(result,0,0));
-		Glib::ustring breeder_name = PQgetvalue(result,0,1);
-		Glib::ustring name = PQgetvalue(result,0,2);
-		Glib::ustring info = PQgetvalue(result,0,3);
-		Glib::ustring desc = PQgetvalue(result,0,4);
-		std::string homepage = PQgetvalue(result,0,5);
-		std::string seedfinder = PQgetvalue(result,0,6);
+		if (PQntuples(result) > 0) {
+			uint64_t breeder_id = std::stoull(PQgetvalue(result,0,0));
+			Glib::ustring breeder_name = PQgetvalue(result,0,1);
+			Glib::ustring name = PQgetvalue(result,0,2);
+			Glib::ustring info = PQgetvalue(result,0,3);
+			Glib::ustring desc = PQgetvalue(result,0,4);
+			std::string homepage = PQgetvalue(result,0,5);
+			std::string seedfinder = PQgetvalue(result,0,6);
 
-		ret = Strain::create(id,breeder_id,breeder_name,name,info,desc,homepage,seedfinder);
+			ret = Strain::create(id,breeder_id,breeder_name,name,info,desc,homepage,seedfinder);
+		}
 	}
 	PQclear(result);
 	return ret;
@@ -514,21 +527,23 @@ DatabasePostgresql::get_strain_vfunc(const Glib::ustring &breeder_name,
 
 	PGresult *result = PQexecParams(m_db_,sql,2,NULL,values,NULL,NULL,0);
 	if (PQresultStatus(result) == PGRES_TUPLES_OK) {
-		uint64_t id = std::stoull(PQgetvalue(result,0,0));
-		uint64_t breeder_id = std::stoull(PQgetvalue(result,0,1));
-		Glib::ustring info = PQgetvalue(result,0,2);
-		Glib::ustring desc = PQgetvalue(result,0,3);
-		std::string homepage = PQgetvalue(result,0,4);
-		std::string seedfinder = PQgetvalue(result,0,5);
+		if (PQntuples(result) > 0) {
+			uint64_t id = std::stoull(PQgetvalue(result,0,0));
+			uint64_t breeder_id = std::stoull(PQgetvalue(result,0,1));
+			Glib::ustring info = PQgetvalue(result,0,2);
+			Glib::ustring desc = PQgetvalue(result,0,3);
+			std::string homepage = PQgetvalue(result,0,4);
+			std::string seedfinder = PQgetvalue(result,0,5);
 
-		ret = Strain::create(id,
-		                     breeder_id,
-		                     breeder_name,
-		                     strain_name,
-		                     info,
-		                     desc,
-		                     homepage,
-		                     seedfinder);
+			ret = Strain::create(id,
+		    	                 breeder_id,
+		    	                 breeder_name,
+		    	                 strain_name,
+		    	                 info,
+		    	                 desc,
+		    	                 homepage,
+		    	                 seedfinder);
+		}
 	}
 	PQclear(result);
 	return ret;
@@ -796,30 +811,32 @@ DatabasePostgresql::get_growlog_vfunc(uint64_t id) const
 
 	PGresult *result = PQexecParams(m_db_,sql,1,NULL,values,NULL,NULL,0);
 	if (PQresultStatus(result) == PGRES_TUPLES_OK) {
-		Glib::ustring title = PQgetvalue(result,0,0);
-		Glib::ustring desc = PQgetvalue(result,0,1);
-		Glib::ustring created_on_str = PQgetvalue(result,0,2);
-		tm datetime;
-		strptime(created_on_str.c_str(),DATETIME_ISO_FORMAT,&datetime);
-		time_t created_on = mktime(&datetime);
-		time_t flower_on = 0;
-		time_t finished_on = 0;
+		if (PQntuples(result) > 0) {
+			Glib::ustring title = PQgetvalue(result,0,0);
+			Glib::ustring desc = PQgetvalue(result,0,1);
+			Glib::ustring created_on_str = PQgetvalue(result,0,2);
+			tm datetime;
+			strptime(created_on_str.c_str(),DATETIME_ISO_FORMAT,&datetime);
+			time_t created_on = mktime(&datetime);
+			time_t flower_on = 0;
+			time_t finished_on = 0;
 
-		if (!PQgetisnull(result,0,3)) {
-			Glib::ustring flower_on_str = PQgetvalue(result,0,3);
-			if (!flower_on_str.empty()) {
-				strptime(flower_on_str.c_str(),DATE_ISO_FORMAT,&datetime);
-				flower_on = mktime(&datetime);
+			if (!PQgetisnull(result,0,3)) {
+				Glib::ustring flower_on_str = PQgetvalue(result,0,3);
+				if (!flower_on_str.empty()) {
+					strptime(flower_on_str.c_str(),DATE_ISO_FORMAT,&datetime);
+					flower_on = mktime(&datetime);
+				}
 			}
-		}
-		if (!PQgetisnull(result,0,4)) {
-			Glib::ustring finished_on_str = PQgetvalue(result,0,4);
-			if (!finished_on_str.empty()) {
-				strptime(finished_on_str.c_str(),DATETIME_ISO_FORMAT,&datetime);
-				finished_on = mktime(&datetime);
+			if (!PQgetisnull(result,0,4)) {
+				Glib::ustring finished_on_str = PQgetvalue(result,0,4);
+				if (!finished_on_str.empty()) {
+					strptime(finished_on_str.c_str(),DATETIME_ISO_FORMAT,&datetime);
+					finished_on = mktime(&datetime);
+				}
 			}
+			growlog = Growlog::create(id,title,desc,created_on,flower_on,finished_on);
 		}
-		growlog = Growlog::create(id,title,desc,created_on,flower_on,finished_on);
 	}
 	PQclear(result);
 	return growlog;
@@ -835,30 +852,32 @@ DatabasePostgresql::get_growlog_vfunc(const Glib::ustring &title) const
 
 	PGresult *result = PQexecParams(m_db_,sql,1,NULL,values,NULL,NULL,0);
 	if (PQresultStatus(result) == PGRES_TUPLES_OK) {
-		tm datetime;
-		uint64_t id = std::stoull(PQgetvalue(result,0,0));
-		Glib::ustring desc = PQgetvalue(result,0,1);
-		Glib::ustring created_on_str = PQgetvalue(result,0,2);
-		strptime(created_on_str.c_str(),DATETIME_ISO_FORMAT,&datetime);
-		time_t created_on = mktime(&datetime);
-		time_t flower_on = 0;
-		time_t finished_on = 0;
-
-		if (!PQgetisnull(result,0,3)) {
-			Glib::ustring flower_on_str = PQgetvalue(result,0,3);
-			if (!flower_on_str.empty()) {
-				strptime(flower_on_str.c_str(),DATE_ISO_FORMAT,&datetime);
-				flower_on = mktime(&datetime);
+		if (PQntuples(result) > 0) {
+			tm datetime;
+			uint64_t id = std::stoull(PQgetvalue(result,0,0));
+			Glib::ustring desc = PQgetvalue(result,0,1);
+			Glib::ustring created_on_str = PQgetvalue(result,0,2);
+			strptime(created_on_str.c_str(),DATETIME_ISO_FORMAT,&datetime);
+			time_t created_on = mktime(&datetime);
+			time_t flower_on = 0;
+			time_t finished_on = 0;
+	
+			if (!PQgetisnull(result,0,3)) {
+				Glib::ustring flower_on_str = PQgetvalue(result,0,3);
+				if (!flower_on_str.empty()) {
+					strptime(flower_on_str.c_str(),DATE_ISO_FORMAT,&datetime);
+					flower_on = mktime(&datetime);
+				}
 			}
-		}
-		if (!PQgetisnull(result,0,4)) {
-			Glib::ustring finished_on_str = PQgetvalue(result,0,4);
-			if (!finished_on_str.empty()) {
-				strptime(finished_on_str.c_str(),DATETIME_ISO_FORMAT,&datetime);
-				finished_on = mktime(&datetime);
+			if (!PQgetisnull(result,0,4)) {
+				Glib::ustring finished_on_str = PQgetvalue(result,0,4);
+				if (!finished_on_str.empty()) {
+					strptime(finished_on_str.c_str(),DATETIME_ISO_FORMAT,&datetime);
+					finished_on = mktime(&datetime);
+				}
 			}
+			growlog = Growlog::create(id,title,desc,created_on,flower_on,finished_on);
 		}
-		growlog = Growlog::create(id,title,desc,created_on,flower_on,finished_on);
 	}
 	PQclear(result);
 	return growlog;
@@ -1026,13 +1045,15 @@ DatabasePostgresql::get_growlog_entry_vfunc(uint64_t id) const
 
 	PGresult *result = PQexecParams(m_db_,sql,1,NULL,values,NULL,NULL,0);
 	if (PQresultStatus(result) == PGRES_TUPLES_OK) {
-		Glib::ustring text = PQgetvalue(result,0,0);
-		Glib::ustring created_on_str = PQgetvalue(result,0,1);
-		tm datetime;
-		strptime(created_on_str.c_str(),DATETIME_ISO_FORMAT,&datetime);
-		time_t created_on = mktime(&datetime);
+		if (PQntuples(result) > 0) {
+			Glib::ustring text = PQgetvalue(result,0,0);
+			Glib::ustring created_on_str = PQgetvalue(result,0,1);
+			tm datetime;
+			strptime(created_on_str.c_str(),DATETIME_ISO_FORMAT,&datetime);
+			time_t created_on = mktime(&datetime);
 
-		entry = GrowlogEntry::create(id,text,created_on);
+			entry = GrowlogEntry::create(id,text,created_on);
+		}
 	}
 	PQclear(result);
 	return entry;

@@ -184,7 +184,7 @@ class Growlog:
 
 	public:
 		static Glib::RefPtr<Growlog> create(const Glib::ustring &title,
-		                                    const Glib::ustring &description,
+		                                    const Glib::ustring &description = Glib::ustring(),
 		                                    time_t created_on=0,
 		                                    time_t flower_on=0,
 		                                    time_t finished_on=0);
@@ -205,6 +205,7 @@ class Growlog:
 
 		time_t get_created_on() const;
 		Glib::ustring get_created_on_format(const Glib::ustring &format=DATETIME_ISO_FORMAT) const;
+		void set_created_on(time_t time);
 		
 		time_t get_flower_on() const;
 		Glib::ustring get_flower_on_format(const Glib::ustring &format=DATE_ISO_FORMAT) const;

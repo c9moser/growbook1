@@ -80,7 +80,8 @@ growbook_SOURCES = \
 	import.cc \
 	import.h \
 	xml_importer.cc \
-	xml_importer.h 
+	xml_importer.h \
+	debug.h 
 
 growbook_LDFLAGS = 
 

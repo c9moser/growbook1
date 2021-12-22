@@ -1383,6 +1383,8 @@ DatabaseSqlite3::add_strain_for_growlog_vfunc(uint64_t growlog_id,
                                               uint64_t strain_id)
 {
 	assert(m_db_);
+	assert(growlog_id);
+	assert(strain_id);
 
 	const char *sql = "INSERT INTO growlog_strain (growlog,strain) VALUES (?,?);";
 	sqlite3_stmt *stmt = nullptr;

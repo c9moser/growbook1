@@ -139,10 +139,15 @@ XML_Exporter::create(const Glib::RefPtr<Database> &database,
 void
 XML_Exporter::export_vfunc(Gtk::Window &parent)
 {
-	std::fstream of(m_filename_.c_str(),
-	                std::fstream::out | std::fstream::trunc);
-
-	if (! of.is_open()) {
+	
+	std::fstream of;
+	if (Glib::file_test(get_filename(),Glib::FILE_TEST_EXISTS)) { 
+		of.open(get_filename(), std::fstream::out | std::fstream::trunc);
+	} else {
+		of.open(get_filename(), std::fstream::out);
+	}
+	
+	if (!of.is_open()) {
 		Gtk::MessageDialog dialog(parent,
 		                   		  _("Unable to open file for writing!"),
 		                          false,
@@ -200,11 +205,11 @@ XML_Exporter::export_vfunc(Gtk::Window &parent)
 	// end breeders
 	breeders.clear();
 	of << indent(1) << "</breeders>" << std::endl;
-
 	
 	// export growlogs
-	std::list<Glib::RefPtr<Growlog> > growlogs(get_database()->get_growlogs());
+	
 	of << indent(1) << "<growlogs>\n";
+	std::list<Glib::RefPtr<Growlog> > growlogs(get_database()->get_growlogs());
 	for (auto iter = growlogs.begin(); iter != growlogs.end(); ++iter) {
 		Glib::RefPtr<Growlog> gl = *iter;
 		
@@ -214,61 +219,67 @@ XML_Exporter::export_vfunc(Gtk::Window &parent)
 			<< escape_text(gl->get_created_on_format()) 
 			<< "</created_on>\n";
 
-		if (gl->get_flower_on())
+		if (gl->get_flower_on()) {
 			of << indent(3) << "<flower_on>" 
 				<< escape_text(gl->get_flower_on_format()) 
 				<< "</flower_on>\n";
+		}
 			
-		if (gl->get_finished_on())
+		if (gl->get_finished_on()) {
 			of << indent(3) << "<finished_on>" 
 				<< escape_text(gl->get_finished_on_format()) 
 				<< "</finished_on>\n";
-
+		}
+		
 		if (!gl->get_description().empty()) { 
-			of << indent(3) << "<description><!CDATA[" 
+			of << indent(3) << "<description><![CDATA[" 
 				<< gl->get_description() 
 				<< "]]></description>\n";
 		}
 
-		// strains
-		std::list<Glib::RefPtr<Strain> > strains(get_database()->get_strains_for_growlog(gl->get_id()));
 		of << indent(3) << "<strains>\n";
+		std::list<Glib::RefPtr<Strain> > strains 
+			= get_database()->get_strains_for_growlog(gl->get_id());
 		for (auto iter = strains.begin(); iter != strains.end(); ++iter) {
-			Glib::RefPtr<Strain> s = *iter;
+			Glib::RefPtr<Strain> strain = *iter;
 			of << indent(4) << "<strain>\n";
 
 			of << indent(5) << "<breeder>" 
-				<< escape_text(s->get_breeder_name())
+				<< escape_text(strain->get_breeder_name())
 				<< "</breeder>\n";
 
-			of << indent(5) << "<name>" 
-				<< escape_text(s->get_name())
+			of << indent(5) << "<name>"
+				<< escape_text(strain->get_name())
 				<< "</name>\n";
+			
 			of << indent(4) << "</strain>\n";
 		}
 		of << indent(3) << "</strains>\n";
-			
-		// entries
-		std::list<Glib::RefPtr<GrowlogEntry> > entries(get_database()->get_growlog_entries(gl->get_id()));
+
 		of << indent(3) << "<entries>\n";
+		std::list<Glib::RefPtr<GrowlogEntry> > entries 
+			= get_database()->get_growlog_entries(gl);
 		for (auto iter = entries.begin(); iter != entries.end(); ++iter) {
-			Glib::RefPtr<GrowlogEntry> e = *iter;
+			Glib::RefPtr<GrowlogEntry> entry = *iter;
 			of << indent(4) << "<entry>\n";
 
 			of << indent(5) << "<created_on>"
-				<< escape_text(e->get_created_on_format())
+				<< escape_text(entry->get_created_on_format())
 				<< "</created_on>\n";
-			of << indent(5) << "<text><!CDATA[" << e->get_text() << "]]></text>\n";
+
+			of << indent(5) << "<text><![CDATA["
+				<< entry->get_text()
+				<< "]]></text>\n";
+
 			of << indent(4) << "</entry>\n";
 		}
 		of << indent(3) << "</entries>\n";
-
+		
 		of << indent(2) << "</growlog>\n";
 	}
+	of << indent(1) << "</growlogs>\n";
 
-	of << indent(1) << "</growlogs>" << std::endl;
-
-	of << "</growbook>";
+	of << "</growbook>" << std::endl;
 
 	of.close();
 }
@@ -508,6 +519,20 @@ ExportDialog::get_exporter()
 	if (filename.empty())
 		return exporter;
 
+	if (Glib::file_test(filename, Glib::FILE_TEST_EXISTS)) {
+		Glib::ustring msg = Glib::ustring::sprintf(_("File \"%s\" already exists!"),filename);
+		Gtk::MessageDialog dialog(*this,msg,false,Gtk::MESSAGE_QUESTION,Gtk::BUTTONS_YES_NO,true);
+		dialog.set_secondary_text(_("Do you want to overwrite the file?"));
+		if (dialog.run() == Gtk::RESPONSE_YES) {
+#ifdef NATIVE_WINDOWS
+			_unlink(filename.c_str());
+#else
+			unlink(filename.c_str());
+#endif // NATIVE_WINDOWS
+		} else {
+			return exporter;
+		}
+	}
 	Glib::RefPtr<Gtk::FileFilter> filter = get_filter();
 	if (filter->get_name() == _(EXPORT_FILTER[EXPORT_FILTER_XML])) {
 		if (!_has_ending(filename, ".growbook"))

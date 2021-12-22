@@ -216,6 +216,30 @@ AppWindow::get_browser_notebook() const
 	return &m_browser_notebook_;
 }
 
+GrowlogSelector*
+AppWindow::get_growlog_selector()
+{
+	return &m_growlog_selector_;
+}
+
+const GrowlogSelector*
+AppWindow::get_growlog_selector() const
+{
+	return &m_growlog_selector_;
+}
+
+StrainSelector*
+AppWindow::get_strain_selector()
+{
+	return &m_strain_selector_;
+}
+
+const StrainSelector*
+AppWindow::get_strain_selector() const
+{
+	return &m_strain_selector_;
+}
+
 int
 AppWindow::add_browser_page(Gtk::Widget &page,const Glib::ustring &title)
 {
@@ -308,5 +332,7 @@ AppWindow::on_import()
 			return;
 		importer->import_db(*this);
 	}
+	m_growlog_selector_.refresh();
+	m_strain_selector_.refresh();
 }
 

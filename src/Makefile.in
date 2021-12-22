@@ -488,7 +488,8 @@ growbook_SOURCES = \
 	import.cc \
 	import.h \
 	xml_importer.cc \
-	xml_importer.h 
+	xml_importer.h \
+	debug.h 
 
 growbook_LDFLAGS = $(am__append_1)
 growbook_LDADD = $(GROWBOOK_LIBS) $(PGSQL_LIBS) $(MARIADB_LIBS)
