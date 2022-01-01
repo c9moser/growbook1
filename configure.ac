@@ -55,7 +55,20 @@ dnl ***************************************************************************
 dnl Check for Packages
 dnl ***************************************************************************
 
-PKG_CHECK_MODULES(GROWBOOK, [gtkmm-3.0 >= 3.24])
+DEPENDS="gtkmm-3.0 >= 3.24"
+
+PKG_CHECK_EXISTS([libpq], 
+				 [AC_DEFINE(HAVE_LIBPQ,1,
+							[define 1 if we have libpq installed])
+				  DEPENDS="$DEPENDS libpq"],
+				 [])
+PKG_CHECK_EXISTS([libmariadb],
+				 [AC_DEFINE(HAVE_MARIADB,1,
+							[define 1 if we have MariaDB client installed]
+				  DEPENDS="$DEPENDS libmariadb")],
+				 [])
+
+PKG_CHECK_MODULES(GROWBOOK, [$DEPENDS])
 AC_CHECK_HEADER(sqlite3.h, 
 				[AC_DEFINE(HAVE_SQLITE3_H,1,[define 1 if we have sqlite3])],
 				AC_MSG_ERROR([No sqlite3 header found!],1))
@@ -63,18 +76,6 @@ AC_CHECK_LIB([sqlite3],[sqlite3_open],[],
 			 AC_MSG_ERROR([sqlite3 not installed!]))			 
 
 AC_CHECK_LIB(sqlite3,sqlite3_open)
-
-PSQL_CFLAGS=""
-PSQL_LIBS=""
-PKG_CHECK_MODULES(PGSQL, [libpq],
-				  AC_DEFINE(HAVE_LIBPQ,1,[define 1 if we have libpq (PostgreSQL) installed.]),
-				  [])
-
-MARIADB_CFLAGS=""
-MARIADB_LIBS=""
-PKG_CHECK_MODULES(MARIADB, [libmariadb],
-				  AC_DEFINE(HAVE_MARIADB,1,[define 1 if we have MariaDB client installed.]),
-				  [])
 
 AC_CONFIG_FILES([
 Makefile

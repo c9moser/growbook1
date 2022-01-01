@@ -15213,477 +15213,7 @@ patsubst($@)])
 m4trace:/usr/share/autoconf/autoconf/autoconf.m4:102: -1- m4_define([m4_regexp], [m4_expand_once([m4_warn([syntax],
 		 [do not use m4_regexp: use regexp or m4_bregexp])])dnl
 regexp($@)])
-m4trace:aclocal.m4:73: -1- m4_define([m4_location(GLIB_LC_MESSAGES)], [aclocal.m4:73])
-m4trace:aclocal.m4:73: -1- m4_define([GLIB_LC_MESSAGES], [_m4_defun_pro([$0])AC_CHECK_HEADERS([locale.h])
-    if test $ac_cv_header_locale_h = yes; then
-    AC_CACHE_CHECK([for LC_MESSAGES], am_cv_val_LC_MESSAGES,
-      [AC_TRY_LINK([#include <locale.h>], [return LC_MESSAGES],
-       am_cv_val_LC_MESSAGES=yes, am_cv_val_LC_MESSAGES=no)])
-    if test $am_cv_val_LC_MESSAGES = yes; then
-      AC_DEFINE(HAVE_LC_MESSAGES, 1,
-        [Define if your <locale.h> file defines LC_MESSAGES.])
-    fi
-  fi[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:89: -1- m4_define([m4_location(GLIB_PATH_PROG_WITH_TEST)], [aclocal.m4:89])
-m4trace:aclocal.m4:89: -1- m4_define([GLIB_PATH_PROG_WITH_TEST], [_m4_defun_pro([$0])# Extract the first word of "$2", so it can be a program name with args.
-set dummy $2; ac_word=[$]2
-AC_MSG_CHECKING([for $ac_word])
-AC_CACHE_VAL(ac_cv_path_$1,
-[case "[$]$1" in
-  /*)
-  ac_cv_path_$1="[$]$1" # Let the user override the test with a path.
-  ;;
-  *)
-  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
-  for ac_dir in ifelse([$5], , $PATH, [$5]); do
-    test -z "$ac_dir" && ac_dir=.
-    if test -f $ac_dir/$ac_word; then
-      if [$3]; then
-	ac_cv_path_$1="$ac_dir/$ac_word"
-	break
-      fi
-    fi
-  done
-  IFS="$ac_save_ifs"
-dnl If no 4th arg is given, leave the cache variable unset,
-dnl so AC_PATH_PROGS will keep looking.
-ifelse([$4], , , [  test -z "[$]ac_cv_path_$1" && ac_cv_path_$1="$4"
-])dnl
-  ;;
-esac])dnl
-$1="$ac_cv_path_$1"
-if test ifelse([$4], , [-n "[$]$1"], ["[$]$1" != "$4"]); then
-  AC_MSG_RESULT([$]$1)
-else
-  AC_MSG_RESULT(no)
-fi
-AC_SUBST($1)dnl
-[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:130: -1- m4_define([m4_location(glib_gt_INTL_MACOSX)], [aclocal.m4:130])
-m4trace:aclocal.m4:130: -1- m4_define([glib_gt_INTL_MACOSX], [_m4_defun_pro([$0])
-  dnl Check for API introduced in Mac OS X 10.2.
-  AC_CACHE_CHECK([for CFPreferencesCopyAppValue],
-    [gt_cv_func_CFPreferencesCopyAppValue],
-    [gt_save_LIBS="$LIBS"
-     LIBS="$LIBS -Wl,-framework -Wl,CoreFoundation"
-     AC_LINK_IFELSE(
-       [AC_LANG_PROGRAM(
-          [[#include <CoreFoundation/CFPreferences.h>]],
-          [[CFPreferencesCopyAppValue(NULL, NULL)]])],
-       [gt_cv_func_CFPreferencesCopyAppValue=yes],
-       [gt_cv_func_CFPreferencesCopyAppValue=no])
-     LIBS="$gt_save_LIBS"])
-  if test $gt_cv_func_CFPreferencesCopyAppValue = yes; then
-    AC_DEFINE([HAVE_CFPREFERENCESCOPYAPPVALUE], [1],
-      [Define to 1 if you have the Mac OS X function CFPreferencesCopyAppValue in the CoreFoundation framework.])
-  fi
-  dnl Check for API introduced in Mac OS X 10.3.
-  AC_CACHE_CHECK([for CFLocaleCopyCurrent], [gt_cv_func_CFLocaleCopyCurrent],
-    [gt_save_LIBS="$LIBS"
-     LIBS="$LIBS -Wl,-framework -Wl,CoreFoundation"
-     AC_LINK_IFELSE(
-       [AC_LANG_PROGRAM(
-          [[#include <CoreFoundation/CFLocale.h>]],
-          [[CFLocaleCopyCurrent();]])],
-       [gt_cv_func_CFLocaleCopyCurrent=yes],
-       [gt_cv_func_CFLocaleCopyCurrent=no])
-     LIBS="$gt_save_LIBS"])
-  if test $gt_cv_func_CFLocaleCopyCurrent = yes; then
-    AC_DEFINE([HAVE_CFLOCALECOPYCURRENT], [1],
-      [Define to 1 if you have the Mac OS X function CFLocaleCopyCurrent in the CoreFoundation framework.])
-  fi
-  INTL_MACOSX_LIBS=
-  if test $gt_cv_func_CFPreferencesCopyAppValue = yes || test $gt_cv_func_CFLocaleCopyCurrent = yes; then
-    INTL_MACOSX_LIBS="-Wl,-framework -Wl,CoreFoundation"
-  fi
-  AC_SUBST([INTL_MACOSX_LIBS])
-[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:172: -1- m4_define([m4_location(GLIB_WITH_NLS)], [aclocal.m4:172])
-m4trace:aclocal.m4:172: -1- m4_define([GLIB_WITH_NLS], [_m4_defun_pro([$0])  USE_NLS=yes
-    AC_SUBST(USE_NLS)
-
-    gt_cv_have_gettext=no
-
-    CATOBJEXT=NONE
-    XGETTEXT=:
-    INTLLIBS=
-
-    glib_gt_INTL_MACOSX
-
-    AC_CHECK_HEADER(libintl.h,
-     [gt_cv_func_dgettext_libintl="no"
-      libintl_extra_libs=""
-
-      #
-      # First check in libc
-      #
-      AC_CACHE_CHECK([for ngettext in libc], gt_cv_func_ngettext_libc,
-        [AC_TRY_LINK([
-#include <libintl.h>
-],
-         [return !ngettext ("","", 1)],
-	  gt_cv_func_ngettext_libc=yes,
-          gt_cv_func_ngettext_libc=no)
-        ])
-  
-      if test "$gt_cv_func_ngettext_libc" = "yes" ; then
-	      AC_CACHE_CHECK([for dgettext in libc], gt_cv_func_dgettext_libc,
-        	[AC_TRY_LINK([
-#include <libintl.h>
-],
-	          [return !dgettext ("","")],
-		  gt_cv_func_dgettext_libc=yes,
-	          gt_cv_func_dgettext_libc=no)
-        	])
-      fi
-  
-      if test "$gt_cv_func_ngettext_libc" = "yes" ; then
-        AC_CHECK_FUNCS(bind_textdomain_codeset)
-      fi
-
-      #
-      # If we don't have everything we want, check in libintl
-      #
-      if test "$gt_cv_func_dgettext_libc" != "yes" \
-	 || test "$gt_cv_func_ngettext_libc" != "yes" \
-         || test "$ac_cv_func_bind_textdomain_codeset" != "yes" ; then
-        
-        AC_CHECK_LIB(intl, bindtextdomain,
-	    [AC_CHECK_LIB(intl, ngettext,
-		    [AC_CHECK_LIB(intl, dgettext,
-			          gt_cv_func_dgettext_libintl=yes)])])
-
-	if test "$gt_cv_func_dgettext_libintl" != "yes" ; then
-	  AC_MSG_CHECKING([if -liconv is needed to use gettext])
-	  AC_MSG_RESULT([])
-  	  AC_CHECK_LIB(intl, ngettext,
-          	[AC_CHECK_LIB(intl, dcgettext,
-		       [gt_cv_func_dgettext_libintl=yes
-			libintl_extra_libs=-liconv],
-			:,-liconv)],
-		:,-liconv)
-        fi
-
-        #
-        # If we found libintl, then check in it for bind_textdomain_codeset();
-        # we'll prefer libc if neither have bind_textdomain_codeset(),
-        # and both have dgettext and ngettext
-        #
-        if test "$gt_cv_func_dgettext_libintl" = "yes" ; then
-          glib_save_LIBS="$LIBS"
-          LIBS="$LIBS -lintl $libintl_extra_libs"
-          unset ac_cv_func_bind_textdomain_codeset
-          AC_CHECK_FUNCS(bind_textdomain_codeset)
-          LIBS="$glib_save_LIBS"
-
-          if test "$ac_cv_func_bind_textdomain_codeset" = "yes" ; then
-            gt_cv_func_dgettext_libc=no
-          else
-            if test "$gt_cv_func_dgettext_libc" = "yes" \
-		&& test "$gt_cv_func_ngettext_libc" = "yes"; then
-              gt_cv_func_dgettext_libintl=no
-            fi
-          fi
-        fi
-      fi
-
-      if test "$gt_cv_func_dgettext_libc" = "yes" \
-	|| test "$gt_cv_func_dgettext_libintl" = "yes"; then
-        gt_cv_have_gettext=yes
-      fi
-  
-      if test "$gt_cv_func_dgettext_libintl" = "yes"; then
-        INTLLIBS="-lintl $libintl_extra_libs $INTL_MACOSX_LIBS"
-      fi
-  
-      if test "$gt_cv_have_gettext" = "yes"; then
-	AC_DEFINE(HAVE_GETTEXT,1,
-	  [Define if the GNU gettext() function is already present or preinstalled.])
-	GLIB_PATH_PROG_WITH_TEST(MSGFMT, msgfmt,
-	  [test -z "`$ac_dir/$ac_word -h 2>&1 | grep 'dv '`"], no)dnl
-	if test "$MSGFMT" != "no"; then
-          glib_save_LIBS="$LIBS"
-          LIBS="$LIBS $INTLLIBS"
-	  AC_CHECK_FUNCS(dcgettext)
-	  MSGFMT_OPTS=
-	  AC_MSG_CHECKING([if msgfmt accepts -c])
-	  GLIB_RUN_PROG([$MSGFMT -c -o /dev/null],[
-msgid ""
-msgstr ""
-"Content-Type: text/plain; charset=UTF-8\n"
-"Project-Id-Version: test 1.0\n"
-"PO-Revision-Date: 2007-02-15 12:01+0100\n"
-"Last-Translator: test <foo@bar.xx>\n"
-"Language-Team: C <LL@li.org>\n"
-"MIME-Version: 1.0\n"
-"Content-Transfer-Encoding: 8bit\n"
-], [MSGFMT_OPTS=-c; AC_MSG_RESULT([yes])], [AC_MSG_RESULT([no])])
-	  AC_SUBST(MSGFMT_OPTS)
-	  AC_PATH_PROG(GMSGFMT, gmsgfmt, $MSGFMT)
-	  GLIB_PATH_PROG_WITH_TEST(XGETTEXT, xgettext,
-	    [test -z "`$ac_dir/$ac_word -h 2>&1 | grep '(HELP)'`"], :)
-	  AC_TRY_LINK(, [extern int _nl_msg_cat_cntr;
-			 return _nl_msg_cat_cntr],
-	    [CATOBJEXT=.gmo 
-             DATADIRNAME=share],
-	    [case $host in
-	    *-*-solaris*)
-	    dnl On Solaris, if bind_textdomain_codeset is in libc,
-	    dnl GNU format message catalog is always supported,
-            dnl since both are added to the libc all together.
-	    dnl Hence, we'd like to go with DATADIRNAME=share and
-	    dnl and CATOBJEXT=.gmo in this case.
-            AC_CHECK_FUNC(bind_textdomain_codeset,
-	      [CATOBJEXT=.gmo 
-               DATADIRNAME=share],
-	      [CATOBJEXT=.mo
-               DATADIRNAME=lib])
-	    ;;
-	    *-*-openbsd*)
-	    CATOBJEXT=.mo
-            DATADIRNAME=share
-	    ;;
-	    *)
-	    CATOBJEXT=.mo
-            DATADIRNAME=lib
-	    ;;
-	    esac])
-          LIBS="$glib_save_LIBS"
-	  INSTOBJEXT=.mo
-	else
-	  gt_cv_have_gettext=no
-	fi
-      fi
-    ])
-
-    if test "$gt_cv_have_gettext" = "yes" ; then
-      AC_DEFINE(ENABLE_NLS, 1,
-        [always defined to indicate that i18n is enabled])
-    fi
-
-    dnl Test whether we really found GNU xgettext.
-    if test "$XGETTEXT" != ":"; then
-      dnl If it is not GNU xgettext we define it as : so that the
-      dnl Makefiles still can work.
-      if $XGETTEXT --omit-header /dev/null 2> /dev/null; then
-        : ;
-      else
-        AC_MSG_RESULT(
-	  [found xgettext program is not GNU xgettext; ignore it])
-        XGETTEXT=":"
-      fi
-    fi
-
-    # We need to process the po/ directory.
-    POSUB=po
-
-    AC_OUTPUT_COMMANDS(
-      [case "$CONFIG_FILES" in *po/Makefile.in*)
-        sed -e "/POTFILES =/r po/POTFILES" po/Makefile.in > po/Makefile
-      esac])
-
-    dnl These rules are solely for the distribution goal.  While doing this
-    dnl we only have to keep exactly one list of the available catalogs
-    dnl in configure.ac.
-    for lang in $ALL_LINGUAS; do
-      GMOFILES="$GMOFILES $lang.gmo"
-      POFILES="$POFILES $lang.po"
-    done
-
-    dnl Make all variables we use known to autoconf.
-    AC_SUBST(CATALOGS)
-    AC_SUBST(CATOBJEXT)
-    AC_SUBST(DATADIRNAME)
-    AC_SUBST(GMOFILES)
-    AC_SUBST(INSTOBJEXT)
-    AC_SUBST(INTLLIBS)
-    AC_SUBST(PO_IN_DATADIR_TRUE)
-    AC_SUBST(PO_IN_DATADIR_FALSE)
-    AC_SUBST(POFILES)
-    AC_SUBST(POSUB)
-  []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:388: -1- AU_DEFINE([GLIB_GNU_GETTEXT], [m4_ifval([[$0: This macro is deprecated. You should use upstream gettext instead.]], [_au_warn_GLIB_GNU_GETTEXT([[$0: This macro is deprecated. You should use upstream gettext instead.]])[m4_warn([obsolete],
-[[$0: This macro is deprecated. You should use upstream gettext instead.]])dnl
-]])dnl
-AC_REQUIRE([AC_PROG_CC])dnl
-   
-   GLIB_LC_MESSAGES
-   GLIB_WITH_NLS
-
-   if test "$gt_cv_have_gettext" = "yes"; then
-     if test "x$ALL_LINGUAS" = "x"; then
-       LINGUAS=
-     else
-       AC_MSG_CHECKING(for catalogs to be installed)
-       NEW_LINGUAS=
-       for presentlang in $ALL_LINGUAS; do
-         useit=no
-         if test "%UNSET%" != "${LINGUAS-%UNSET%}"; then
-           desiredlanguages="$LINGUAS"
-         else
-           desiredlanguages="$ALL_LINGUAS"
-         fi
-         for desiredlang in $desiredlanguages; do
- 	   # Use the presentlang catalog if desiredlang is
-           #   a. equal to presentlang, or
-           #   b. a variant of presentlang (because in this case,
-           #      presentlang can be used as a fallback for messages
-           #      which are not translated in the desiredlang catalog).
-           case "$desiredlang" in
-             "$presentlang"*) useit=yes;;
-           esac
-         done
-         if test $useit = yes; then
-           NEW_LINGUAS="$NEW_LINGUAS $presentlang"
-         fi
-       done
-       LINGUAS=$NEW_LINGUAS
-       AC_MSG_RESULT($LINGUAS)
-     fi
-
-     dnl Construct list of names of catalog files to be constructed.
-     if test -n "$LINGUAS"; then
-       for lang in $LINGUAS; do CATALOGS="$CATALOGS $lang$CATOBJEXT"; done
-     fi
-   fi
-
-   dnl If the AC_CONFIG_AUX_DIR macro for autoconf is used we possibly
-   dnl find the mkinstalldirs script in another subdir but ($top_srcdir).
-   dnl Try to locate is.
-   MKINSTALLDIRS=
-   if test -n "$ac_aux_dir"; then
-     MKINSTALLDIRS="$ac_aux_dir/mkinstalldirs"
-   fi
-   if test -z "$MKINSTALLDIRS"; then
-     MKINSTALLDIRS="\$(top_srcdir)/mkinstalldirs"
-   fi
-   AC_SUBST(MKINSTALLDIRS)
-
-   dnl Generate list of files to be processed by xgettext which will
-   dnl be included in po/Makefile.
-   test -d po || mkdir po
-   if test "x$srcdir" != "x."; then
-     if test "x`echo $srcdir | sed 's@/.*@@'`" = "x"; then
-       posrcprefix="$srcdir/"
-     else
-       posrcprefix="../$srcdir/"
-     fi
-   else
-     posrcprefix="../"
-   fi
-   rm -f po/POTFILES
-   sed -e "/^#/d" -e "/^\$/d" -e "s,.*,	$posrcprefix& \\\\," -e "\$s/\(.*\) \\\\/\1/" \
-	< $srcdir/po/POTFILES.in > po/POTFILES
-  ])
-m4trace:aclocal.m4:388: -1- AU_DEFINE([_au_warn_GLIB_GNU_GETTEXT], [m4_warning($@)dnl
-m4_define([_au_warn_GLIB_GNU_GETTEXT], [])])
-m4trace:aclocal.m4:388: -1- m4_define([m4_location(GLIB_GNU_GETTEXT)], [aclocal.m4:388])
-m4trace:aclocal.m4:388: -1- m4_define([GLIB_GNU_GETTEXT], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `GLIB_GNU_GETTEXT' is obsolete.
-You should run autoupdate.])dnl
-AC_REQUIRE([AC_PROG_CC])dnl
-   
-   GLIB_LC_MESSAGES
-   GLIB_WITH_NLS
-
-   if test "$gt_cv_have_gettext" = "yes"; then
-     if test "x$ALL_LINGUAS" = "x"; then
-       LINGUAS=
-     else
-       AC_MSG_CHECKING(for catalogs to be installed)
-       NEW_LINGUAS=
-       for presentlang in $ALL_LINGUAS; do
-         useit=no
-         if test "%UNSET%" != "${LINGUAS-%UNSET%}"; then
-           desiredlanguages="$LINGUAS"
-         else
-           desiredlanguages="$ALL_LINGUAS"
-         fi
-         for desiredlang in $desiredlanguages; do
- 	   # Use the presentlang catalog if desiredlang is
-           #   a. equal to presentlang, or
-           #   b. a variant of presentlang (because in this case,
-           #      presentlang can be used as a fallback for messages
-           #      which are not translated in the desiredlang catalog).
-           case "$desiredlang" in
-             "$presentlang"*) useit=yes;;
-           esac
-         done
-         if test $useit = yes; then
-           NEW_LINGUAS="$NEW_LINGUAS $presentlang"
-         fi
-       done
-       LINGUAS=$NEW_LINGUAS
-       AC_MSG_RESULT($LINGUAS)
-     fi
-
-     dnl Construct list of names of catalog files to be constructed.
-     if test -n "$LINGUAS"; then
-       for lang in $LINGUAS; do CATALOGS="$CATALOGS $lang$CATOBJEXT"; done
-     fi
-   fi
-
-   dnl If the AC_CONFIG_AUX_DIR macro for autoconf is used we possibly
-   dnl find the mkinstalldirs script in another subdir but ($top_srcdir).
-   dnl Try to locate is.
-   MKINSTALLDIRS=
-   if test -n "$ac_aux_dir"; then
-     MKINSTALLDIRS="$ac_aux_dir/mkinstalldirs"
-   fi
-   if test -z "$MKINSTALLDIRS"; then
-     MKINSTALLDIRS="\$(top_srcdir)/mkinstalldirs"
-   fi
-   AC_SUBST(MKINSTALLDIRS)
-
-   dnl Generate list of files to be processed by xgettext which will
-   dnl be included in po/Makefile.
-   test -d po || mkdir po
-   if test "x$srcdir" != "x."; then
-     if test "x`echo $srcdir | sed 's@/.*@@'`" = "x"; then
-       posrcprefix="$srcdir/"
-     else
-       posrcprefix="../$srcdir/"
-     fi
-   else
-     posrcprefix="../"
-   fi
-   rm -f po/POTFILES
-   sed -e "/^#/d" -e "/^\$/d" -e "s,.*,	$posrcprefix& \\\\," -e "\$s/\(.*\) \\\\/\1/" \
-	< $srcdir/po/POTFILES.in > po/POTFILES
-  []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:465: -1- m4_define([m4_location(GLIB_DEFINE_LOCALEDIR)], [aclocal.m4:465])
-m4trace:aclocal.m4:465: -1- m4_define([GLIB_DEFINE_LOCALEDIR], [_m4_defun_pro([$0])glib_REQUIRE([GLIB_GNU_GETTEXT])dnl
-glib_save_prefix="$prefix"
-glib_save_exec_prefix="$exec_prefix"
-glib_save_datarootdir="$datarootdir"
-test "x$prefix" = xNONE && prefix=$ac_default_prefix
-test "x$exec_prefix" = xNONE && exec_prefix=$prefix
-datarootdir=`eval echo "${datarootdir}"`
-if test "x$CATOBJEXT" = "x.mo" ; then
-  localedir=`eval echo "${libdir}/locale"`
-else
-  localedir=`eval echo "${datadir}/locale"`
-fi
-prefix="$glib_save_prefix"
-exec_prefix="$glib_save_exec_prefix"
-datarootdir="$glib_save_datarootdir"
-AC_DEFINE_UNQUOTED($1, "$localedir",
-  [Define the location where the catalogs will be installed])
-[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:488: -1- m4_define([m4_location(AM_GLIB_GNU_GETTEXT)], [aclocal.m4:488])
-m4trace:aclocal.m4:488: -1- m4_define([AM_GLIB_GNU_GETTEXT], [_m4_defun_pro([$0])GLIB_GNU_GETTEXT($@)[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:488: -1- m4_define([m4_location(AM_GLIB_DEFINE_LOCALEDIR)], [aclocal.m4:488])
-m4trace:aclocal.m4:488: -1- m4_define([AM_GLIB_DEFINE_LOCALEDIR], [_m4_defun_pro([$0])GLIB_DEFINE_LOCALEDIR($@)[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:498: -1- m4_define([m4_location(GLIB_RUN_PROG)], [aclocal.m4:498])
-m4trace:aclocal.m4:498: -1- m4_define([GLIB_RUN_PROG], [_m4_defun_pro([$0])cat >conftest.foo <<_ACEOF
-$2
-_ACEOF
-if AC_RUN_LOG([$1 conftest.foo]); then
-  m4_ifval([$3], [$3], [:])
-m4_ifvaln([$4], [else $4])dnl
-echo "$as_me: failed input was:" >&AS_MESSAGE_LOG_FD
-sed 's/^/| /' conftest.foo >&AS_MESSAGE_LOG_FD
-fi[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:519: -1- m4_define([_LT_COPYING], [dnl
+m4trace:aclocal.m4:32: -1- m4_define([_LT_COPYING], [dnl
 # Copyright (C) 2014 Free Software Foundation, Inc.
 # This is free software; see the source for copying conditions.  There is NO
 # warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
@@ -15706,20 +15236,20 @@ m4trace:aclocal.m4:519: -1- m4_define([_LT_COPYING], [dnl
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ])
-m4trace:aclocal.m4:549: -1- m4_define([m4_location(LT_PREREQ)], [aclocal.m4:549])
-m4trace:aclocal.m4:549: -1- m4_define([LT_PREREQ], [_m4_defun_pro([$0])m4_if(m4_version_compare(m4_defn([LT_PACKAGE_VERSION]), [$1]), -1,
+m4trace:aclocal.m4:62: -1- m4_define([m4_location(LT_PREREQ)], [aclocal.m4:62])
+m4trace:aclocal.m4:62: -1- m4_define([LT_PREREQ], [_m4_defun_pro([$0])m4_if(m4_version_compare(m4_defn([LT_PACKAGE_VERSION]), [$1]), -1,
        [m4_default([$3],
 		   [m4_fatal([Libtool version $1 or higher is required],
 		             63)])],
        [$2])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:560: -1- m4_define([m4_location(_LT_CHECK_BUILDDIR)], [aclocal.m4:560])
-m4trace:aclocal.m4:560: -1- m4_define([_LT_CHECK_BUILDDIR], [_m4_defun_pro([$0])case `pwd` in
+m4trace:aclocal.m4:73: -1- m4_define([m4_location(_LT_CHECK_BUILDDIR)], [aclocal.m4:73])
+m4trace:aclocal.m4:73: -1- m4_define([_LT_CHECK_BUILDDIR], [_m4_defun_pro([$0])case `pwd` in
   *\ * | *\	*)
     AC_MSG_WARN([Libtool does not cope well with whitespace in `pwd`]) ;;
 esac
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:570: -1- m4_define([m4_location(LT_INIT)], [aclocal.m4:570])
-m4trace:aclocal.m4:570: -1- m4_define([LT_INIT], [_m4_defun_pro([$0])AC_PREREQ([2.62])dnl We use AC_PATH_PROGS_FEATURE_CHECK
+m4trace:aclocal.m4:83: -1- m4_define([m4_location(LT_INIT)], [aclocal.m4:83])
+m4trace:aclocal.m4:83: -1- m4_define([LT_INIT], [_m4_defun_pro([$0])AC_PREREQ([2.62])dnl We use AC_PATH_PROGS_FEATURE_CHECK
 AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 AC_BEFORE([$0], [LT_LANG])dnl
 AC_BEFORE([$0], [LT_OUTPUT])dnl
@@ -15754,28 +15284,28 @@ _LT_SETUP
 # Only expand once:
 m4_define([LT_INIT])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:608: -1- AU_DEFINE([AC_PROG_LIBTOOL], [m4_ifval([], [_au_warn_AC_PROG_LIBTOOL([])[m4_warn([obsolete],
+m4trace:aclocal.m4:121: -1- AU_DEFINE([AC_PROG_LIBTOOL], [m4_ifval([], [_au_warn_AC_PROG_LIBTOOL([])[m4_warn([obsolete],
 [])dnl
 ]])dnl
 m4_if($#, 0, [LT_INIT], [LT_INIT($@)])])
-m4trace:aclocal.m4:608: -1- AU_DEFINE([_au_warn_AC_PROG_LIBTOOL], [m4_warning($@)dnl
+m4trace:aclocal.m4:121: -1- AU_DEFINE([_au_warn_AC_PROG_LIBTOOL], [m4_warning($@)dnl
 m4_define([_au_warn_AC_PROG_LIBTOOL], [])])
-m4trace:aclocal.m4:608: -1- m4_define([m4_location(AC_PROG_LIBTOOL)], [aclocal.m4:608])
-m4trace:aclocal.m4:608: -1- m4_define([AC_PROG_LIBTOOL], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AC_PROG_LIBTOOL' is obsolete.
+m4trace:aclocal.m4:121: -1- m4_define([m4_location(AC_PROG_LIBTOOL)], [aclocal.m4:121])
+m4trace:aclocal.m4:121: -1- m4_define([AC_PROG_LIBTOOL], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AC_PROG_LIBTOOL' is obsolete.
 You should run autoupdate.])dnl
 m4_if($#, 0, [LT_INIT], [LT_INIT($@)])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:609: -1- AU_DEFINE([AM_PROG_LIBTOOL], [m4_ifval([], [_au_warn_AM_PROG_LIBTOOL([])[m4_warn([obsolete],
+m4trace:aclocal.m4:122: -1- AU_DEFINE([AM_PROG_LIBTOOL], [m4_ifval([], [_au_warn_AM_PROG_LIBTOOL([])[m4_warn([obsolete],
 [])dnl
 ]])dnl
 m4_if($#, 0, [LT_INIT], [LT_INIT($@)])])
-m4trace:aclocal.m4:609: -1- AU_DEFINE([_au_warn_AM_PROG_LIBTOOL], [m4_warning($@)dnl
+m4trace:aclocal.m4:122: -1- AU_DEFINE([_au_warn_AM_PROG_LIBTOOL], [m4_warning($@)dnl
 m4_define([_au_warn_AM_PROG_LIBTOOL], [])])
-m4trace:aclocal.m4:609: -1- m4_define([m4_location(AM_PROG_LIBTOOL)], [aclocal.m4:609])
-m4trace:aclocal.m4:609: -1- m4_define([AM_PROG_LIBTOOL], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AM_PROG_LIBTOOL' is obsolete.
+m4trace:aclocal.m4:122: -1- m4_define([m4_location(AM_PROG_LIBTOOL)], [aclocal.m4:122])
+m4trace:aclocal.m4:122: -1- m4_define([AM_PROG_LIBTOOL], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AM_PROG_LIBTOOL' is obsolete.
 You should run autoupdate.])dnl
 m4_if($#, 0, [LT_INIT], [LT_INIT($@)])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:617: -1- m4_define([m4_location(_LT_PREPARE_CC_BASENAME)], [aclocal.m4:617])
-m4trace:aclocal.m4:617: -1- m4_define([_LT_PREPARE_CC_BASENAME], [_m4_defun_pro([$0])
+m4trace:aclocal.m4:130: -1- m4_define([m4_location(_LT_PREPARE_CC_BASENAME)], [aclocal.m4:130])
+m4trace:aclocal.m4:130: -1- m4_define([_LT_PREPARE_CC_BASENAME], [_m4_defun_pro([$0])
 # Calculate cc_basename.  Skip known compiler wrappers and cross-prefix.
 func_cc_basename ()
 {
@@ -15790,20 +15320,20 @@ func_cc_basename ()
     func_cc_basename_result=`$ECHO "$cc_temp" | $SED "s%.*/%%; s%^$host_alias-%%"`
 }
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:639: -1- m4_define([m4_location(_LT_CC_BASENAME)], [aclocal.m4:639])
-m4trace:aclocal.m4:639: -1- m4_define([_LT_CC_BASENAME], [_m4_defun_pro([$0])m4_require([_LT_PREPARE_CC_BASENAME])dnl
+m4trace:aclocal.m4:152: -1- m4_define([m4_location(_LT_CC_BASENAME)], [aclocal.m4:152])
+m4trace:aclocal.m4:152: -1- m4_define([_LT_CC_BASENAME], [_m4_defun_pro([$0])m4_require([_LT_PREPARE_CC_BASENAME])dnl
 AC_REQUIRE([_LT_DECL_SED])dnl
 AC_REQUIRE([_LT_PROG_ECHO_BACKSLASH])dnl
 func_cc_basename $1
 cc_basename=$func_cc_basename_result
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:652: -1- m4_define([m4_location(_LT_FILEUTILS_DEFAULTS)], [aclocal.m4:652])
-m4trace:aclocal.m4:652: -1- m4_define([_LT_FILEUTILS_DEFAULTS], [_m4_defun_pro([$0]): ${CP="cp -f"}
+m4trace:aclocal.m4:165: -1- m4_define([m4_location(_LT_FILEUTILS_DEFAULTS)], [aclocal.m4:165])
+m4trace:aclocal.m4:165: -1- m4_define([_LT_FILEUTILS_DEFAULTS], [_m4_defun_pro([$0]): ${CP="cp -f"}
 : ${MV="mv -f"}
 : ${RM="rm -f"}
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:661: -1- m4_define([m4_location(_LT_SETUP)], [aclocal.m4:661])
-m4trace:aclocal.m4:661: -1- m4_define([_LT_SETUP], [_m4_defun_pro([$0])AC_REQUIRE([AC_CANONICAL_HOST])dnl
+m4trace:aclocal.m4:174: -1- m4_define([m4_location(_LT_SETUP)], [aclocal.m4:174])
+m4trace:aclocal.m4:174: -1- m4_define([_LT_SETUP], [_m4_defun_pro([$0])AC_REQUIRE([AC_CANONICAL_HOST])dnl
 AC_REQUIRE([AC_CANONICAL_BUILD])dnl
 AC_REQUIRE([_LT_PREPARE_SED_QUOTE_VARS])dnl
 AC_REQUIRE([_LT_PROG_ECHO_BACKSLASH])dnl
@@ -15906,8 +15436,8 @@ _LT_LANG_C_CONFIG
 _LT_LANG_DEFAULT_CONFIG
 _LT_CONFIG_COMMANDS
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:770: -1- m4_define([m4_location(_LT_PREPARE_SED_QUOTE_VARS)], [aclocal.m4:770])
-m4trace:aclocal.m4:770: -1- m4_define([_LT_PREPARE_SED_QUOTE_VARS], [_m4_defun_pro([$0])# Backslashify metacharacters that are still active within
+m4trace:aclocal.m4:283: -1- m4_define([m4_location(_LT_PREPARE_SED_QUOTE_VARS)], [aclocal.m4:283])
+m4trace:aclocal.m4:283: -1- m4_define([_LT_PREPARE_SED_QUOTE_VARS], [_m4_defun_pro([$0])# Backslashify metacharacters that are still active within
 # double-quoted strings.
 sed_quote_subst='s/\([["`$\\]]\)/\\\1/g'
 
@@ -15924,30 +15454,30 @@ delay_single_quote_subst='s/'\''/'\'\\\\\\\'\''/g'
 # Sed substitution to avoid accidental globbing in evaled expressions
 no_glob_subst='s/\*/\\\*/g'
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:795: -1- m4_define([m4_location(_LT_PROG_LTMAIN)], [aclocal.m4:795])
-m4trace:aclocal.m4:795: -1- m4_define([_LT_PROG_LTMAIN], [_m4_defun_pro([$0])m4_ifdef([AC_REQUIRE_AUX_FILE], [AC_REQUIRE_AUX_FILE([ltmain.sh])])dnl
+m4trace:aclocal.m4:308: -1- m4_define([m4_location(_LT_PROG_LTMAIN)], [aclocal.m4:308])
+m4trace:aclocal.m4:308: -1- m4_define([_LT_PROG_LTMAIN], [_m4_defun_pro([$0])m4_ifdef([AC_REQUIRE_AUX_FILE], [AC_REQUIRE_AUX_FILE([ltmain.sh])])dnl
 _LT_CONFIG_LIBTOOL_INIT([ac_aux_dir='$ac_aux_dir'])
 ltmain=$ac_aux_dir/ltmain.sh
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:812: -1- m4_define([_LT_CONFIG_LIBTOOL_INIT], [m4_ifval([$1],
+m4trace:aclocal.m4:325: -1- m4_define([_LT_CONFIG_LIBTOOL_INIT], [m4_ifval([$1],
           [m4_append([_LT_OUTPUT_LIBTOOL_INIT],
                      [$1
 ])])])
-m4trace:aclocal.m4:819: -1- m4_define([_LT_OUTPUT_LIBTOOL_INIT])
-m4trace:aclocal.m4:825: -1- m4_define([_LT_CONFIG_LIBTOOL], [m4_ifval([$1],
+m4trace:aclocal.m4:332: -1- m4_define([_LT_OUTPUT_LIBTOOL_INIT])
+m4trace:aclocal.m4:338: -1- m4_define([_LT_CONFIG_LIBTOOL], [m4_ifval([$1],
           [m4_append([_LT_OUTPUT_LIBTOOL_COMMANDS],
                      [$1
 ])])])
-m4trace:aclocal.m4:832: -1- m4_define([_LT_OUTPUT_LIBTOOL_COMMANDS])
-m4trace:aclocal.m4:837: -1- m4_define([m4_location(_LT_CONFIG_SAVE_COMMANDS)], [aclocal.m4:837])
-m4trace:aclocal.m4:837: -1- m4_define([_LT_CONFIG_SAVE_COMMANDS], [_m4_defun_pro([$0])_LT_CONFIG_LIBTOOL([$1])
+m4trace:aclocal.m4:345: -1- m4_define([_LT_OUTPUT_LIBTOOL_COMMANDS])
+m4trace:aclocal.m4:350: -1- m4_define([m4_location(_LT_CONFIG_SAVE_COMMANDS)], [aclocal.m4:350])
+m4trace:aclocal.m4:350: -1- m4_define([_LT_CONFIG_SAVE_COMMANDS], [_m4_defun_pro([$0])_LT_CONFIG_LIBTOOL([$1])
 _LT_CONFIG_LIBTOOL_INIT([$2])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:847: -1- m4_define([_LT_FORMAT_COMMENT], [m4_ifval([$1], [
+m4trace:aclocal.m4:360: -1- m4_define([_LT_FORMAT_COMMENT], [m4_ifval([$1], [
 m4_bpatsubst([m4_bpatsubst([$1], [^ *], [# ])],
               [['`$\]], [\\\&])]m4_bmatch([$1], [[!?.]$], [], [.])
 )])
-m4trace:aclocal.m4:863: -1- m4_define([_LT_DECL], [lt_if_append_uniq([lt_decl_varnames], [$2], [, ],
+m4trace:aclocal.m4:376: -1- m4_define([_LT_DECL], [lt_if_append_uniq([lt_decl_varnames], [$2], [, ],
     [lt_dict_add_subkey([lt_decl_dict], [$2], [libtool_name],
 	[m4_ifval([$1], [$1], [$2])])
     lt_dict_add_subkey([lt_decl_dict], [$2], [value], [$3])
@@ -15956,39 +15486,39 @@ m4trace:aclocal.m4:863: -1- m4_define([_LT_DECL], [lt_if_append_uniq([lt_decl_va
     lt_dict_add_subkey([lt_decl_dict], [$2],
 	[tagged?], [m4_ifval([$5], [yes], [no])])])
 ])
-m4trace:aclocal.m4:877: -1- m4_define([_LT_TAGDECL], [_LT_DECL([$1], [$2], [$3], [$4], [yes])])
-m4trace:aclocal.m4:882: -1- m4_define([lt_decl_tag_varnames], [_lt_decl_filter([tagged?], [yes], $@)])
-m4trace:aclocal.m4:888: -1- m4_define([_lt_decl_filter], [m4_case([$#],
+m4trace:aclocal.m4:390: -1- m4_define([_LT_TAGDECL], [_LT_DECL([$1], [$2], [$3], [$4], [yes])])
+m4trace:aclocal.m4:395: -1- m4_define([lt_decl_tag_varnames], [_lt_decl_filter([tagged?], [yes], $@)])
+m4trace:aclocal.m4:401: -1- m4_define([_lt_decl_filter], [m4_case([$#],
   [0], [m4_fatal([$0: too few arguments: $#])],
   [1], [m4_fatal([$0: too few arguments: $#: $1])],
   [2], [lt_dict_filter([lt_decl_dict], [$1], [$2], [], lt_decl_varnames)],
   [3], [lt_dict_filter([lt_decl_dict], [$1], [$2], [$3], lt_decl_varnames)],
   [lt_dict_filter([lt_decl_dict], $@)])[]dnl
 ])
-m4trace:aclocal.m4:900: -1- m4_define([lt_decl_quote_varnames], [_lt_decl_filter([value], [1], $@)])
-m4trace:aclocal.m4:906: -1- m4_define([lt_decl_dquote_varnames], [_lt_decl_filter([value], [2], $@)])
-m4trace:aclocal.m4:912: -1- m4_define([lt_decl_varnames_tagged], [m4_assert([$# <= 2])dnl
+m4trace:aclocal.m4:413: -1- m4_define([lt_decl_quote_varnames], [_lt_decl_filter([value], [1], $@)])
+m4trace:aclocal.m4:419: -1- m4_define([lt_decl_dquote_varnames], [_lt_decl_filter([value], [2], $@)])
+m4trace:aclocal.m4:425: -1- m4_define([lt_decl_varnames_tagged], [m4_assert([$# <= 2])dnl
 _$0(m4_quote(m4_default([$1], [[, ]])),
     m4_ifval([$2], [[$2]], [m4_dquote(lt_decl_tag_varnames)]),
     m4_split(m4_normalize(m4_quote(_LT_TAGS)), [ ]))])
-m4trace:aclocal.m4:917: -1- m4_define([_lt_decl_varnames_tagged], [m4_ifval([$3], [lt_combine([$1], [$2], [_], $3)])])
-m4trace:aclocal.m4:923: -1- m4_define([lt_decl_all_varnames], [_$0(m4_quote(m4_default([$1], [[, ]])),
+m4trace:aclocal.m4:430: -1- m4_define([_lt_decl_varnames_tagged], [m4_ifval([$3], [lt_combine([$1], [$2], [_], $3)])])
+m4trace:aclocal.m4:436: -1- m4_define([lt_decl_all_varnames], [_$0(m4_quote(m4_default([$1], [[, ]])),
      m4_if([$2], [],
 	   m4_quote(lt_decl_varnames),
 	m4_quote(m4_shift($@))))[]dnl
 ])
-m4trace:aclocal.m4:929: -1- m4_define([_lt_decl_all_varnames], [lt_join($@, lt_decl_varnames_tagged([$1],
+m4trace:aclocal.m4:442: -1- m4_define([_lt_decl_all_varnames], [lt_join($@, lt_decl_varnames_tagged([$1],
 			lt_decl_tag_varnames([[, ]], m4_shift($@))))dnl
 ])
-m4trace:aclocal.m4:940: -1- m4_define([_LT_CONFIG_STATUS_DECLARE], [$1='`$ECHO "$$1" | $SED "$delay_single_quote_subst"`'])
-m4trace:aclocal.m4:952: -1- m4_define([m4_location(_LT_CONFIG_STATUS_DECLARATIONS)], [aclocal.m4:952])
-m4trace:aclocal.m4:952: -1- m4_define([_LT_CONFIG_STATUS_DECLARATIONS], [_m4_defun_pro([$0])m4_foreach([_lt_var], m4_quote(lt_decl_all_varnames),
+m4trace:aclocal.m4:453: -1- m4_define([_LT_CONFIG_STATUS_DECLARE], [$1='`$ECHO "$$1" | $SED "$delay_single_quote_subst"`'])
+m4trace:aclocal.m4:465: -1- m4_define([m4_location(_LT_CONFIG_STATUS_DECLARATIONS)], [aclocal.m4:465])
+m4trace:aclocal.m4:465: -1- m4_define([_LT_CONFIG_STATUS_DECLARATIONS], [_m4_defun_pro([$0])m4_foreach([_lt_var], m4_quote(lt_decl_all_varnames),
     [m4_n([_LT_CONFIG_STATUS_DECLARE(_lt_var)])])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:960: -1- m4_define([m4_location(_LT_LIBTOOL_TAGS)], [aclocal.m4:960])
-m4trace:aclocal.m4:960: -1- m4_define([_LT_LIBTOOL_TAGS], [_m4_defun_pro([$0])_LT_FORMAT_COMMENT([The names of the tagged configurations supported by this script])dnl
+m4trace:aclocal.m4:473: -1- m4_define([m4_location(_LT_LIBTOOL_TAGS)], [aclocal.m4:473])
+m4trace:aclocal.m4:473: -1- m4_define([_LT_LIBTOOL_TAGS], [_m4_defun_pro([$0])_LT_FORMAT_COMMENT([The names of the tagged configurations supported by this script])dnl
 available_tags='_LT_TAGS'dnl
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:973: -1- m4_define([_LT_LIBTOOL_DECLARE], [_LT_FORMAT_COMMENT(m4_quote(lt_dict_fetch([lt_decl_dict], [$1],
+m4trace:aclocal.m4:486: -1- m4_define([_LT_LIBTOOL_DECLARE], [_LT_FORMAT_COMMENT(m4_quote(lt_dict_fetch([lt_decl_dict], [$1],
 					   [description])))[]dnl
 m4_pushdef([_libtool_name],
     m4_quote(lt_dict_fetch([lt_decl_dict], [$1], [libtool_name])))[]dnl
@@ -15999,15 +15529,15 @@ m4_case(m4_quote(lt_dict_fetch([lt_decl_dict], [$1], [value])),
     [_libtool_name=lt_dict_fetch([lt_decl_dict], [$1], [value])])[]dnl
 m4_ifval([$2], [_$2])[]m4_popdef([_libtool_name])[]dnl
 ])
-m4trace:aclocal.m4:993: -1- m4_define([m4_location(_LT_LIBTOOL_CONFIG_VARS)], [aclocal.m4:993])
-m4trace:aclocal.m4:993: -1- m4_define([_LT_LIBTOOL_CONFIG_VARS], [_m4_defun_pro([$0])m4_foreach([_lt_var],
+m4trace:aclocal.m4:506: -1- m4_define([m4_location(_LT_LIBTOOL_CONFIG_VARS)], [aclocal.m4:506])
+m4trace:aclocal.m4:506: -1- m4_define([_LT_LIBTOOL_CONFIG_VARS], [_m4_defun_pro([$0])m4_foreach([_lt_var],
     m4_quote(_lt_decl_filter([tagged?], [no], [], lt_decl_varnames)),
     [m4_n([_LT_LIBTOOL_DECLARE(_lt_var)])])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:1001: -1- m4_define([_LT_LIBTOOL_TAG_VARS], [m4_foreach([_lt_var], m4_quote(lt_decl_tag_varnames),
+m4trace:aclocal.m4:514: -1- m4_define([_LT_LIBTOOL_TAG_VARS], [m4_foreach([_lt_var], m4_quote(lt_decl_tag_varnames),
     [m4_n([_LT_LIBTOOL_DECLARE(_lt_var, [$1])])])])
-m4trace:aclocal.m4:1008: -1- m4_define([_LT_TAGVAR], [m4_ifval([$2], [$1_$2], [$1])])
-m4trace:aclocal.m4:1019: -1- m4_define([m4_location(_LT_CONFIG_COMMANDS)], [aclocal.m4:1019])
-m4trace:aclocal.m4:1019: -1- m4_define([_LT_CONFIG_COMMANDS], [_m4_defun_pro([$0])AC_PROVIDE_IFELSE([LT_OUTPUT],
+m4trace:aclocal.m4:521: -1- m4_define([_LT_TAGVAR], [m4_ifval([$2], [$1_$2], [$1])])
+m4trace:aclocal.m4:532: -1- m4_define([m4_location(_LT_CONFIG_COMMANDS)], [aclocal.m4:532])
+m4trace:aclocal.m4:532: -1- m4_define([_LT_CONFIG_COMMANDS], [_m4_defun_pro([$0])AC_PROVIDE_IFELSE([LT_OUTPUT],
 	dnl If the libtool generation code has been placed in $CONFIG_LT,
 	dnl instead of duplicating it all over again into config.status,
 	dnl then we will have config.status run $CONFIG_LT later, so it
@@ -16019,7 +15549,7 @@ m4trace:aclocal.m4:1019: -1- m4_define([_LT_CONFIG_COMMANDS], [_m4_defun_pro([$0
     [AC_CONFIG_COMMANDS([libtool],
         [_LT_OUTPUT_LIBTOOL_COMMANDS], [_LT_OUTPUT_LIBTOOL_COMMANDS_INIT])])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:1035: -1- m4_define([_LT_OUTPUT_LIBTOOL_COMMANDS_INIT], [
+m4trace:aclocal.m4:548: -1- m4_define([_LT_OUTPUT_LIBTOOL_COMMANDS_INIT], [
 
 # The HP-UX ksh and POSIX shell print the target directory to stdout
 # if CDPATH is set.
@@ -16069,10 +15599,10 @@ done
 
 _LT_OUTPUT_LIBTOOL_INIT
 ])
-m4trace:aclocal.m4:1096: -1- m4_define([m4_location(_LT_GENERATED_FILE_INIT)], [aclocal.m4:1096])
-m4trace:aclocal.m4:1096: -1- m4_define([_LT_GENERATED_FILE_INIT], [_m4_defun_pro([$0])AS_INIT_GENERATED($@)[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:1122: -1- m4_define([m4_location(LT_OUTPUT)], [aclocal.m4:1122])
-m4trace:aclocal.m4:1122: -1- m4_define([LT_OUTPUT], [_m4_defun_pro([$0]): ${CONFIG_LT=./config.lt}
+m4trace:aclocal.m4:609: -1- m4_define([m4_location(_LT_GENERATED_FILE_INIT)], [aclocal.m4:609])
+m4trace:aclocal.m4:609: -1- m4_define([_LT_GENERATED_FILE_INIT], [_m4_defun_pro([$0])AS_INIT_GENERATED($@)[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:635: -1- m4_define([m4_location(LT_OUTPUT)], [aclocal.m4:635])
+m4trace:aclocal.m4:635: -1- m4_define([LT_OUTPUT], [_m4_defun_pro([$0]): ${CONFIG_LT=./config.lt}
 AC_MSG_NOTICE([creating $CONFIG_LT])
 _LT_GENERATED_FILE_INIT(["$CONFIG_LT"],
 [# Run this file to recreate a libtool stub with the current configuration.])
@@ -16157,8 +15687,8 @@ $SHELL "$CONFIG_LT" $lt_config_lt_args || lt_cl_success=false
 exec AS_MESSAGE_LOG_FD>>config.log
 $lt_cl_success || AS_EXIT(1)
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:1216: -1- m4_define([m4_location(_LT_CONFIG)], [aclocal.m4:1216])
-m4trace:aclocal.m4:1216: -1- m4_define([_LT_CONFIG], [_m4_defun_pro([$0])m4_require([_LT_FILEUTILS_DEFAULTS])dnl
+m4trace:aclocal.m4:729: -1- m4_define([m4_location(_LT_CONFIG)], [aclocal.m4:729])
+m4trace:aclocal.m4:729: -1- m4_define([_LT_CONFIG], [_m4_defun_pro([$0])m4_require([_LT_FILEUTILS_DEFAULTS])dnl
 _LT_CONFIG_SAVE_COMMANDS([
   m4_define([_LT_TAG], m4_if([$1], [], [C], [$1]))dnl
   m4_if(_LT_TAG, [C], [
@@ -16249,12 +15779,12 @@ _LT_EOF
     ofile='$ofile'], [])
 ])dnl /_LT_CONFIG_SAVE_COMMANDS
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:1315: -1- m4_define([m4_location(LT_SUPPORTED_TAG)], [aclocal.m4:1315])
-m4trace:aclocal.m4:1315: -1- m4_define([LT_SUPPORTED_TAG], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:1319: -1- m4_define([_LT_LANG_C_enabled], [])
-m4trace:aclocal.m4:1320: -1- m4_define([_LT_TAGS], [])
-m4trace:aclocal.m4:1326: -1- m4_define([m4_location(LT_LANG)], [aclocal.m4:1326])
-m4trace:aclocal.m4:1326: -1- m4_define([LT_LANG], [_m4_defun_pro([$0])AC_BEFORE([$0], [LT_OUTPUT])dnl
+m4trace:aclocal.m4:828: -1- m4_define([m4_location(LT_SUPPORTED_TAG)], [aclocal.m4:828])
+m4trace:aclocal.m4:828: -1- m4_define([LT_SUPPORTED_TAG], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:832: -1- m4_define([_LT_LANG_C_enabled], [])
+m4trace:aclocal.m4:833: -1- m4_define([_LT_TAGS], [])
+m4trace:aclocal.m4:839: -1- m4_define([m4_location(LT_LANG)], [aclocal.m4:839])
+m4trace:aclocal.m4:839: -1- m4_define([LT_LANG], [_m4_defun_pro([$0])AC_BEFORE([$0], [LT_OUTPUT])dnl
 m4_case([$1],
   [C],			[_LT_LANG(C)],
   [C++],		[_LT_LANG(CXX)],
@@ -16267,15 +15797,15 @@ m4_case([$1],
     [_LT_LANG($1)],
     [m4_fatal([$0: unsupported language: "$1"])])])dnl
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:1344: -1- m4_define([m4_location(_LT_LANG)], [aclocal.m4:1344])
-m4trace:aclocal.m4:1344: -1- m4_define([_LT_LANG], [_m4_defun_pro([$0])m4_ifdef([_LT_LANG_]$1[_enabled], [],
+m4trace:aclocal.m4:857: -1- m4_define([m4_location(_LT_LANG)], [aclocal.m4:857])
+m4trace:aclocal.m4:857: -1- m4_define([_LT_LANG], [_m4_defun_pro([$0])m4_ifdef([_LT_LANG_]$1[_enabled], [],
   [LT_SUPPORTED_TAG([$1])dnl
   m4_append([_LT_TAGS], [$1 ])dnl
   m4_define([_LT_LANG_]$1[_enabled], [])dnl
   _LT_LANG_$1_CONFIG($1)])dnl
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:1378: -1- m4_define([m4_location(_LT_LANG_DEFAULT_CONFIG)], [aclocal.m4:1378])
-m4trace:aclocal.m4:1378: -1- m4_define([_LT_LANG_DEFAULT_CONFIG], [_m4_defun_pro([$0])AC_PROVIDE_IFELSE([AC_PROG_CXX],
+m4trace:aclocal.m4:891: -1- m4_define([m4_location(_LT_LANG_DEFAULT_CONFIG)], [aclocal.m4:891])
+m4trace:aclocal.m4:891: -1- m4_define([_LT_LANG_DEFAULT_CONFIG], [_m4_defun_pro([$0])AC_PROVIDE_IFELSE([AC_PROG_CXX],
   [LT_LANG(CXX)],
   [m4_define([AC_PROG_CXX], defn([AC_PROG_CXX])[LT_LANG(CXX)])])
 
@@ -16310,58 +15840,58 @@ AC_PROVIDE_IFELSE([LT_PROG_RC],
   [LT_LANG(RC)],
   [m4_define([LT_PROG_RC], defn([LT_PROG_RC])[LT_LANG(RC)])])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:1416: -1- AU_DEFINE([AC_LIBTOOL_CXX], [m4_ifval([], [_au_warn_AC_LIBTOOL_CXX([])[m4_warn([obsolete],
+m4trace:aclocal.m4:929: -1- AU_DEFINE([AC_LIBTOOL_CXX], [m4_ifval([], [_au_warn_AC_LIBTOOL_CXX([])[m4_warn([obsolete],
 [])dnl
 ]])dnl
 LT_LANG(C++)])
-m4trace:aclocal.m4:1416: -1- AU_DEFINE([_au_warn_AC_LIBTOOL_CXX], [m4_warning($@)dnl
+m4trace:aclocal.m4:929: -1- AU_DEFINE([_au_warn_AC_LIBTOOL_CXX], [m4_warning($@)dnl
 m4_define([_au_warn_AC_LIBTOOL_CXX], [])])
-m4trace:aclocal.m4:1416: -1- m4_define([m4_location(AC_LIBTOOL_CXX)], [aclocal.m4:1416])
-m4trace:aclocal.m4:1416: -1- m4_define([AC_LIBTOOL_CXX], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AC_LIBTOOL_CXX' is obsolete.
+m4trace:aclocal.m4:929: -1- m4_define([m4_location(AC_LIBTOOL_CXX)], [aclocal.m4:929])
+m4trace:aclocal.m4:929: -1- m4_define([AC_LIBTOOL_CXX], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AC_LIBTOOL_CXX' is obsolete.
 You should run autoupdate.])dnl
 LT_LANG(C++)[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:1417: -1- AU_DEFINE([AC_LIBTOOL_F77], [m4_ifval([], [_au_warn_AC_LIBTOOL_F77([])[m4_warn([obsolete],
+m4trace:aclocal.m4:930: -1- AU_DEFINE([AC_LIBTOOL_F77], [m4_ifval([], [_au_warn_AC_LIBTOOL_F77([])[m4_warn([obsolete],
 [])dnl
 ]])dnl
 LT_LANG(Fortran 77)])
-m4trace:aclocal.m4:1417: -1- AU_DEFINE([_au_warn_AC_LIBTOOL_F77], [m4_warning($@)dnl
+m4trace:aclocal.m4:930: -1- AU_DEFINE([_au_warn_AC_LIBTOOL_F77], [m4_warning($@)dnl
 m4_define([_au_warn_AC_LIBTOOL_F77], [])])
-m4trace:aclocal.m4:1417: -1- m4_define([m4_location(AC_LIBTOOL_F77)], [aclocal.m4:1417])
-m4trace:aclocal.m4:1417: -1- m4_define([AC_LIBTOOL_F77], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AC_LIBTOOL_F77' is obsolete.
+m4trace:aclocal.m4:930: -1- m4_define([m4_location(AC_LIBTOOL_F77)], [aclocal.m4:930])
+m4trace:aclocal.m4:930: -1- m4_define([AC_LIBTOOL_F77], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AC_LIBTOOL_F77' is obsolete.
 You should run autoupdate.])dnl
 LT_LANG(Fortran 77)[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:1418: -1- AU_DEFINE([AC_LIBTOOL_FC], [m4_ifval([], [_au_warn_AC_LIBTOOL_FC([])[m4_warn([obsolete],
+m4trace:aclocal.m4:931: -1- AU_DEFINE([AC_LIBTOOL_FC], [m4_ifval([], [_au_warn_AC_LIBTOOL_FC([])[m4_warn([obsolete],
 [])dnl
 ]])dnl
 LT_LANG(Fortran)])
-m4trace:aclocal.m4:1418: -1- AU_DEFINE([_au_warn_AC_LIBTOOL_FC], [m4_warning($@)dnl
+m4trace:aclocal.m4:931: -1- AU_DEFINE([_au_warn_AC_LIBTOOL_FC], [m4_warning($@)dnl
 m4_define([_au_warn_AC_LIBTOOL_FC], [])])
-m4trace:aclocal.m4:1418: -1- m4_define([m4_location(AC_LIBTOOL_FC)], [aclocal.m4:1418])
-m4trace:aclocal.m4:1418: -1- m4_define([AC_LIBTOOL_FC], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AC_LIBTOOL_FC' is obsolete.
+m4trace:aclocal.m4:931: -1- m4_define([m4_location(AC_LIBTOOL_FC)], [aclocal.m4:931])
+m4trace:aclocal.m4:931: -1- m4_define([AC_LIBTOOL_FC], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AC_LIBTOOL_FC' is obsolete.
 You should run autoupdate.])dnl
 LT_LANG(Fortran)[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:1419: -1- AU_DEFINE([AC_LIBTOOL_GCJ], [m4_ifval([], [_au_warn_AC_LIBTOOL_GCJ([])[m4_warn([obsolete],
+m4trace:aclocal.m4:932: -1- AU_DEFINE([AC_LIBTOOL_GCJ], [m4_ifval([], [_au_warn_AC_LIBTOOL_GCJ([])[m4_warn([obsolete],
 [])dnl
 ]])dnl
 LT_LANG(Java)])
-m4trace:aclocal.m4:1419: -1- AU_DEFINE([_au_warn_AC_LIBTOOL_GCJ], [m4_warning($@)dnl
+m4trace:aclocal.m4:932: -1- AU_DEFINE([_au_warn_AC_LIBTOOL_GCJ], [m4_warning($@)dnl
 m4_define([_au_warn_AC_LIBTOOL_GCJ], [])])
-m4trace:aclocal.m4:1419: -1- m4_define([m4_location(AC_LIBTOOL_GCJ)], [aclocal.m4:1419])
-m4trace:aclocal.m4:1419: -1- m4_define([AC_LIBTOOL_GCJ], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AC_LIBTOOL_GCJ' is obsolete.
+m4trace:aclocal.m4:932: -1- m4_define([m4_location(AC_LIBTOOL_GCJ)], [aclocal.m4:932])
+m4trace:aclocal.m4:932: -1- m4_define([AC_LIBTOOL_GCJ], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AC_LIBTOOL_GCJ' is obsolete.
 You should run autoupdate.])dnl
 LT_LANG(Java)[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:1420: -1- AU_DEFINE([AC_LIBTOOL_RC], [m4_ifval([], [_au_warn_AC_LIBTOOL_RC([])[m4_warn([obsolete],
+m4trace:aclocal.m4:933: -1- AU_DEFINE([AC_LIBTOOL_RC], [m4_ifval([], [_au_warn_AC_LIBTOOL_RC([])[m4_warn([obsolete],
 [])dnl
 ]])dnl
 LT_LANG(Windows Resource)])
-m4trace:aclocal.m4:1420: -1- AU_DEFINE([_au_warn_AC_LIBTOOL_RC], [m4_warning($@)dnl
+m4trace:aclocal.m4:933: -1- AU_DEFINE([_au_warn_AC_LIBTOOL_RC], [m4_warning($@)dnl
 m4_define([_au_warn_AC_LIBTOOL_RC], [])])
-m4trace:aclocal.m4:1420: -1- m4_define([m4_location(AC_LIBTOOL_RC)], [aclocal.m4:1420])
-m4trace:aclocal.m4:1420: -1- m4_define([AC_LIBTOOL_RC], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AC_LIBTOOL_RC' is obsolete.
+m4trace:aclocal.m4:933: -1- m4_define([m4_location(AC_LIBTOOL_RC)], [aclocal.m4:933])
+m4trace:aclocal.m4:933: -1- m4_define([AC_LIBTOOL_RC], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AC_LIBTOOL_RC' is obsolete.
 You should run autoupdate.])dnl
 LT_LANG(Windows Resource)[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:1431: -1- m4_define([m4_location(_LT_TAG_COMPILER)], [aclocal.m4:1431])
-m4trace:aclocal.m4:1431: -1- m4_define([_LT_TAG_COMPILER], [_m4_defun_pro([$0])AC_REQUIRE([AC_PROG_CC])dnl
+m4trace:aclocal.m4:944: -1- m4_define([m4_location(_LT_TAG_COMPILER)], [aclocal.m4:944])
+m4trace:aclocal.m4:944: -1- m4_define([_LT_TAG_COMPILER], [_m4_defun_pro([$0])AC_REQUIRE([AC_PROG_CC])dnl
 
 _LT_DECL([LTCC], [CC], [1], [A C compiler])dnl
 _LT_DECL([LTCFLAGS], [CFLAGS], [1], [LTCC compiler flags])dnl
@@ -16377,24 +15907,24 @@ LTCFLAGS=${LTCFLAGS-"$CFLAGS"}
 # Allow CC to be a program name with arguments.
 compiler=$CC
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:1454: -1- m4_define([m4_location(_LT_COMPILER_BOILERPLATE)], [aclocal.m4:1454])
-m4trace:aclocal.m4:1454: -1- m4_define([_LT_COMPILER_BOILERPLATE], [_m4_defun_pro([$0])m4_require([_LT_DECL_SED])dnl
+m4trace:aclocal.m4:967: -1- m4_define([m4_location(_LT_COMPILER_BOILERPLATE)], [aclocal.m4:967])
+m4trace:aclocal.m4:967: -1- m4_define([_LT_COMPILER_BOILERPLATE], [_m4_defun_pro([$0])m4_require([_LT_DECL_SED])dnl
 ac_outfile=conftest.$ac_objext
 echo "$lt_simple_compile_test_code" >conftest.$ac_ext
 eval "$ac_compile" 2>&1 >/dev/null | $SED '/^$/d; /^ *+/d' >conftest.err
 _lt_compiler_boilerplate=`cat conftest.err`
 $RM conftest*
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:1468: -1- m4_define([m4_location(_LT_LINKER_BOILERPLATE)], [aclocal.m4:1468])
-m4trace:aclocal.m4:1468: -1- m4_define([_LT_LINKER_BOILERPLATE], [_m4_defun_pro([$0])m4_require([_LT_DECL_SED])dnl
+m4trace:aclocal.m4:981: -1- m4_define([m4_location(_LT_LINKER_BOILERPLATE)], [aclocal.m4:981])
+m4trace:aclocal.m4:981: -1- m4_define([_LT_LINKER_BOILERPLATE], [_m4_defun_pro([$0])m4_require([_LT_DECL_SED])dnl
 ac_outfile=conftest.$ac_objext
 echo "$lt_simple_link_test_code" >conftest.$ac_ext
 eval "$ac_link" 2>&1 >/dev/null | $SED '/^$/d; /^ *+/d' >conftest.err
 _lt_linker_boilerplate=`cat conftest.err`
 $RM -r conftest*
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:1479: -1- m4_define([m4_location(_LT_REQUIRED_DARWIN_CHECKS)], [aclocal.m4:1479])
-m4trace:aclocal.m4:1479: -1- m4_define([_LT_REQUIRED_DARWIN_CHECKS], [_m4_defun_once([_LT_REQUIRED_DARWIN_CHECKS], [
+m4trace:aclocal.m4:992: -1- m4_define([m4_location(_LT_REQUIRED_DARWIN_CHECKS)], [aclocal.m4:992])
+m4trace:aclocal.m4:992: -1- m4_define([_LT_REQUIRED_DARWIN_CHECKS], [_m4_defun_once([_LT_REQUIRED_DARWIN_CHECKS], [
   case $host_os in
     rhapsody* | darwin*)
     AC_CHECK_TOOL([DSYMUTIL], [dsymutil], [:])
@@ -16519,8 +16049,8 @@ _LT_EOF
   [[_m4_defun_pro([_LT_REQUIRED_DARWIN_CHECKS])m4_unquote(], [)_m4_defun_epi([_LT_REQUIRED_DARWIN_CHECKS])]],
 m4_ifdef([_m4_diverting([_LT_REQUIRED_DARWIN_CHECKS])], [-]), [-], [[m4_unquote(], [)]],
   [[_m4_require_call([_LT_REQUIRED_DARWIN_CHECKS],], [, _m4_divert_dump)]]))])
-m4trace:aclocal.m4:1606: -1- m4_define([m4_location(_LT_DARWIN_LINKER_FEATURES)], [aclocal.m4:1606])
-m4trace:aclocal.m4:1606: -1- m4_define([_LT_DARWIN_LINKER_FEATURES], [_m4_defun_pro([$0])
+m4trace:aclocal.m4:1119: -1- m4_define([m4_location(_LT_DARWIN_LINKER_FEATURES)], [aclocal.m4:1119])
+m4trace:aclocal.m4:1119: -1- m4_define([_LT_DARWIN_LINKER_FEATURES], [_m4_defun_pro([$0])
   m4_require([_LT_REQUIRED_DARWIN_CHECKS])
   _LT_TAGVAR(archive_cmds_need_lc, $1)=no
   _LT_TAGVAR(hardcode_direct, $1)=no
@@ -16555,8 +16085,8 @@ m4trace:aclocal.m4:1606: -1- m4_define([_LT_DARWIN_LINKER_FEATURES], [_m4_defun_
   _LT_TAGVAR(ld_shlibs, $1)=no
   fi
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:1653: -1- m4_define([m4_location(_LT_SYS_MODULE_PATH_AIX)], [aclocal.m4:1653])
-m4trace:aclocal.m4:1653: -1- m4_define([_LT_SYS_MODULE_PATH_AIX], [_m4_defun_pro([$0])m4_require([_LT_DECL_SED])dnl
+m4trace:aclocal.m4:1166: -1- m4_define([m4_location(_LT_SYS_MODULE_PATH_AIX)], [aclocal.m4:1166])
+m4trace:aclocal.m4:1166: -1- m4_define([_LT_SYS_MODULE_PATH_AIX], [_m4_defun_pro([$0])m4_require([_LT_DECL_SED])dnl
 if test set = "${lt_cv_aix_libpath+set}"; then
   aix_libpath=$lt_cv_aix_libpath
 else
@@ -16581,10 +16111,10 @@ else
   aix_libpath=$_LT_TAGVAR([lt_cv_aix_libpath_], [$1])
 fi
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:1683: -1- m4_define([_LT_SHELL_INIT], [m4_divert_text([M4SH-INIT], [$1
+m4trace:aclocal.m4:1196: -1- m4_define([_LT_SHELL_INIT], [m4_divert_text([M4SH-INIT], [$1
 ])])
-m4trace:aclocal.m4:1695: -1- m4_define([m4_location(_LT_PROG_ECHO_BACKSLASH)], [aclocal.m4:1695])
-m4trace:aclocal.m4:1695: -1- m4_define([_LT_PROG_ECHO_BACKSLASH], [_m4_defun_pro([$0])ECHO='\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\'
+m4trace:aclocal.m4:1208: -1- m4_define([m4_location(_LT_PROG_ECHO_BACKSLASH)], [aclocal.m4:1208])
+m4trace:aclocal.m4:1208: -1- m4_define([_LT_PROG_ECHO_BACKSLASH], [_m4_defun_pro([$0])ECHO='\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\'
 ECHO=$ECHO$ECHO$ECHO$ECHO$ECHO
 ECHO=$ECHO$ECHO$ECHO$ECHO$ECHO$ECHO
 
@@ -16632,8 +16162,8 @@ m4_ifdef([_AS_DETECT_SUGGESTED],
 _LT_DECL([], [SHELL], [1], [Shell to use when invoking shell scripts])
 _LT_DECL([], [ECHO], [1], [An echo program that protects backslashes])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:1748: -1- m4_define([m4_location(_LT_WITH_SYSROOT)], [aclocal.m4:1748])
-m4trace:aclocal.m4:1748: -1- m4_define([_LT_WITH_SYSROOT], [_m4_defun_pro([$0])AC_MSG_CHECKING([for sysroot])
+m4trace:aclocal.m4:1261: -1- m4_define([m4_location(_LT_WITH_SYSROOT)], [aclocal.m4:1261])
+m4trace:aclocal.m4:1261: -1- m4_define([_LT_WITH_SYSROOT], [_m4_defun_pro([$0])AC_MSG_CHECKING([for sysroot])
 AC_ARG_WITH([sysroot],
 [AS_HELP_STRING([--with-sysroot@<:@=DIR@:>@],
   [Search for dependent libraries within DIR (or the compiler's sysroot
@@ -16663,8 +16193,8 @@ esac
  AC_MSG_RESULT([${lt_sysroot:-no}])
 _LT_DECL([], [lt_sysroot], [0], [The root where to search for ]dnl
 [dependent libraries, and where our libraries should be installed.])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:1782: -1- m4_define([m4_location(_LT_ENABLE_LOCK)], [aclocal.m4:1782])
-m4trace:aclocal.m4:1782: -1- m4_define([_LT_ENABLE_LOCK], [_m4_defun_pro([$0])AC_ARG_ENABLE([libtool-lock],
+m4trace:aclocal.m4:1295: -1- m4_define([m4_location(_LT_ENABLE_LOCK)], [aclocal.m4:1295])
+m4trace:aclocal.m4:1295: -1- m4_define([_LT_ENABLE_LOCK], [_m4_defun_pro([$0])AC_ARG_ENABLE([libtool-lock],
   [AS_HELP_STRING([--disable-libtool-lock],
     [avoid locking (might break parallel builds)])])
 test no = "$enable_libtool_lock" || enable_libtool_lock=yes
@@ -16871,8 +16401,8 @@ esac
 
 need_locks=$enable_libtool_lock
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:1994: -1- m4_define([m4_location(_LT_PROG_AR)], [aclocal.m4:1994])
-m4trace:aclocal.m4:1994: -1- m4_define([_LT_PROG_AR], [_m4_defun_pro([$0])AC_CHECK_TOOLS(AR, [ar], false)
+m4trace:aclocal.m4:1507: -1- m4_define([m4_location(_LT_PROG_AR)], [aclocal.m4:1507])
+m4trace:aclocal.m4:1507: -1- m4_define([_LT_PROG_AR], [_m4_defun_pro([$0])AC_CHECK_TOOLS(AR, [ar], false)
 : ${AR=ar}
 : ${AR_FLAGS=cru}
 _LT_DECL([], [AR], [1], [The archiver])
@@ -16904,8 +16434,8 @@ fi
 _LT_DECL([], [archiver_list_spec], [1],
   [How to feed a file listing to the archiver])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:2031: -1- m4_define([m4_location(_LT_CMD_OLD_ARCHIVE)], [aclocal.m4:2031])
-m4trace:aclocal.m4:2031: -1- m4_define([_LT_CMD_OLD_ARCHIVE], [_m4_defun_pro([$0])_LT_PROG_AR
+m4trace:aclocal.m4:1544: -1- m4_define([m4_location(_LT_CMD_OLD_ARCHIVE)], [aclocal.m4:1544])
+m4trace:aclocal.m4:1544: -1- m4_define([_LT_CMD_OLD_ARCHIVE], [_m4_defun_pro([$0])_LT_PROG_AR
 
 AC_CHECK_TOOL(STRIP, strip, :)
 test -z "$STRIP" && STRIP=:
@@ -16946,8 +16476,8 @@ _LT_TAGDECL([], [old_archive_cmds], [2],
 _LT_DECL([], [lock_old_archive_extraction], [0],
     [Whether to use a lock for old archive extraction])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:2079: -1- m4_define([m4_location(_LT_COMPILER_OPTION)], [aclocal.m4:2079])
-m4trace:aclocal.m4:2079: -1- m4_define([_LT_COMPILER_OPTION], [_m4_defun_pro([$0])m4_require([_LT_FILEUTILS_DEFAULTS])dnl
+m4trace:aclocal.m4:1592: -1- m4_define([m4_location(_LT_COMPILER_OPTION)], [aclocal.m4:1592])
+m4trace:aclocal.m4:1592: -1- m4_define([_LT_COMPILER_OPTION], [_m4_defun_pro([$0])m4_require([_LT_FILEUTILS_DEFAULTS])dnl
 m4_require([_LT_DECL_SED])dnl
 AC_CACHE_CHECK([$1], [$2],
   [$2=no
@@ -16986,18 +16516,18 @@ else
     m4_if([$6], , :, [$6])
 fi
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:2121: -1- AU_DEFINE([AC_LIBTOOL_COMPILER_OPTION], [m4_ifval([], [_au_warn_AC_LIBTOOL_COMPILER_OPTION([])[m4_warn([obsolete],
+m4trace:aclocal.m4:1634: -1- AU_DEFINE([AC_LIBTOOL_COMPILER_OPTION], [m4_ifval([], [_au_warn_AC_LIBTOOL_COMPILER_OPTION([])[m4_warn([obsolete],
 [])dnl
 ]])dnl
 m4_if($#, 0, [_LT_COMPILER_OPTION], [_LT_COMPILER_OPTION($@)])])
-m4trace:aclocal.m4:2121: -1- AU_DEFINE([_au_warn_AC_LIBTOOL_COMPILER_OPTION], [m4_warning($@)dnl
+m4trace:aclocal.m4:1634: -1- AU_DEFINE([_au_warn_AC_LIBTOOL_COMPILER_OPTION], [m4_warning($@)dnl
 m4_define([_au_warn_AC_LIBTOOL_COMPILER_OPTION], [])])
-m4trace:aclocal.m4:2121: -1- m4_define([m4_location(AC_LIBTOOL_COMPILER_OPTION)], [aclocal.m4:2121])
-m4trace:aclocal.m4:2121: -1- m4_define([AC_LIBTOOL_COMPILER_OPTION], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AC_LIBTOOL_COMPILER_OPTION' is obsolete.
+m4trace:aclocal.m4:1634: -1- m4_define([m4_location(AC_LIBTOOL_COMPILER_OPTION)], [aclocal.m4:1634])
+m4trace:aclocal.m4:1634: -1- m4_define([AC_LIBTOOL_COMPILER_OPTION], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AC_LIBTOOL_COMPILER_OPTION' is obsolete.
 You should run autoupdate.])dnl
 m4_if($#, 0, [_LT_COMPILER_OPTION], [_LT_COMPILER_OPTION($@)])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:2130: -1- m4_define([m4_location(_LT_LINKER_OPTION)], [aclocal.m4:2130])
-m4trace:aclocal.m4:2130: -1- m4_define([_LT_LINKER_OPTION], [_m4_defun_pro([$0])m4_require([_LT_FILEUTILS_DEFAULTS])dnl
+m4trace:aclocal.m4:1643: -1- m4_define([m4_location(_LT_LINKER_OPTION)], [aclocal.m4:1643])
+m4trace:aclocal.m4:1643: -1- m4_define([_LT_LINKER_OPTION], [_m4_defun_pro([$0])m4_require([_LT_FILEUTILS_DEFAULTS])dnl
 m4_require([_LT_DECL_SED])dnl
 AC_CACHE_CHECK([$1], [$2],
   [$2=no
@@ -17029,18 +16559,18 @@ else
     m4_if([$5], , :, [$5])
 fi
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:2165: -1- AU_DEFINE([AC_LIBTOOL_LINKER_OPTION], [m4_ifval([], [_au_warn_AC_LIBTOOL_LINKER_OPTION([])[m4_warn([obsolete],
+m4trace:aclocal.m4:1678: -1- AU_DEFINE([AC_LIBTOOL_LINKER_OPTION], [m4_ifval([], [_au_warn_AC_LIBTOOL_LINKER_OPTION([])[m4_warn([obsolete],
 [])dnl
 ]])dnl
 m4_if($#, 0, [_LT_LINKER_OPTION], [_LT_LINKER_OPTION($@)])])
-m4trace:aclocal.m4:2165: -1- AU_DEFINE([_au_warn_AC_LIBTOOL_LINKER_OPTION], [m4_warning($@)dnl
+m4trace:aclocal.m4:1678: -1- AU_DEFINE([_au_warn_AC_LIBTOOL_LINKER_OPTION], [m4_warning($@)dnl
 m4_define([_au_warn_AC_LIBTOOL_LINKER_OPTION], [])])
-m4trace:aclocal.m4:2165: -1- m4_define([m4_location(AC_LIBTOOL_LINKER_OPTION)], [aclocal.m4:2165])
-m4trace:aclocal.m4:2165: -1- m4_define([AC_LIBTOOL_LINKER_OPTION], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AC_LIBTOOL_LINKER_OPTION' is obsolete.
+m4trace:aclocal.m4:1678: -1- m4_define([m4_location(AC_LIBTOOL_LINKER_OPTION)], [aclocal.m4:1678])
+m4trace:aclocal.m4:1678: -1- m4_define([AC_LIBTOOL_LINKER_OPTION], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AC_LIBTOOL_LINKER_OPTION' is obsolete.
 You should run autoupdate.])dnl
 m4_if($#, 0, [_LT_LINKER_OPTION], [_LT_LINKER_OPTION($@)])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:2172: -1- m4_define([m4_location(LT_CMD_MAX_LEN)], [aclocal.m4:2172])
-m4trace:aclocal.m4:2172: -1- m4_define([LT_CMD_MAX_LEN], [_m4_defun_pro([$0])AC_REQUIRE([AC_CANONICAL_HOST])dnl
+m4trace:aclocal.m4:1685: -1- m4_define([m4_location(LT_CMD_MAX_LEN)], [aclocal.m4:1685])
+m4trace:aclocal.m4:1685: -1- m4_define([LT_CMD_MAX_LEN], [_m4_defun_pro([$0])AC_REQUIRE([AC_CANONICAL_HOST])dnl
 # find the maximum length of command line arguments
 AC_MSG_CHECKING([the maximum length of command line arguments])
 AC_CACHE_VAL([lt_cv_sys_max_cmd_len], [dnl
@@ -17063,7 +16593,7 @@ AC_CACHE_VAL([lt_cv_sys_max_cmd_len], [dnl
     lt_cv_sys_max_cmd_len=-1;
     ;;
 
-  cygwin* | mingw* | cegcc*)
+  cygwin* | msys* | mingw* | cegcc*)
     # On Win9x/ME, this test blows up -- it succeeds, but takes
     # about 5 minutes as the teststring grows exponentially.
     # Worse, since 9x/ME are not pre-emptively multitasking,
@@ -17176,21 +16706,21 @@ max_cmd_len=$lt_cv_sys_max_cmd_len
 _LT_DECL([], [max_cmd_len], [0],
     [What is the maximum length of a command?])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:2311: -1- AU_DEFINE([AC_LIBTOOL_SYS_MAX_CMD_LEN], [m4_ifval([], [_au_warn_AC_LIBTOOL_SYS_MAX_CMD_LEN([])[m4_warn([obsolete],
+m4trace:aclocal.m4:1824: -1- AU_DEFINE([AC_LIBTOOL_SYS_MAX_CMD_LEN], [m4_ifval([], [_au_warn_AC_LIBTOOL_SYS_MAX_CMD_LEN([])[m4_warn([obsolete],
 [])dnl
 ]])dnl
 m4_if($#, 0, [LT_CMD_MAX_LEN], [LT_CMD_MAX_LEN($@)])])
-m4trace:aclocal.m4:2311: -1- AU_DEFINE([_au_warn_AC_LIBTOOL_SYS_MAX_CMD_LEN], [m4_warning($@)dnl
+m4trace:aclocal.m4:1824: -1- AU_DEFINE([_au_warn_AC_LIBTOOL_SYS_MAX_CMD_LEN], [m4_warning($@)dnl
 m4_define([_au_warn_AC_LIBTOOL_SYS_MAX_CMD_LEN], [])])
-m4trace:aclocal.m4:2311: -1- m4_define([m4_location(AC_LIBTOOL_SYS_MAX_CMD_LEN)], [aclocal.m4:2311])
-m4trace:aclocal.m4:2311: -1- m4_define([AC_LIBTOOL_SYS_MAX_CMD_LEN], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AC_LIBTOOL_SYS_MAX_CMD_LEN' is obsolete.
+m4trace:aclocal.m4:1824: -1- m4_define([m4_location(AC_LIBTOOL_SYS_MAX_CMD_LEN)], [aclocal.m4:1824])
+m4trace:aclocal.m4:1824: -1- m4_define([AC_LIBTOOL_SYS_MAX_CMD_LEN], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AC_LIBTOOL_SYS_MAX_CMD_LEN' is obsolete.
 You should run autoupdate.])dnl
 m4_if($#, 0, [LT_CMD_MAX_LEN], [LT_CMD_MAX_LEN($@)])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:2318: -1- m4_define([m4_location(_LT_HEADER_DLFCN)], [aclocal.m4:2318])
-m4trace:aclocal.m4:2318: -1- m4_define([_LT_HEADER_DLFCN], [_m4_defun_pro([$0])AC_CHECK_HEADERS([dlfcn.h], [], [], [AC_INCLUDES_DEFAULT])dnl
+m4trace:aclocal.m4:1831: -1- m4_define([m4_location(_LT_HEADER_DLFCN)], [aclocal.m4:1831])
+m4trace:aclocal.m4:1831: -1- m4_define([_LT_HEADER_DLFCN], [_m4_defun_pro([$0])AC_CHECK_HEADERS([dlfcn.h], [], [], [AC_INCLUDES_DEFAULT])dnl
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:2326: -1- m4_define([m4_location(_LT_TRY_DLOPEN_SELF)], [aclocal.m4:2326])
-m4trace:aclocal.m4:2326: -1- m4_define([_LT_TRY_DLOPEN_SELF], [_m4_defun_pro([$0])m4_require([_LT_HEADER_DLFCN])dnl
+m4trace:aclocal.m4:1839: -1- m4_define([m4_location(_LT_TRY_DLOPEN_SELF)], [aclocal.m4:1839])
+m4trace:aclocal.m4:1839: -1- m4_define([_LT_TRY_DLOPEN_SELF], [_m4_defun_pro([$0])m4_require([_LT_HEADER_DLFCN])dnl
 if test yes = "$cross_compiling"; then :
   [$4]
 else
@@ -17281,8 +16811,8 @@ _LT_EOF
 fi
 rm -fr conftest*
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:2422: -1- m4_define([m4_location(LT_SYS_DLOPEN_SELF)], [aclocal.m4:2422])
-m4trace:aclocal.m4:2422: -1- m4_define([LT_SYS_DLOPEN_SELF], [_m4_defun_pro([$0])m4_require([_LT_HEADER_DLFCN])dnl
+m4trace:aclocal.m4:1935: -1- m4_define([m4_location(LT_SYS_DLOPEN_SELF)], [aclocal.m4:1935])
+m4trace:aclocal.m4:1935: -1- m4_define([LT_SYS_DLOPEN_SELF], [_m4_defun_pro([$0])m4_require([_LT_HEADER_DLFCN])dnl
 if test yes != "$enable_dlopen"; then
   enable_dlopen=unknown
   enable_dlopen_self=unknown
@@ -17303,7 +16833,7 @@ else
     lt_cv_dlopen_libs=
     ;;
 
-  cygwin*)
+  cygwin* | msys*)
     lt_cv_dlopen=dlopen
     lt_cv_dlopen_libs=
     ;;
@@ -17404,18 +16934,18 @@ _LT_DECL([dlopen_self], [enable_dlopen_self], [0],
 _LT_DECL([dlopen_self_static], [enable_dlopen_self_static], [0],
 	 [Whether dlopen of statically linked programs is supported])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:2547: -1- AU_DEFINE([AC_LIBTOOL_DLOPEN_SELF], [m4_ifval([], [_au_warn_AC_LIBTOOL_DLOPEN_SELF([])[m4_warn([obsolete],
+m4trace:aclocal.m4:2060: -1- AU_DEFINE([AC_LIBTOOL_DLOPEN_SELF], [m4_ifval([], [_au_warn_AC_LIBTOOL_DLOPEN_SELF([])[m4_warn([obsolete],
 [])dnl
 ]])dnl
 m4_if($#, 0, [LT_SYS_DLOPEN_SELF], [LT_SYS_DLOPEN_SELF($@)])])
-m4trace:aclocal.m4:2547: -1- AU_DEFINE([_au_warn_AC_LIBTOOL_DLOPEN_SELF], [m4_warning($@)dnl
+m4trace:aclocal.m4:2060: -1- AU_DEFINE([_au_warn_AC_LIBTOOL_DLOPEN_SELF], [m4_warning($@)dnl
 m4_define([_au_warn_AC_LIBTOOL_DLOPEN_SELF], [])])
-m4trace:aclocal.m4:2547: -1- m4_define([m4_location(AC_LIBTOOL_DLOPEN_SELF)], [aclocal.m4:2547])
-m4trace:aclocal.m4:2547: -1- m4_define([AC_LIBTOOL_DLOPEN_SELF], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AC_LIBTOOL_DLOPEN_SELF' is obsolete.
+m4trace:aclocal.m4:2060: -1- m4_define([m4_location(AC_LIBTOOL_DLOPEN_SELF)], [aclocal.m4:2060])
+m4trace:aclocal.m4:2060: -1- m4_define([AC_LIBTOOL_DLOPEN_SELF], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AC_LIBTOOL_DLOPEN_SELF' is obsolete.
 You should run autoupdate.])dnl
 m4_if($#, 0, [LT_SYS_DLOPEN_SELF], [LT_SYS_DLOPEN_SELF($@)])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:2556: -1- m4_define([m4_location(_LT_COMPILER_C_O)], [aclocal.m4:2556])
-m4trace:aclocal.m4:2556: -1- m4_define([_LT_COMPILER_C_O], [_m4_defun_pro([$0])m4_require([_LT_DECL_SED])dnl
+m4trace:aclocal.m4:2069: -1- m4_define([m4_location(_LT_COMPILER_C_O)], [aclocal.m4:2069])
+m4trace:aclocal.m4:2069: -1- m4_define([_LT_COMPILER_C_O], [_m4_defun_pro([$0])m4_require([_LT_DECL_SED])dnl
 m4_require([_LT_FILEUTILS_DEFAULTS])dnl
 m4_require([_LT_TAG_COMPILER])dnl
 AC_CACHE_CHECK([if $compiler supports -c -o file.$ac_objext],
@@ -17464,8 +16994,8 @@ AC_CACHE_CHECK([if $compiler supports -c -o file.$ac_objext],
 _LT_TAGDECL([compiler_c_o], [lt_cv_prog_compiler_c_o], [1],
 	[Does compiler simultaneously support -c and -o options?])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:2611: -1- m4_define([m4_location(_LT_COMPILER_FILE_LOCKS)], [aclocal.m4:2611])
-m4trace:aclocal.m4:2611: -1- m4_define([_LT_COMPILER_FILE_LOCKS], [_m4_defun_pro([$0])m4_require([_LT_ENABLE_LOCK])dnl
+m4trace:aclocal.m4:2124: -1- m4_define([m4_location(_LT_COMPILER_FILE_LOCKS)], [aclocal.m4:2124])
+m4trace:aclocal.m4:2124: -1- m4_define([_LT_COMPILER_FILE_LOCKS], [_m4_defun_pro([$0])m4_require([_LT_ENABLE_LOCK])dnl
 m4_require([_LT_FILEUTILS_DEFAULTS])dnl
 _LT_COMPILER_C_O([$1])
 
@@ -17489,8 +17019,8 @@ else
 fi
 _LT_DECL([], [need_locks], [1], [Must we lock files when doing compilation?])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:2640: -1- m4_define([m4_location(_LT_CHECK_OBJDIR)], [aclocal.m4:2640])
-m4trace:aclocal.m4:2640: -1- m4_define([_LT_CHECK_OBJDIR], [_m4_defun_pro([$0])AC_CACHE_CHECK([for objdir], [lt_cv_objdir],
+m4trace:aclocal.m4:2153: -1- m4_define([m4_location(_LT_CHECK_OBJDIR)], [aclocal.m4:2153])
+m4trace:aclocal.m4:2153: -1- m4_define([_LT_CHECK_OBJDIR], [_m4_defun_pro([$0])AC_CACHE_CHECK([for objdir], [lt_cv_objdir],
 [rm -f .libs 2>/dev/null
 mkdir .libs 2>/dev/null
 if test -d .libs; then
@@ -17507,8 +17037,8 @@ m4_pattern_allow([LT_OBJDIR])dnl
 AC_DEFINE_UNQUOTED([LT_OBJDIR], "$lt_cv_objdir/",
   [Define to the sub-directory where libtool stores uninstalled libraries.])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:2663: -1- m4_define([m4_location(_LT_LINKER_HARDCODE_LIBPATH)], [aclocal.m4:2663])
-m4trace:aclocal.m4:2663: -1- m4_define([_LT_LINKER_HARDCODE_LIBPATH], [_m4_defun_pro([$0])AC_MSG_CHECKING([how to hardcode library paths into programs])
+m4trace:aclocal.m4:2176: -1- m4_define([m4_location(_LT_LINKER_HARDCODE_LIBPATH)], [aclocal.m4:2176])
+m4trace:aclocal.m4:2176: -1- m4_define([_LT_LINKER_HARDCODE_LIBPATH], [_m4_defun_pro([$0])AC_MSG_CHECKING([how to hardcode library paths into programs])
 _LT_TAGVAR(hardcode_action, $1)=
 if test -n "$_LT_TAGVAR(hardcode_libdir_flag_spec, $1)" ||
    test -n "$_LT_TAGVAR(runpath_var, $1)" ||
@@ -17546,8 +17076,8 @@ fi
 _LT_TAGDECL([], [hardcode_action], [0],
     [How to hardcode a shared library path into an executable])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:2706: -1- m4_define([m4_location(_LT_CMD_STRIPLIB)], [aclocal.m4:2706])
-m4trace:aclocal.m4:2706: -1- m4_define([_LT_CMD_STRIPLIB], [_m4_defun_pro([$0])m4_require([_LT_DECL_EGREP])
+m4trace:aclocal.m4:2219: -1- m4_define([m4_location(_LT_CMD_STRIPLIB)], [aclocal.m4:2219])
+m4trace:aclocal.m4:2219: -1- m4_define([_LT_CMD_STRIPLIB], [_m4_defun_pro([$0])m4_require([_LT_DECL_EGREP])
 striplib=
 old_striplib=
 AC_MSG_CHECKING([whether stripping libraries is possible])
@@ -17575,8 +17105,8 @@ fi
 _LT_DECL([], [old_striplib], [1], [Commands to strip libraries])
 _LT_DECL([], [striplib], [1])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:2740: -1- m4_define([m4_location(_LT_PREPARE_MUNGE_PATH_LIST)], [aclocal.m4:2740])
-m4trace:aclocal.m4:2740: -1- m4_define([_LT_PREPARE_MUNGE_PATH_LIST], [_m4_defun_pro([$0])[# func_munge_path_list VARIABLE PATH
+m4trace:aclocal.m4:2253: -1- m4_define([m4_location(_LT_PREPARE_MUNGE_PATH_LIST)], [aclocal.m4:2253])
+m4trace:aclocal.m4:2253: -1- m4_define([_LT_PREPARE_MUNGE_PATH_LIST], [_m4_defun_pro([$0])[# func_munge_path_list VARIABLE PATH
 # -----------------------------------
 # VARIABLE is name of variable containing _space_ separated list of
 # directories to be munged by the contents of PATH, which is string
@@ -17611,8 +17141,8 @@ func_munge_path_list ()
     esac
 }
 ][]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:2781: -1- m4_define([m4_location(_LT_SYS_DYNAMIC_LINKER)], [aclocal.m4:2781])
-m4trace:aclocal.m4:2781: -1- m4_define([_LT_SYS_DYNAMIC_LINKER], [_m4_defun_pro([$0])AC_REQUIRE([AC_CANONICAL_HOST])dnl
+m4trace:aclocal.m4:2294: -1- m4_define([m4_location(_LT_SYS_DYNAMIC_LINKER)], [aclocal.m4:2294])
+m4trace:aclocal.m4:2294: -1- m4_define([_LT_SYS_DYNAMIC_LINKER], [_m4_defun_pro([$0])AC_REQUIRE([AC_CANONICAL_HOST])dnl
 m4_require([_LT_DECL_EGREP])dnl
 m4_require([_LT_FILEUTILS_DEFAULTS])dnl
 m4_require([_LT_DECL_OBJDUMP])dnl
@@ -17855,7 +17385,7 @@ bsdi[[45]]*)
   # libtool to hard-code these into programs
   ;;
 
-cygwin* | mingw* | pw32* | cegcc*)
+cygwin* | msys* | mingw* | pw32* | cegcc*)
   version_type=windows
   shrext_cmds=.dll
   need_version=no
@@ -17884,6 +17414,12 @@ cygwin* | mingw* | pw32* | cegcc*)
     cygwin*)
       # Cygwin DLLs use 'cyg' prefix rather than 'lib'
       soname_spec='`echo $libname | sed -e 's/^lib/cyg/'``echo $release | $SED -e 's/[[.]]/-/g'`$versuffix$shared_ext'
+m4_if([$1], [],[
+      sys_lib_search_path_spec="$sys_lib_search_path_spec /usr/lib/w32api"])
+      ;;
+    msys*)
+      # MSYS DLLs use 'msys-' prefix rather than 'lib'
+      soname_spec='`echo $libname | sed -e 's/^lib/msys-/'``echo $release | $SED -e 's/[[.]]/-/g'`$versuffix$shared_ext'
 m4_if([$1], [],[
       sys_lib_search_path_spec="$sys_lib_search_path_spec /usr/lib/w32api"])
       ;;
@@ -17921,7 +17457,7 @@ m4_if([$1], [],[
       # Convert to MSYS style.
       sys_lib_search_path_spec=`$ECHO "$sys_lib_search_path_spec" | sed -e 's|\\\\|/|g' -e 's| \\([[a-zA-Z]]\\):| /\\1|g' -e 's|^ ||'`
       ;;
-    cygwin*)
+    cygwin* | msys*)
       # Convert to unix form, then to dos form, then back to unix form
       # but this time dos style (no spaces!) so that the unix form looks
       # like /cygdrive/c/PROGRA~1:/cygdr...
@@ -18481,8 +18017,8 @@ _LT_DECL([sys_lib_dlsearch_path_spec], [configure_time_dlsearch_path], [2],
 _LT_DECL([], [configure_time_lt_sys_library_path], [2],
     [Explicit LT_SYS_LIBRARY_PATH set during ./configure time])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:3656: -1- m4_define([m4_location(_LT_PATH_TOOL_PREFIX)], [aclocal.m4:3656])
-m4trace:aclocal.m4:3656: -1- m4_define([_LT_PATH_TOOL_PREFIX], [_m4_defun_pro([$0])m4_require([_LT_DECL_EGREP])dnl
+m4trace:aclocal.m4:3175: -1- m4_define([m4_location(_LT_PATH_TOOL_PREFIX)], [aclocal.m4:3175])
+m4trace:aclocal.m4:3175: -1- m4_define([_LT_PATH_TOOL_PREFIX], [_m4_defun_pro([$0])m4_require([_LT_DECL_EGREP])dnl
 AC_MSG_CHECKING([for $1])
 AC_CACHE_VAL(lt_cv_path_MAGIC_CMD,
 [case $MAGIC_CMD in
@@ -18541,18 +18077,18 @@ fi
 _LT_DECL([], [MAGIC_CMD], [0],
 	 [Used to examine libraries when file_magic_cmd begins with "file"])dnl
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:3718: -1- AU_DEFINE([AC_PATH_TOOL_PREFIX], [m4_ifval([], [_au_warn_AC_PATH_TOOL_PREFIX([])[m4_warn([obsolete],
+m4trace:aclocal.m4:3237: -1- AU_DEFINE([AC_PATH_TOOL_PREFIX], [m4_ifval([], [_au_warn_AC_PATH_TOOL_PREFIX([])[m4_warn([obsolete],
 [])dnl
 ]])dnl
 m4_if($#, 0, [_LT_PATH_TOOL_PREFIX], [_LT_PATH_TOOL_PREFIX($@)])])
-m4trace:aclocal.m4:3718: -1- AU_DEFINE([_au_warn_AC_PATH_TOOL_PREFIX], [m4_warning($@)dnl
+m4trace:aclocal.m4:3237: -1- AU_DEFINE([_au_warn_AC_PATH_TOOL_PREFIX], [m4_warning($@)dnl
 m4_define([_au_warn_AC_PATH_TOOL_PREFIX], [])])
-m4trace:aclocal.m4:3718: -1- m4_define([m4_location(AC_PATH_TOOL_PREFIX)], [aclocal.m4:3718])
-m4trace:aclocal.m4:3718: -1- m4_define([AC_PATH_TOOL_PREFIX], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AC_PATH_TOOL_PREFIX' is obsolete.
+m4trace:aclocal.m4:3237: -1- m4_define([m4_location(AC_PATH_TOOL_PREFIX)], [aclocal.m4:3237])
+m4trace:aclocal.m4:3237: -1- m4_define([AC_PATH_TOOL_PREFIX], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AC_PATH_TOOL_PREFIX' is obsolete.
 You should run autoupdate.])dnl
 m4_if($#, 0, [_LT_PATH_TOOL_PREFIX], [_LT_PATH_TOOL_PREFIX($@)])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:3726: -1- m4_define([m4_location(_LT_PATH_MAGIC)], [aclocal.m4:3726])
-m4trace:aclocal.m4:3726: -1- m4_define([_LT_PATH_MAGIC], [_m4_defun_pro([$0])_LT_PATH_TOOL_PREFIX(${ac_tool_prefix}file, /usr/bin$PATH_SEPARATOR$PATH)
+m4trace:aclocal.m4:3245: -1- m4_define([m4_location(_LT_PATH_MAGIC)], [aclocal.m4:3245])
+m4trace:aclocal.m4:3245: -1- m4_define([_LT_PATH_MAGIC], [_m4_defun_pro([$0])_LT_PATH_TOOL_PREFIX(${ac_tool_prefix}file, /usr/bin$PATH_SEPARATOR$PATH)
 if test -z "$lt_cv_path_MAGIC_CMD"; then
   if test -n "$ac_tool_prefix"; then
     _LT_PATH_TOOL_PREFIX(file, /usr/bin$PATH_SEPARATOR$PATH)
@@ -18561,8 +18097,8 @@ if test -z "$lt_cv_path_MAGIC_CMD"; then
   fi
 fi
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:3741: -1- m4_define([m4_location(LT_PATH_LD)], [aclocal.m4:3741])
-m4trace:aclocal.m4:3741: -1- m4_define([LT_PATH_LD], [_m4_defun_pro([$0])AC_REQUIRE([AC_PROG_CC])dnl
+m4trace:aclocal.m4:3260: -1- m4_define([m4_location(LT_PATH_LD)], [aclocal.m4:3260])
+m4trace:aclocal.m4:3260: -1- m4_define([LT_PATH_LD], [_m4_defun_pro([$0])AC_REQUIRE([AC_PROG_CC])dnl
 AC_REQUIRE([AC_CANONICAL_HOST])dnl
 AC_REQUIRE([AC_CANONICAL_BUILD])dnl
 m4_require([_LT_DECL_SED])dnl
@@ -18648,28 +18184,28 @@ AC_SUBST([LD])
 
 _LT_TAGDECL([], [LD], [1], [The linker used to build libraries])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:3830: -1- AU_DEFINE([AM_PROG_LD], [m4_ifval([], [_au_warn_AM_PROG_LD([])[m4_warn([obsolete],
+m4trace:aclocal.m4:3349: -1- AU_DEFINE([AM_PROG_LD], [m4_ifval([], [_au_warn_AM_PROG_LD([])[m4_warn([obsolete],
 [])dnl
 ]])dnl
 m4_if($#, 0, [LT_PATH_LD], [LT_PATH_LD($@)])])
-m4trace:aclocal.m4:3830: -1- AU_DEFINE([_au_warn_AM_PROG_LD], [m4_warning($@)dnl
+m4trace:aclocal.m4:3349: -1- AU_DEFINE([_au_warn_AM_PROG_LD], [m4_warning($@)dnl
 m4_define([_au_warn_AM_PROG_LD], [])])
-m4trace:aclocal.m4:3830: -1- m4_define([m4_location(AM_PROG_LD)], [aclocal.m4:3830])
-m4trace:aclocal.m4:3830: -1- m4_define([AM_PROG_LD], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AM_PROG_LD' is obsolete.
+m4trace:aclocal.m4:3349: -1- m4_define([m4_location(AM_PROG_LD)], [aclocal.m4:3349])
+m4trace:aclocal.m4:3349: -1- m4_define([AM_PROG_LD], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AM_PROG_LD' is obsolete.
 You should run autoupdate.])dnl
 m4_if($#, 0, [LT_PATH_LD], [LT_PATH_LD($@)])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:3831: -1- AU_DEFINE([AC_PROG_LD], [m4_ifval([], [_au_warn_AC_PROG_LD([])[m4_warn([obsolete],
+m4trace:aclocal.m4:3350: -1- AU_DEFINE([AC_PROG_LD], [m4_ifval([], [_au_warn_AC_PROG_LD([])[m4_warn([obsolete],
 [])dnl
 ]])dnl
 m4_if($#, 0, [LT_PATH_LD], [LT_PATH_LD($@)])])
-m4trace:aclocal.m4:3831: -1- AU_DEFINE([_au_warn_AC_PROG_LD], [m4_warning($@)dnl
+m4trace:aclocal.m4:3350: -1- AU_DEFINE([_au_warn_AC_PROG_LD], [m4_warning($@)dnl
 m4_define([_au_warn_AC_PROG_LD], [])])
-m4trace:aclocal.m4:3831: -1- m4_define([m4_location(AC_PROG_LD)], [aclocal.m4:3831])
-m4trace:aclocal.m4:3831: -1- m4_define([AC_PROG_LD], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AC_PROG_LD' is obsolete.
+m4trace:aclocal.m4:3350: -1- m4_define([m4_location(AC_PROG_LD)], [aclocal.m4:3350])
+m4trace:aclocal.m4:3350: -1- m4_define([AC_PROG_LD], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AC_PROG_LD' is obsolete.
 You should run autoupdate.])dnl
 m4_if($#, 0, [LT_PATH_LD], [LT_PATH_LD($@)])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:3839: -1- m4_define([m4_location(_LT_PATH_LD_GNU)], [aclocal.m4:3839])
-m4trace:aclocal.m4:3839: -1- m4_define([_LT_PATH_LD_GNU], [_m4_defun_pro([$0])AC_CACHE_CHECK([if the linker ($LD) is GNU ld], lt_cv_prog_gnu_ld,
+m4trace:aclocal.m4:3358: -1- m4_define([m4_location(_LT_PATH_LD_GNU)], [aclocal.m4:3358])
+m4trace:aclocal.m4:3358: -1- m4_define([_LT_PATH_LD_GNU], [_m4_defun_pro([$0])AC_CACHE_CHECK([if the linker ($LD) is GNU ld], lt_cv_prog_gnu_ld,
 [# I'd rather use --version here, but apparently some GNU lds only accept -v.
 case `$LD -v 2>&1 </dev/null` in
 *GNU* | *'with BFD'*)
@@ -18681,8 +18217,8 @@ case `$LD -v 2>&1 </dev/null` in
 esac])
 with_gnu_ld=$lt_cv_prog_gnu_ld
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:3858: -1- m4_define([m4_location(_LT_CMD_RELOAD)], [aclocal.m4:3858])
-m4trace:aclocal.m4:3858: -1- m4_define([_LT_CMD_RELOAD], [_m4_defun_pro([$0])AC_CACHE_CHECK([for $LD option to reload object files],
+m4trace:aclocal.m4:3377: -1- m4_define([m4_location(_LT_CMD_RELOAD)], [aclocal.m4:3377])
+m4trace:aclocal.m4:3377: -1- m4_define([_LT_CMD_RELOAD], [_m4_defun_pro([$0])AC_CACHE_CHECK([for $LD option to reload object files],
   lt_cv_ld_reload_flag,
   [lt_cv_ld_reload_flag='-r'])
 reload_flag=$lt_cv_ld_reload_flag
@@ -18692,7 +18228,7 @@ case $reload_flag in
 esac
 reload_cmds='$LD$reload_flag -o $output$reload_objs'
 case $host_os in
-  cygwin* | mingw* | pw32* | cegcc*)
+  cygwin* | msys* | mingw* | pw32* | cegcc*)
     if test yes != "$GCC"; then
       reload_cmds=false
     fi
@@ -18708,8 +18244,8 @@ esac
 _LT_TAGDECL([], [reload_flag], [1], [How to create reloadable object files])dnl
 _LT_TAGDECL([], [reload_cmds], [2])dnl
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:3890: -1- m4_define([m4_location(_LT_PATH_DD)], [aclocal.m4:3890])
-m4trace:aclocal.m4:3890: -1- m4_define([_LT_PATH_DD], [_m4_defun_pro([$0])AC_CACHE_CHECK([for a working dd], [ac_cv_path_lt_DD],
+m4trace:aclocal.m4:3409: -1- m4_define([m4_location(_LT_PATH_DD)], [aclocal.m4:3409])
+m4trace:aclocal.m4:3409: -1- m4_define([_LT_PATH_DD], [_m4_defun_pro([$0])AC_CACHE_CHECK([for a working dd], [ac_cv_path_lt_DD],
 [printf 0123456789abcdef0123456789abcdef >conftest.i
 cat conftest.i conftest.i >conftest2.i
 : ${lt_DD:=$DD}
@@ -18720,8 +18256,8 @@ AC_PATH_PROGS_FEATURE_CHECK([lt_DD], [dd],
 fi])
 rm -f conftest.i conftest2.i conftest.out])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:3907: -1- m4_define([m4_location(_LT_CMD_TRUNCATE)], [aclocal.m4:3907])
-m4trace:aclocal.m4:3907: -1- m4_define([_LT_CMD_TRUNCATE], [_m4_defun_pro([$0])m4_require([_LT_PATH_DD])
+m4trace:aclocal.m4:3426: -1- m4_define([m4_location(_LT_CMD_TRUNCATE)], [aclocal.m4:3426])
+m4trace:aclocal.m4:3426: -1- m4_define([_LT_CMD_TRUNCATE], [_m4_defun_pro([$0])m4_require([_LT_PATH_DD])
 AC_CACHE_CHECK([how to truncate binary pipes], [lt_cv_truncate_bin],
 [printf 0123456789abcdef0123456789abcdef >conftest.i
 cat conftest.i conftest.i >conftest2.i
@@ -18735,8 +18271,8 @@ test -z "$lt_cv_truncate_bin" && lt_cv_truncate_bin="$SED -e 4q"])
 _LT_DECL([lt_truncate_bin], [lt_cv_truncate_bin], [1],
   [Command to truncate a binary pipe])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:3928: -1- m4_define([m4_location(_LT_CHECK_MAGIC_METHOD)], [aclocal.m4:3928])
-m4trace:aclocal.m4:3928: -1- m4_define([_LT_CHECK_MAGIC_METHOD], [_m4_defun_pro([$0])m4_require([_LT_DECL_EGREP])
+m4trace:aclocal.m4:3447: -1- m4_define([m4_location(_LT_CHECK_MAGIC_METHOD)], [aclocal.m4:3447])
+m4trace:aclocal.m4:3447: -1- m4_define([_LT_CHECK_MAGIC_METHOD], [_m4_defun_pro([$0])m4_require([_LT_DECL_EGREP])
 m4_require([_LT_DECL_OBJDUMP])
 AC_CACHE_CHECK([how to recognize dependent libraries],
 lt_cv_deplibs_check_method,
@@ -18769,7 +18305,7 @@ bsdi[[45]]*)
   lt_cv_file_magic_test_file=/shlib/libc.so
   ;;
 
-cygwin*)
+cygwin* | msys*)
   # func_win32_libid is a shell function defined in ltmain.sh
   lt_cv_deplibs_check_method='file_magic ^x86 archive import|^x86 DLL'
   lt_cv_file_magic_cmd='func_win32_libid'
@@ -18962,8 +18498,8 @@ _LT_DECL([], [file_magic_glob], [1],
 _LT_DECL([], [want_nocaseglob], [1],
     [Find potential files using nocaseglob when deplibs_check_method = "file_magic"])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:4160: -1- m4_define([m4_location(LT_PATH_NM)], [aclocal.m4:4160])
-m4trace:aclocal.m4:4160: -1- m4_define([LT_PATH_NM], [_m4_defun_pro([$0])AC_REQUIRE([AC_PROG_CC])dnl
+m4trace:aclocal.m4:3679: -1- m4_define([m4_location(LT_PATH_NM)], [aclocal.m4:3679])
+m4trace:aclocal.m4:3679: -1- m4_define([LT_PATH_NM], [_m4_defun_pro([$0])AC_REQUIRE([AC_PROG_CC])dnl
 AC_CACHE_CHECK([for BSD- or MS-compatible name lister (nm)], lt_cv_path_NM,
 [if test -n "$NM"; then
   # Let the user override the test.
@@ -19055,28 +18591,28 @@ AC_CACHE_CHECK([the name lister ($NM) interface], [lt_cv_nm_interface],
   fi
   rm -f conftest*])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:4255: -1- AU_DEFINE([AM_PROG_NM], [m4_ifval([], [_au_warn_AM_PROG_NM([])[m4_warn([obsolete],
+m4trace:aclocal.m4:3774: -1- AU_DEFINE([AM_PROG_NM], [m4_ifval([], [_au_warn_AM_PROG_NM([])[m4_warn([obsolete],
 [])dnl
 ]])dnl
 m4_if($#, 0, [LT_PATH_NM], [LT_PATH_NM($@)])])
-m4trace:aclocal.m4:4255: -1- AU_DEFINE([_au_warn_AM_PROG_NM], [m4_warning($@)dnl
+m4trace:aclocal.m4:3774: -1- AU_DEFINE([_au_warn_AM_PROG_NM], [m4_warning($@)dnl
 m4_define([_au_warn_AM_PROG_NM], [])])
-m4trace:aclocal.m4:4255: -1- m4_define([m4_location(AM_PROG_NM)], [aclocal.m4:4255])
-m4trace:aclocal.m4:4255: -1- m4_define([AM_PROG_NM], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AM_PROG_NM' is obsolete.
+m4trace:aclocal.m4:3774: -1- m4_define([m4_location(AM_PROG_NM)], [aclocal.m4:3774])
+m4trace:aclocal.m4:3774: -1- m4_define([AM_PROG_NM], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AM_PROG_NM' is obsolete.
 You should run autoupdate.])dnl
 m4_if($#, 0, [LT_PATH_NM], [LT_PATH_NM($@)])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:4256: -1- AU_DEFINE([AC_PROG_NM], [m4_ifval([], [_au_warn_AC_PROG_NM([])[m4_warn([obsolete],
+m4trace:aclocal.m4:3775: -1- AU_DEFINE([AC_PROG_NM], [m4_ifval([], [_au_warn_AC_PROG_NM([])[m4_warn([obsolete],
 [])dnl
 ]])dnl
 m4_if($#, 0, [LT_PATH_NM], [LT_PATH_NM($@)])])
-m4trace:aclocal.m4:4256: -1- AU_DEFINE([_au_warn_AC_PROG_NM], [m4_warning($@)dnl
+m4trace:aclocal.m4:3775: -1- AU_DEFINE([_au_warn_AC_PROG_NM], [m4_warning($@)dnl
 m4_define([_au_warn_AC_PROG_NM], [])])
-m4trace:aclocal.m4:4256: -1- m4_define([m4_location(AC_PROG_NM)], [aclocal.m4:4256])
-m4trace:aclocal.m4:4256: -1- m4_define([AC_PROG_NM], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AC_PROG_NM' is obsolete.
+m4trace:aclocal.m4:3775: -1- m4_define([m4_location(AC_PROG_NM)], [aclocal.m4:3775])
+m4trace:aclocal.m4:3775: -1- m4_define([AC_PROG_NM], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AC_PROG_NM' is obsolete.
 You should run autoupdate.])dnl
 m4_if($#, 0, [LT_PATH_NM], [LT_PATH_NM($@)])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:4266: -1- m4_define([m4_location(_LT_CHECK_SHAREDLIB_FROM_LINKLIB)], [aclocal.m4:4266])
-m4trace:aclocal.m4:4266: -1- m4_define([_LT_CHECK_SHAREDLIB_FROM_LINKLIB], [_m4_defun_pro([$0])m4_require([_LT_DECL_EGREP])
+m4trace:aclocal.m4:3785: -1- m4_define([m4_location(_LT_CHECK_SHAREDLIB_FROM_LINKLIB)], [aclocal.m4:3785])
+m4trace:aclocal.m4:3785: -1- m4_define([_LT_CHECK_SHAREDLIB_FROM_LINKLIB], [_m4_defun_pro([$0])m4_require([_LT_DECL_EGREP])
 m4_require([_LT_DECL_OBJDUMP])
 m4_require([_LT_DECL_DLLTOOL])
 AC_CACHE_CHECK([how to associate runtime and link libraries],
@@ -19084,7 +18620,7 @@ lt_cv_sharedlib_from_linklib_cmd,
 [lt_cv_sharedlib_from_linklib_cmd='unknown'
 
 case $host_os in
-cygwin* | mingw* | pw32* | cegcc*)
+cygwin* | msys* | mingw* | pw32* | cegcc*)
   # two different shell functions defined in ltmain.sh;
   # decide which one to use based on capabilities of $DLLTOOL
   case `$DLLTOOL --help 2>&1` in
@@ -19108,8 +18644,8 @@ test -z "$sharedlib_from_linklib_cmd" && sharedlib_from_linklib_cmd=$ECHO
 _LT_DECL([], [sharedlib_from_linklib_cmd], [1],
     [Command to associate shared and link libraries])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:4304: -1- m4_define([m4_location(_LT_PATH_MANIFEST_TOOL)], [aclocal.m4:4304])
-m4trace:aclocal.m4:4304: -1- m4_define([_LT_PATH_MANIFEST_TOOL], [_m4_defun_pro([$0])AC_CHECK_TOOL(MANIFEST_TOOL, mt, :)
+m4trace:aclocal.m4:3823: -1- m4_define([m4_location(_LT_PATH_MANIFEST_TOOL)], [aclocal.m4:3823])
+m4trace:aclocal.m4:3823: -1- m4_define([_LT_PATH_MANIFEST_TOOL], [_m4_defun_pro([$0])AC_CHECK_TOOL(MANIFEST_TOOL, mt, :)
 test -z "$MANIFEST_TOOL" && MANIFEST_TOOL=mt
 AC_CACHE_CHECK([if $MANIFEST_TOOL is a manifest tool], [lt_cv_path_mainfest_tool],
   [lt_cv_path_mainfest_tool=no
@@ -19125,8 +18661,8 @@ if test yes != "$lt_cv_path_mainfest_tool"; then
 fi
 _LT_DECL([], [MANIFEST_TOOL], [1], [Manifest tool])dnl
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:4327: -1- m4_define([m4_location(_LT_DLL_DEF_P)], [aclocal.m4:4327])
-m4trace:aclocal.m4:4327: -1- m4_define([_LT_DLL_DEF_P], [_m4_defun_pro([$0])dnl
+m4trace:aclocal.m4:3846: -1- m4_define([m4_location(_LT_DLL_DEF_P)], [aclocal.m4:3846])
+m4trace:aclocal.m4:3846: -1- m4_define([_LT_DLL_DEF_P], [_m4_defun_pro([$0])dnl
   test DEF = "`$SED -n dnl
     -e '\''s/^[[	 ]]*//'\'' dnl Strip leading whitespace
     -e '\''/^\(;.*\)*$/d'\'' dnl      Delete empty lines and comments
@@ -19134,11 +18670,11 @@ m4trace:aclocal.m4:4327: -1- m4_define([_LT_DLL_DEF_P], [_m4_defun_pro([$0])dnl
     -e q dnl                          Only consider the first "real" line
     $1`" dnl
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:4341: -1- m4_define([m4_location(LT_LIB_M)], [aclocal.m4:4341])
-m4trace:aclocal.m4:4341: -1- m4_define([LT_LIB_M], [_m4_defun_pro([$0])AC_REQUIRE([AC_CANONICAL_HOST])dnl
+m4trace:aclocal.m4:3860: -1- m4_define([m4_location(LT_LIB_M)], [aclocal.m4:3860])
+m4trace:aclocal.m4:3860: -1- m4_define([LT_LIB_M], [_m4_defun_pro([$0])AC_REQUIRE([AC_CANONICAL_HOST])dnl
 LIBM=
 case $host in
-*-*-beos* | *-*-cegcc* | *-*-cygwin* | *-*-haiku* | *-*-pw32* | *-*-darwin*)
+*-*-beos* | *-*-cegcc* | *-*-cygwin* | *-*-msys* | *-*-haiku* | *-*-pw32* | *-*-darwin*)
   # These system don't have libm, or don't need it
   ;;
 *-ncr-sysv4.3*)
@@ -19151,18 +18687,18 @@ case $host in
 esac
 AC_SUBST([LIBM])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:4360: -1- AU_DEFINE([AC_CHECK_LIBM], [m4_ifval([], [_au_warn_AC_CHECK_LIBM([])[m4_warn([obsolete],
+m4trace:aclocal.m4:3879: -1- AU_DEFINE([AC_CHECK_LIBM], [m4_ifval([], [_au_warn_AC_CHECK_LIBM([])[m4_warn([obsolete],
 [])dnl
 ]])dnl
 m4_if($#, 0, [LT_LIB_M], [LT_LIB_M($@)])])
-m4trace:aclocal.m4:4360: -1- AU_DEFINE([_au_warn_AC_CHECK_LIBM], [m4_warning($@)dnl
+m4trace:aclocal.m4:3879: -1- AU_DEFINE([_au_warn_AC_CHECK_LIBM], [m4_warning($@)dnl
 m4_define([_au_warn_AC_CHECK_LIBM], [])])
-m4trace:aclocal.m4:4360: -1- m4_define([m4_location(AC_CHECK_LIBM)], [aclocal.m4:4360])
-m4trace:aclocal.m4:4360: -1- m4_define([AC_CHECK_LIBM], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AC_CHECK_LIBM' is obsolete.
+m4trace:aclocal.m4:3879: -1- m4_define([m4_location(AC_CHECK_LIBM)], [aclocal.m4:3879])
+m4trace:aclocal.m4:3879: -1- m4_define([AC_CHECK_LIBM], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AC_CHECK_LIBM' is obsolete.
 You should run autoupdate.])dnl
 m4_if($#, 0, [LT_LIB_M], [LT_LIB_M($@)])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:4367: -1- m4_define([m4_location(_LT_COMPILER_NO_RTTI)], [aclocal.m4:4367])
-m4trace:aclocal.m4:4367: -1- m4_define([_LT_COMPILER_NO_RTTI], [_m4_defun_pro([$0])m4_require([_LT_TAG_COMPILER])dnl
+m4trace:aclocal.m4:3886: -1- m4_define([m4_location(_LT_COMPILER_NO_RTTI)], [aclocal.m4:3886])
+m4trace:aclocal.m4:3886: -1- m4_define([_LT_COMPILER_NO_RTTI], [_m4_defun_pro([$0])m4_require([_LT_TAG_COMPILER])dnl
 
 _LT_TAGVAR(lt_prog_compiler_no_builtin_flag, $1)=
 
@@ -19182,8 +18718,8 @@ fi
 _LT_TAGDECL([no_builtin_flag], [lt_prog_compiler_no_builtin_flag], [1],
 	[Compiler flag to turn off builtin functions])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:4392: -1- m4_define([m4_location(_LT_CMD_GLOBAL_SYMBOLS)], [aclocal.m4:4392])
-m4trace:aclocal.m4:4392: -1- m4_define([_LT_CMD_GLOBAL_SYMBOLS], [_m4_defun_pro([$0])AC_REQUIRE([AC_CANONICAL_HOST])dnl
+m4trace:aclocal.m4:3911: -1- m4_define([m4_location(_LT_CMD_GLOBAL_SYMBOLS)], [aclocal.m4:3911])
+m4trace:aclocal.m4:3911: -1- m4_define([_LT_CMD_GLOBAL_SYMBOLS], [_m4_defun_pro([$0])AC_REQUIRE([AC_CANONICAL_HOST])dnl
 AC_REQUIRE([AC_PROG_CC])dnl
 AC_REQUIRE([AC_PROG_AWK])dnl
 AC_REQUIRE([LT_PATH_NM])dnl
@@ -19210,7 +18746,7 @@ case $host_os in
 aix*)
   symcode='[[BCDT]]'
   ;;
-cygwin* | mingw* | pw32* | cegcc*)
+cygwin* | msys* | mingw* | pw32* | cegcc*)
   symcode='[[ABCDGISTW]]'
   ;;
 hpux*)
@@ -19472,8 +19008,8 @@ _LT_DECL([nm_interface], [lt_cv_nm_interface], [1],
 _LT_DECL([], [nm_file_list_spec], [1],
     [Specify filename containing input files for $NM])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:4686: -1- m4_define([m4_location(_LT_COMPILER_PIC)], [aclocal.m4:4686])
-m4trace:aclocal.m4:4686: -1- m4_define([_LT_COMPILER_PIC], [_m4_defun_pro([$0])m4_require([_LT_TAG_COMPILER])dnl
+m4trace:aclocal.m4:4205: -1- m4_define([m4_location(_LT_COMPILER_PIC)], [aclocal.m4:4205])
+m4trace:aclocal.m4:4205: -1- m4_define([_LT_COMPILER_PIC], [_m4_defun_pro([$0])m4_require([_LT_TAG_COMPILER])dnl
 _LT_TAGVAR(lt_prog_compiler_wl, $1)=
 _LT_TAGVAR(lt_prog_compiler_pic, $1)=
 _LT_TAGVAR(lt_prog_compiler_static, $1)=
@@ -19512,7 +19048,7 @@ m4_if([$1], [CXX], [
     beos* | irix5* | irix6* | nonstopux* | osf3* | osf4* | osf5*)
       # PIC is the default for these OSes.
       ;;
-    mingw* | cygwin* | os2* | pw32* | cegcc*)
+    mingw* | cygwin* | msys* | os2* | pw32* | cegcc*)
       # This hack is so that the source file can tell whether it is being
       # built for inclusion in a dll (and should export symbols for example).
       # Although the cygwin gcc ignores -fPIC, still need this for old-style
@@ -19588,7 +19124,7 @@ m4_if([$1], [CXX], [
 	  ;;
 	esac
 	;;
-      mingw* | cygwin* | os2* | pw32* | cegcc*)
+      mingw* | cygwin* | msys* | os2* | pw32* | cegcc*)
 	# This hack is so that the source file can tell whether it is being
 	# built for inclusion in a dll (and should export symbols for example).
 	m4_if([$1], [GCJ], [],
@@ -19836,7 +19372,7 @@ m4_if([$1], [CXX], [
       # PIC is the default for these OSes.
       ;;
 
-    mingw* | cygwin* | pw32* | os2* | cegcc*)
+    mingw* | cygwin* | msys* | pw32* | os2* | cegcc*)
       # This hack is so that the source file can tell whether it is being
       # built for inclusion in a dll (and should export symbols for example).
       # Although the cygwin gcc ignores -fPIC, still need this for old-style
@@ -19940,7 +19476,7 @@ m4_if([$1], [CXX], [
       esac
       ;;
 
-    mingw* | cygwin* | pw32* | os2* | cegcc*)
+    mingw* | cygwin* | msys* | pw32* | os2* | cegcc*)
       # This hack is so that the source file can tell whether it is being
       # built for inclusion in a dll (and should export symbols for example).
       m4_if([$1], [GCJ], [],
@@ -20178,8 +19714,8 @@ _LT_LINKER_OPTION([if $compiler static flag $lt_tmp_static_flag works],
 _LT_TAGDECL([link_static_flag], [lt_prog_compiler_static], [1],
 	[Compiler flag to prevent dynamic linking])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:5397: -1- m4_define([m4_location(_LT_LINKER_SHLIBS)], [aclocal.m4:5397])
-m4trace:aclocal.m4:5397: -1- m4_define([_LT_LINKER_SHLIBS], [_m4_defun_pro([$0])AC_REQUIRE([LT_PATH_LD])dnl
+m4trace:aclocal.m4:4916: -1- m4_define([m4_location(_LT_LINKER_SHLIBS)], [aclocal.m4:4916])
+m4trace:aclocal.m4:4916: -1- m4_define([_LT_LINKER_SHLIBS], [_m4_defun_pro([$0])AC_REQUIRE([LT_PATH_LD])dnl
 AC_REQUIRE([LT_PATH_NM])dnl
 m4_require([_LT_PATH_MANIFEST_TOOL])dnl
 m4_require([_LT_FILEUTILS_DEFAULTS])dnl
@@ -20210,7 +19746,7 @@ m4_if([$1], [CXX], [
   pw32*)
     _LT_TAGVAR(export_symbols_cmds, $1)=$ltdll_cmds
     ;;
-  cygwin* | mingw* | cegcc*)
+  cygwin* | msys* | mingw* | cegcc*)
     case $cc_basename in
     cl*)
       _LT_TAGVAR(exclude_expsyms, $1)='_NULL_IMPORT_DESCRIPTOR|_IMPORT_DESCRIPTOR_.*'
@@ -20268,7 +19804,7 @@ dnl Note also adjust exclude_expsyms for C++ above.
   extract_expsyms_cmds=
 
   case $host_os in
-  cygwin* | mingw* | pw32* | cegcc*)
+  cygwin* | msys* | mingw* | pw32* | cegcc*)
     # FIXME: the MSVC++ port hasn't been tested in a loooong time
     # When not using gcc, we currently assume that we are using
     # Microsoft Visual C++.
@@ -20383,7 +19919,7 @@ _LT_EOF
       fi
       ;;
 
-    cygwin* | mingw* | pw32* | cegcc*)
+    cygwin* | msys* | mingw* | pw32* | cegcc*)
       # _LT_TAGVAR(hardcode_libdir_flag_spec, $1) is actually meaningless,
       # as there is no search path for DLLs.
       _LT_TAGVAR(hardcode_libdir_flag_spec, $1)='-L$libdir'
@@ -20840,7 +20376,7 @@ _LT_EOF
       _LT_TAGVAR(export_dynamic_flag_spec, $1)=-rdynamic
       ;;
 
-    cygwin* | mingw* | pw32* | cegcc*)
+    cygwin* | msys* | mingw* | pw32* | cegcc*)
       # When not using gcc, we currently assume that we are using
       # Microsoft Visual C++.
       # hardcode_libdir_flag_spec is actually meaningless, as there is
@@ -21473,8 +21009,8 @@ dnl FIXME: Not yet implemented
 dnl _LT_TAGDECL([], [thread_safe_flag_spec], [1],
 dnl    [Compiler flag to generate thread safe objects])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:6699: -1- m4_define([m4_location(_LT_LANG_C_CONFIG)], [aclocal.m4:6699])
-m4trace:aclocal.m4:6699: -1- m4_define([_LT_LANG_C_CONFIG], [_m4_defun_pro([$0])m4_require([_LT_DECL_EGREP])dnl
+m4trace:aclocal.m4:6218: -1- m4_define([m4_location(_LT_LANG_C_CONFIG)], [aclocal.m4:6218])
+m4trace:aclocal.m4:6218: -1- m4_define([_LT_LANG_C_CONFIG], [_m4_defun_pro([$0])m4_require([_LT_DECL_EGREP])dnl
 lt_save_CC=$CC
 AC_LANG_PUSH(C)
 
@@ -21551,8 +21087,8 @@ fi
 AC_LANG_POP
 CC=$lt_save_CC
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:6784: -1- m4_define([m4_location(_LT_LANG_CXX_CONFIG)], [aclocal.m4:6784])
-m4trace:aclocal.m4:6784: -1- m4_define([_LT_LANG_CXX_CONFIG], [_m4_defun_pro([$0])m4_require([_LT_FILEUTILS_DEFAULTS])dnl
+m4trace:aclocal.m4:6303: -1- m4_define([m4_location(_LT_LANG_CXX_CONFIG)], [aclocal.m4:6303])
+m4trace:aclocal.m4:6303: -1- m4_define([_LT_LANG_CXX_CONFIG], [_m4_defun_pro([$0])m4_require([_LT_FILEUTILS_DEFAULTS])dnl
 m4_require([_LT_DECL_EGREP])dnl
 m4_require([_LT_PATH_MANIFEST_TOOL])dnl
 if test -n "$CXX" && ( test no != "$CXX" &&
@@ -21897,7 +21433,7 @@ if test yes != "$_lt_caught_CXX_error"; then
         esac
         ;;
 
-      cygwin* | mingw* | pw32* | cegcc*)
+      cygwin* | msys* | mingw* | pw32* | cegcc*)
 	case $GXX,$cc_basename in
 	,cl* | no,cl*)
 	  # Native MSVC
@@ -22689,8 +22225,8 @@ fi # test yes != "$_lt_caught_CXX_error"
 
 AC_LANG_POP
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:7935: -1- m4_define([m4_location(_LT_FUNC_STRIPNAME_CNF)], [aclocal.m4:7935])
-m4trace:aclocal.m4:7935: -1- m4_define([_LT_FUNC_STRIPNAME_CNF], [_m4_defun_pro([$0])dnl
+m4trace:aclocal.m4:7454: -1- m4_define([m4_location(_LT_FUNC_STRIPNAME_CNF)], [aclocal.m4:7454])
+m4trace:aclocal.m4:7454: -1- m4_define([_LT_FUNC_STRIPNAME_CNF], [_m4_defun_pro([$0])dnl
 AC_REQUIRE([_LT_DECL_SED])
 AC_REQUIRE([_LT_PROG_ECHO_BACKSLASH])
 func_stripname_cnf ()
@@ -22701,8 +22237,8 @@ func_stripname_cnf ()
   esac
 } # func_stripname_cnf
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:7954: -1- m4_define([m4_location(_LT_SYS_HIDDEN_LIBDEPS)], [aclocal.m4:7954])
-m4trace:aclocal.m4:7954: -1- m4_define([_LT_SYS_HIDDEN_LIBDEPS], [_m4_defun_pro([$0])m4_require([_LT_FILEUTILS_DEFAULTS])dnl
+m4trace:aclocal.m4:7473: -1- m4_define([m4_location(_LT_SYS_HIDDEN_LIBDEPS)], [aclocal.m4:7473])
+m4trace:aclocal.m4:7473: -1- m4_define([_LT_SYS_HIDDEN_LIBDEPS], [_m4_defun_pro([$0])m4_require([_LT_FILEUTILS_DEFAULTS])dnl
 AC_REQUIRE([_LT_FUNC_STRIPNAME_CNF])dnl
 # Dependencies to place before and after the object being linked:
 _LT_TAGVAR(predep_objects, $1)=
@@ -22895,8 +22431,8 @@ _LT_TAGDECL([], [compiler_lib_search_path], [1],
     [The library search path used internally by the compiler when linking
     a shared library])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:8155: -1- m4_define([m4_location(_LT_LANG_F77_CONFIG)], [aclocal.m4:8155])
-m4trace:aclocal.m4:8155: -1- m4_define([_LT_LANG_F77_CONFIG], [_m4_defun_pro([$0])AC_LANG_PUSH(Fortran 77)
+m4trace:aclocal.m4:7674: -1- m4_define([m4_location(_LT_LANG_F77_CONFIG)], [aclocal.m4:7674])
+m4trace:aclocal.m4:7674: -1- m4_define([_LT_LANG_F77_CONFIG], [_m4_defun_pro([$0])AC_LANG_PUSH(Fortran 77)
 if test -z "$F77" || test no = "$F77"; then
   _lt_disable_F77=yes
 fi
@@ -23023,8 +22559,8 @@ fi # test yes != "$_lt_disable_F77"
 
 AC_LANG_POP
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:8290: -1- m4_define([m4_location(_LT_LANG_FC_CONFIG)], [aclocal.m4:8290])
-m4trace:aclocal.m4:8290: -1- m4_define([_LT_LANG_FC_CONFIG], [_m4_defun_pro([$0])AC_LANG_PUSH(Fortran)
+m4trace:aclocal.m4:7809: -1- m4_define([m4_location(_LT_LANG_FC_CONFIG)], [aclocal.m4:7809])
+m4trace:aclocal.m4:7809: -1- m4_define([_LT_LANG_FC_CONFIG], [_m4_defun_pro([$0])AC_LANG_PUSH(Fortran)
 
 if test -z "$FC" || test no = "$FC"; then
   _lt_disable_FC=yes
@@ -23155,8 +22691,8 @@ fi # test yes != "$_lt_disable_FC"
 
 AC_LANG_POP
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:8429: -1- m4_define([m4_location(_LT_LANG_GCJ_CONFIG)], [aclocal.m4:8429])
-m4trace:aclocal.m4:8429: -1- m4_define([_LT_LANG_GCJ_CONFIG], [_m4_defun_pro([$0])AC_REQUIRE([LT_PROG_GCJ])dnl
+m4trace:aclocal.m4:7948: -1- m4_define([m4_location(_LT_LANG_GCJ_CONFIG)], [aclocal.m4:7948])
+m4trace:aclocal.m4:7948: -1- m4_define([_LT_LANG_GCJ_CONFIG], [_m4_defun_pro([$0])AC_REQUIRE([LT_PROG_GCJ])dnl
 AC_LANG_SAVE
 
 # Source file extension for Java test sources.
@@ -23215,8 +22751,8 @@ GCC=$lt_save_GCC
 CC=$lt_save_CC
 CFLAGS=$lt_save_CFLAGS
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:8496: -1- m4_define([m4_location(_LT_LANG_GO_CONFIG)], [aclocal.m4:8496])
-m4trace:aclocal.m4:8496: -1- m4_define([_LT_LANG_GO_CONFIG], [_m4_defun_pro([$0])AC_REQUIRE([LT_PROG_GO])dnl
+m4trace:aclocal.m4:8015: -1- m4_define([m4_location(_LT_LANG_GO_CONFIG)], [aclocal.m4:8015])
+m4trace:aclocal.m4:8015: -1- m4_define([_LT_LANG_GO_CONFIG], [_m4_defun_pro([$0])AC_REQUIRE([LT_PROG_GO])dnl
 AC_LANG_SAVE
 
 # Source file extension for Go test sources.
@@ -23275,8 +22811,8 @@ GCC=$lt_save_GCC
 CC=$lt_save_CC
 CFLAGS=$lt_save_CFLAGS
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:8563: -1- m4_define([m4_location(_LT_LANG_RC_CONFIG)], [aclocal.m4:8563])
-m4trace:aclocal.m4:8563: -1- m4_define([_LT_LANG_RC_CONFIG], [_m4_defun_pro([$0])AC_REQUIRE([LT_PROG_RC])dnl
+m4trace:aclocal.m4:8082: -1- m4_define([m4_location(_LT_LANG_RC_CONFIG)], [aclocal.m4:8082])
+m4trace:aclocal.m4:8082: -1- m4_define([_LT_LANG_RC_CONFIG], [_m4_defun_pro([$0])AC_REQUIRE([LT_PROG_RC])dnl
 AC_LANG_SAVE
 
 # Source file extension for RC test sources.
@@ -23321,41 +22857,41 @@ AC_LANG_RESTORE
 CC=$lt_save_CC
 CFLAGS=$lt_save_CFLAGS
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:8613: -1- m4_define([m4_location(LT_PROG_GCJ)], [aclocal.m4:8613])
-m4trace:aclocal.m4:8613: -1- m4_define([LT_PROG_GCJ], [_m4_defun_pro([$0])m4_ifdef([AC_PROG_GCJ], [AC_PROG_GCJ],
+m4trace:aclocal.m4:8132: -1- m4_define([m4_location(LT_PROG_GCJ)], [aclocal.m4:8132])
+m4trace:aclocal.m4:8132: -1- m4_define([LT_PROG_GCJ], [_m4_defun_pro([$0])m4_ifdef([AC_PROG_GCJ], [AC_PROG_GCJ],
   [m4_ifdef([A][M_PROG_GCJ], [A][M_PROG_GCJ],
     [AC_CHECK_TOOL(GCJ, gcj,)
       test set = "${GCJFLAGS+set}" || GCJFLAGS="-g -O2"
       AC_SUBST(GCJFLAGS)])])[]dnl
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:8622: -1- AU_DEFINE([LT_AC_PROG_GCJ], [m4_ifval([], [_au_warn_LT_AC_PROG_GCJ([])[m4_warn([obsolete],
+m4trace:aclocal.m4:8141: -1- AU_DEFINE([LT_AC_PROG_GCJ], [m4_ifval([], [_au_warn_LT_AC_PROG_GCJ([])[m4_warn([obsolete],
 [])dnl
 ]])dnl
 m4_if($#, 0, [LT_PROG_GCJ], [LT_PROG_GCJ($@)])])
-m4trace:aclocal.m4:8622: -1- AU_DEFINE([_au_warn_LT_AC_PROG_GCJ], [m4_warning($@)dnl
+m4trace:aclocal.m4:8141: -1- AU_DEFINE([_au_warn_LT_AC_PROG_GCJ], [m4_warning($@)dnl
 m4_define([_au_warn_LT_AC_PROG_GCJ], [])])
-m4trace:aclocal.m4:8622: -1- m4_define([m4_location(LT_AC_PROG_GCJ)], [aclocal.m4:8622])
-m4trace:aclocal.m4:8622: -1- m4_define([LT_AC_PROG_GCJ], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `LT_AC_PROG_GCJ' is obsolete.
+m4trace:aclocal.m4:8141: -1- m4_define([m4_location(LT_AC_PROG_GCJ)], [aclocal.m4:8141])
+m4trace:aclocal.m4:8141: -1- m4_define([LT_AC_PROG_GCJ], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `LT_AC_PROG_GCJ' is obsolete.
 You should run autoupdate.])dnl
 m4_if($#, 0, [LT_PROG_GCJ], [LT_PROG_GCJ($@)])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:8629: -1- m4_define([m4_location(LT_PROG_GO)], [aclocal.m4:8629])
-m4trace:aclocal.m4:8629: -1- m4_define([LT_PROG_GO], [_m4_defun_pro([$0])AC_CHECK_TOOL(GOC, gccgo,)
+m4trace:aclocal.m4:8148: -1- m4_define([m4_location(LT_PROG_GO)], [aclocal.m4:8148])
+m4trace:aclocal.m4:8148: -1- m4_define([LT_PROG_GO], [_m4_defun_pro([$0])AC_CHECK_TOOL(GOC, gccgo,)
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:8636: -1- m4_define([m4_location(LT_PROG_RC)], [aclocal.m4:8636])
-m4trace:aclocal.m4:8636: -1- m4_define([LT_PROG_RC], [_m4_defun_pro([$0])AC_CHECK_TOOL(RC, windres,)
+m4trace:aclocal.m4:8155: -1- m4_define([m4_location(LT_PROG_RC)], [aclocal.m4:8155])
+m4trace:aclocal.m4:8155: -1- m4_define([LT_PROG_RC], [_m4_defun_pro([$0])AC_CHECK_TOOL(RC, windres,)
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:8641: -1- AU_DEFINE([LT_AC_PROG_RC], [m4_ifval([], [_au_warn_LT_AC_PROG_RC([])[m4_warn([obsolete],
+m4trace:aclocal.m4:8160: -1- AU_DEFINE([LT_AC_PROG_RC], [m4_ifval([], [_au_warn_LT_AC_PROG_RC([])[m4_warn([obsolete],
 [])dnl
 ]])dnl
 m4_if($#, 0, [LT_PROG_RC], [LT_PROG_RC($@)])])
-m4trace:aclocal.m4:8641: -1- AU_DEFINE([_au_warn_LT_AC_PROG_RC], [m4_warning($@)dnl
+m4trace:aclocal.m4:8160: -1- AU_DEFINE([_au_warn_LT_AC_PROG_RC], [m4_warning($@)dnl
 m4_define([_au_warn_LT_AC_PROG_RC], [])])
-m4trace:aclocal.m4:8641: -1- m4_define([m4_location(LT_AC_PROG_RC)], [aclocal.m4:8641])
-m4trace:aclocal.m4:8641: -1- m4_define([LT_AC_PROG_RC], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `LT_AC_PROG_RC' is obsolete.
+m4trace:aclocal.m4:8160: -1- m4_define([m4_location(LT_AC_PROG_RC)], [aclocal.m4:8160])
+m4trace:aclocal.m4:8160: -1- m4_define([LT_AC_PROG_RC], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `LT_AC_PROG_RC' is obsolete.
 You should run autoupdate.])dnl
 m4_if($#, 0, [LT_PROG_RC], [LT_PROG_RC($@)])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:8650: -1- m4_define([m4_location(_LT_DECL_EGREP)], [aclocal.m4:8650])
-m4trace:aclocal.m4:8650: -1- m4_define([_LT_DECL_EGREP], [_m4_defun_pro([$0])AC_REQUIRE([AC_PROG_EGREP])dnl
+m4trace:aclocal.m4:8169: -1- m4_define([m4_location(_LT_DECL_EGREP)], [aclocal.m4:8169])
+m4trace:aclocal.m4:8169: -1- m4_define([_LT_DECL_EGREP], [_m4_defun_pro([$0])AC_REQUIRE([AC_PROG_EGREP])dnl
 AC_REQUIRE([AC_PROG_FGREP])dnl
 test -z "$GREP" && GREP=grep
 _LT_DECL([], [GREP], [1], [A grep program that handles long lines])
@@ -23364,38 +22900,38 @@ _LT_DECL([], [FGREP], [1], [A literal string matcher])
 dnl Non-bleeding-edge autoconf doesn't subst GREP, so do it here too
 AC_SUBST([GREP])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:8666: -1- m4_define([m4_location(_LT_DECL_OBJDUMP)], [aclocal.m4:8666])
-m4trace:aclocal.m4:8666: -1- m4_define([_LT_DECL_OBJDUMP], [_m4_defun_pro([$0])AC_CHECK_TOOL(OBJDUMP, objdump, false)
+m4trace:aclocal.m4:8185: -1- m4_define([m4_location(_LT_DECL_OBJDUMP)], [aclocal.m4:8185])
+m4trace:aclocal.m4:8185: -1- m4_define([_LT_DECL_OBJDUMP], [_m4_defun_pro([$0])AC_CHECK_TOOL(OBJDUMP, objdump, false)
 test -z "$OBJDUMP" && OBJDUMP=objdump
 _LT_DECL([], [OBJDUMP], [1], [An object symbol dumper])
 AC_SUBST([OBJDUMP])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:8676: -1- m4_define([m4_location(_LT_DECL_DLLTOOL)], [aclocal.m4:8676])
-m4trace:aclocal.m4:8676: -1- m4_define([_LT_DECL_DLLTOOL], [_m4_defun_pro([$0])AC_CHECK_TOOL(DLLTOOL, dlltool, false)
+m4trace:aclocal.m4:8195: -1- m4_define([m4_location(_LT_DECL_DLLTOOL)], [aclocal.m4:8195])
+m4trace:aclocal.m4:8195: -1- m4_define([_LT_DECL_DLLTOOL], [_m4_defun_pro([$0])AC_CHECK_TOOL(DLLTOOL, dlltool, false)
 test -z "$DLLTOOL" && DLLTOOL=dlltool
 _LT_DECL([], [DLLTOOL], [1], [DLL creation program])
 AC_SUBST([DLLTOOL])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:8687: -1- m4_define([m4_location(_LT_DECL_SED)], [aclocal.m4:8687])
-m4trace:aclocal.m4:8687: -1- m4_define([_LT_DECL_SED], [_m4_defun_pro([$0])AC_PROG_SED
+m4trace:aclocal.m4:8206: -1- m4_define([m4_location(_LT_DECL_SED)], [aclocal.m4:8206])
+m4trace:aclocal.m4:8206: -1- m4_define([_LT_DECL_SED], [_m4_defun_pro([$0])AC_PROG_SED
 test -z "$SED" && SED=sed
 Xsed="$SED -e 1s/^X//"
 _LT_DECL([], [SED], [1], [A sed program that does not truncate output])
 _LT_DECL([], [Xsed], ["\$SED -e 1s/^X//"],
     [Sed that helps us avoid accidentally triggering echo(1) options like -n])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:8759: -1- AU_DEFINE([LT_AC_PROG_SED], [m4_ifval([], [_au_warn_LT_AC_PROG_SED([])[m4_warn([obsolete],
+m4trace:aclocal.m4:8278: -1- AU_DEFINE([LT_AC_PROG_SED], [m4_ifval([], [_au_warn_LT_AC_PROG_SED([])[m4_warn([obsolete],
 [])dnl
 ]])dnl
 m4_if($#, 0, [AC_PROG_SED], [AC_PROG_SED($@)])])
-m4trace:aclocal.m4:8759: -1- AU_DEFINE([_au_warn_LT_AC_PROG_SED], [m4_warning($@)dnl
+m4trace:aclocal.m4:8278: -1- AU_DEFINE([_au_warn_LT_AC_PROG_SED], [m4_warning($@)dnl
 m4_define([_au_warn_LT_AC_PROG_SED], [])])
-m4trace:aclocal.m4:8759: -1- m4_define([m4_location(LT_AC_PROG_SED)], [aclocal.m4:8759])
-m4trace:aclocal.m4:8759: -1- m4_define([LT_AC_PROG_SED], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `LT_AC_PROG_SED' is obsolete.
+m4trace:aclocal.m4:8278: -1- m4_define([m4_location(LT_AC_PROG_SED)], [aclocal.m4:8278])
+m4trace:aclocal.m4:8278: -1- m4_define([LT_AC_PROG_SED], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `LT_AC_PROG_SED' is obsolete.
 You should run autoupdate.])dnl
 m4_if($#, 0, [AC_PROG_SED], [AC_PROG_SED($@)])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:8768: -1- m4_define([m4_location(_LT_CHECK_SHELL_FEATURES)], [aclocal.m4:8768])
-m4trace:aclocal.m4:8768: -1- m4_define([_LT_CHECK_SHELL_FEATURES], [_m4_defun_pro([$0])if ( (MAIL=60; unset MAIL) || exit) >/dev/null 2>&1; then
+m4trace:aclocal.m4:8287: -1- m4_define([m4_location(_LT_CHECK_SHELL_FEATURES)], [aclocal.m4:8287])
+m4trace:aclocal.m4:8287: -1- m4_define([_LT_CHECK_SHELL_FEATURES], [_m4_defun_pro([$0])if ( (MAIL=60; unset MAIL) || exit) >/dev/null 2>&1; then
   lt_unset=unset
 else
   lt_unset=false
@@ -23417,8 +22953,8 @@ esac
 _LT_DECL([SP2NL], [lt_SP2NL], [1], [turn spaces into newlines])dnl
 _LT_DECL([NL2SP], [lt_NL2SP], [1], [turn newlines into spaces])dnl
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:8798: -1- m4_define([m4_location(_LT_PATH_CONVERSION_FUNCTIONS)], [aclocal.m4:8798])
-m4trace:aclocal.m4:8798: -1- m4_define([_LT_PATH_CONVERSION_FUNCTIONS], [_m4_defun_pro([$0])AC_REQUIRE([AC_CANONICAL_HOST])dnl
+m4trace:aclocal.m4:8317: -1- m4_define([m4_location(_LT_PATH_CONVERSION_FUNCTIONS)], [aclocal.m4:8317])
+m4trace:aclocal.m4:8317: -1- m4_define([_LT_PATH_CONVERSION_FUNCTIONS], [_m4_defun_pro([$0])AC_REQUIRE([AC_CANONICAL_HOST])dnl
 AC_REQUIRE([AC_CANONICAL_BUILD])dnl
 AC_MSG_CHECKING([how to convert $build file names to $host format])
 AC_CACHE_VAL(lt_cv_to_host_file_cmd,
@@ -23428,7 +22964,7 @@ AC_CACHE_VAL(lt_cv_to_host_file_cmd,
       *-*-mingw* ) # actually msys
         lt_cv_to_host_file_cmd=func_convert_file_msys_to_w32
         ;;
-      *-*-cygwin* )
+      *-*-cygwin* | *-*-msys* )
         lt_cv_to_host_file_cmd=func_convert_file_cygwin_to_w32
         ;;
       * ) # otherwise, assume *nix
@@ -23436,12 +22972,12 @@ AC_CACHE_VAL(lt_cv_to_host_file_cmd,
         ;;
     esac
     ;;
-  *-*-cygwin* )
+  *-*-cygwin* | *-*-msys* )
     case $build in
       *-*-mingw* ) # actually msys
         lt_cv_to_host_file_cmd=func_convert_file_msys_to_cygwin
         ;;
-      *-*-cygwin* )
+      *-*-cygwin* | *-*-msys* )
         lt_cv_to_host_file_cmd=func_convert_file_noop
         ;;
       * ) # otherwise, assume *nix
@@ -23478,23 +23014,23 @@ AC_MSG_RESULT([$lt_cv_to_tool_file_cmd])
 _LT_DECL([to_tool_file_cmd], [lt_cv_to_tool_file_cmd],
          [0], [convert $build files to toolchain format])dnl
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:8873: -1- m4_define([m4_location(LTOPTIONS_VERSION)], [aclocal.m4:8873])
-m4trace:aclocal.m4:8873: -1- m4_define([LTOPTIONS_VERSION], [_m4_defun_pro([$0])m4_if([1])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:8878: -1- m4_define([_LT_MANGLE_OPTION], [[_LT_OPTION_]m4_bpatsubst($1__$2, [[^a-zA-Z0-9_]], [_])])
-m4trace:aclocal.m4:8887: -1- m4_define([_LT_SET_OPTION], [m4_define(_LT_MANGLE_OPTION([$1], [$2]))dnl
+m4trace:aclocal.m4:8392: -1- m4_define([m4_location(LTOPTIONS_VERSION)], [aclocal.m4:8392])
+m4trace:aclocal.m4:8392: -1- m4_define([LTOPTIONS_VERSION], [_m4_defun_pro([$0])m4_if([1])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:8397: -1- m4_define([_LT_MANGLE_OPTION], [[_LT_OPTION_]m4_bpatsubst($1__$2, [[^a-zA-Z0-9_]], [_])])
+m4trace:aclocal.m4:8406: -1- m4_define([_LT_SET_OPTION], [m4_define(_LT_MANGLE_OPTION([$1], [$2]))dnl
 m4_ifdef(_LT_MANGLE_DEFUN([$1], [$2]),
         _LT_MANGLE_DEFUN([$1], [$2]),
     [m4_warning([Unknown $1 option '$2'])])[]dnl
 ])
-m4trace:aclocal.m4:8898: -1- m4_define([_LT_IF_OPTION], [m4_ifdef(_LT_MANGLE_OPTION([$1], [$2]), [$3], [$4])])
-m4trace:aclocal.m4:8906: -1- m4_define([_LT_UNLESS_OPTIONS], [m4_foreach([_LT_Option], m4_split(m4_normalize([$2])),
+m4trace:aclocal.m4:8417: -1- m4_define([_LT_IF_OPTION], [m4_ifdef(_LT_MANGLE_OPTION([$1], [$2]), [$3], [$4])])
+m4trace:aclocal.m4:8425: -1- m4_define([_LT_UNLESS_OPTIONS], [m4_foreach([_LT_Option], m4_split(m4_normalize([$2])),
 	    [m4_ifdef(_LT_MANGLE_OPTION([$1], _LT_Option),
 		      [m4_define([$0_found])])])[]dnl
 m4_ifdef([$0_found], [m4_undefine([$0_found])], [$3
 ])[]dnl
 ])
-m4trace:aclocal.m4:8921: -1- m4_define([m4_location(_LT_SET_OPTIONS)], [aclocal.m4:8921])
-m4trace:aclocal.m4:8921: -1- m4_define([_LT_SET_OPTIONS], [_m4_defun_pro([$0])# Set options
+m4trace:aclocal.m4:8440: -1- m4_define([m4_location(_LT_SET_OPTIONS)], [aclocal.m4:8440])
+m4trace:aclocal.m4:8440: -1- m4_define([_LT_SET_OPTIONS], [_m4_defun_pro([$0])# Set options
 m4_foreach([_LT_Option], m4_split(m4_normalize([$2])),
     [_LT_SET_OPTION([$1], _LT_Option)])
 
@@ -23520,12 +23056,12 @@ m4_if([$1],[LT_INIT],[
 		   [_LT_WITH_AIX_SONAME([aix])])
   ])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:8953: -1- m4_define([_LT_MANGLE_DEFUN], [[_LT_OPTION_DEFUN_]m4_bpatsubst(m4_toupper([$1__$2]), [[^A-Z0-9_]], [_])])
-m4trace:aclocal.m4:8959: -1- m4_define([LT_OPTION_DEFINE], [m4_define(_LT_MANGLE_DEFUN([$1], [$2]), [$3])[]dnl
+m4trace:aclocal.m4:8472: -1- m4_define([_LT_MANGLE_DEFUN], [[_LT_OPTION_DEFUN_]m4_bpatsubst(m4_toupper([$1__$2]), [[^A-Z0-9_]], [_])])
+m4trace:aclocal.m4:8478: -1- m4_define([LT_OPTION_DEFINE], [m4_define(_LT_MANGLE_DEFUN([$1], [$2]), [$3])[]dnl
 ])
-m4trace:aclocal.m4:8966: -1- m4_define([_LT_OPTION_DEFUN_LT_INIT__DLOPEN], [enable_dlopen=yes
+m4trace:aclocal.m4:8485: -1- m4_define([_LT_OPTION_DEFUN_LT_INIT__DLOPEN], [enable_dlopen=yes
 ])
-m4trace:aclocal.m4:8969: -1- AU_DEFINE([AC_LIBTOOL_DLOPEN], [m4_ifval([], [_au_warn_AC_LIBTOOL_DLOPEN([])[m4_warn([obsolete],
+m4trace:aclocal.m4:8488: -1- AU_DEFINE([AC_LIBTOOL_DLOPEN], [m4_ifval([], [_au_warn_AC_LIBTOOL_DLOPEN([])[m4_warn([obsolete],
 [])dnl
 ]])dnl
 _LT_SET_OPTION([LT_INIT], [dlopen])
@@ -23533,20 +23069,20 @@ AC_DIAGNOSE([obsolete],
 [$0: Remove this warning and the call to _LT_SET_OPTION when you
 put the 'dlopen' option into LT_INIT's first parameter.])
 ])
-m4trace:aclocal.m4:8969: -1- AU_DEFINE([_au_warn_AC_LIBTOOL_DLOPEN], [m4_warning($@)dnl
+m4trace:aclocal.m4:8488: -1- AU_DEFINE([_au_warn_AC_LIBTOOL_DLOPEN], [m4_warning($@)dnl
 m4_define([_au_warn_AC_LIBTOOL_DLOPEN], [])])
-m4trace:aclocal.m4:8969: -1- m4_define([m4_location(AC_LIBTOOL_DLOPEN)], [aclocal.m4:8969])
-m4trace:aclocal.m4:8969: -1- m4_define([AC_LIBTOOL_DLOPEN], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AC_LIBTOOL_DLOPEN' is obsolete.
+m4trace:aclocal.m4:8488: -1- m4_define([m4_location(AC_LIBTOOL_DLOPEN)], [aclocal.m4:8488])
+m4trace:aclocal.m4:8488: -1- m4_define([AC_LIBTOOL_DLOPEN], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AC_LIBTOOL_DLOPEN' is obsolete.
 You should run autoupdate.])dnl
 _LT_SET_OPTION([LT_INIT], [dlopen])
 AC_DIAGNOSE([obsolete],
 [$0: Remove this warning and the call to _LT_SET_OPTION when you
 put the 'dlopen' option into LT_INIT's first parameter.])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:8983: -1- m4_define([_LT_OPTION_DEFUN_LT_INIT__WIN32_DLL], [enable_win32_dll=yes
+m4trace:aclocal.m4:8502: -1- m4_define([_LT_OPTION_DEFUN_LT_INIT__WIN32_DLL], [enable_win32_dll=yes
 
 case $host in
-*-*-cygwin* | *-*-mingw* | *-*-pw32* | *-*-cegcc*)
+*-*-cygwin* | *-*-msys* | *-*-mingw* | *-*-pw32* | *-*-cegcc*)
   AC_CHECK_TOOL(AS, as, false)
   AC_CHECK_TOOL(DLLTOOL, dlltool, false)
   AC_CHECK_TOOL(OBJDUMP, objdump, false)
@@ -23562,7 +23098,7 @@ _LT_DECL([], [DLLTOOL], [1], [DLL creation program])dnl
 test -z "$OBJDUMP" && OBJDUMP=objdump
 _LT_DECL([], [OBJDUMP], [1], [Object dumper program])dnl
 ])
-m4trace:aclocal.m4:9004: -1- AU_DEFINE([AC_LIBTOOL_WIN32_DLL], [m4_ifval([], [_au_warn_AC_LIBTOOL_WIN32_DLL([])[m4_warn([obsolete],
+m4trace:aclocal.m4:8523: -1- AU_DEFINE([AC_LIBTOOL_WIN32_DLL], [m4_ifval([], [_au_warn_AC_LIBTOOL_WIN32_DLL([])[m4_warn([obsolete],
 [])dnl
 ]])dnl
 AC_REQUIRE([AC_CANONICAL_HOST])dnl
@@ -23571,10 +23107,10 @@ AC_DIAGNOSE([obsolete],
 [$0: Remove this warning and the call to _LT_SET_OPTION when you
 put the 'win32-dll' option into LT_INIT's first parameter.])
 ])
-m4trace:aclocal.m4:9004: -1- AU_DEFINE([_au_warn_AC_LIBTOOL_WIN32_DLL], [m4_warning($@)dnl
+m4trace:aclocal.m4:8523: -1- AU_DEFINE([_au_warn_AC_LIBTOOL_WIN32_DLL], [m4_warning($@)dnl
 m4_define([_au_warn_AC_LIBTOOL_WIN32_DLL], [])])
-m4trace:aclocal.m4:9004: -1- m4_define([m4_location(AC_LIBTOOL_WIN32_DLL)], [aclocal.m4:9004])
-m4trace:aclocal.m4:9004: -1- m4_define([AC_LIBTOOL_WIN32_DLL], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AC_LIBTOOL_WIN32_DLL' is obsolete.
+m4trace:aclocal.m4:8523: -1- m4_define([m4_location(AC_LIBTOOL_WIN32_DLL)], [aclocal.m4:8523])
+m4trace:aclocal.m4:8523: -1- m4_define([AC_LIBTOOL_WIN32_DLL], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AC_LIBTOOL_WIN32_DLL' is obsolete.
 You should run autoupdate.])dnl
 AC_REQUIRE([AC_CANONICAL_HOST])dnl
 _LT_SET_OPTION([LT_INIT], [win32-dll])
@@ -23582,18 +23118,14 @@ AC_DIAGNOSE([obsolete],
 [$0: Remove this warning and the call to _LT_SET_OPTION when you
 put the 'win32-dll' option into LT_INIT's first parameter.])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9021: -1- m4_define([_LT_ENABLE_SHARED], [m4_define([_LT_ENABLE_SHARED_DEFAULT], [m4_if($1, no, no, yes)])dnl
+m4trace:aclocal.m4:8540: -1- m4_define([_LT_ENABLE_SHARED], [m4_define([_LT_ENABLE_SHARED_DEFAULT], [m4_if($1, no, no, yes)])dnl
 AC_ARG_ENABLE([shared],
     [AS_HELP_STRING([--enable-shared@<:@=PKGS@:>@],
 	[build shared libraries @<:@default=]_LT_ENABLE_SHARED_DEFAULT[@:>@])],
     [p=${PACKAGE-default}
     case $enableval in
     yes) enable_shared=yes ;;
-    no)
-      enable_shared=no
-      AC_DEFINE([LT_MINGW_STATIC_TESTSUITE_HACK], [1],
-         [Define if running the test suite so that test #27 works on MinGW.])
-      ;;
+    no) enable_shared=no ;;
     *)
       enable_shared=no
       # Look at the argument we got.  We use all the common list separators.
@@ -23612,35 +23144,35 @@ AC_ARG_ENABLE([shared],
     _LT_DECL([build_libtool_libs], [enable_shared], [0],
 	[Whether or not to build shared libraries])
 ])
-m4trace:aclocal.m4:9053: -1- m4_define([_LT_OPTION_DEFUN_LT_INIT__SHARED], [_LT_ENABLE_SHARED([yes])])
-m4trace:aclocal.m4:9054: -1- m4_define([_LT_OPTION_DEFUN_LT_INIT__DISABLE_SHARED], [_LT_ENABLE_SHARED([no])])
-m4trace:aclocal.m4:9057: -1- m4_define([m4_location(AC_ENABLE_SHARED)], [aclocal.m4:9057])
-m4trace:aclocal.m4:9057: -1- m4_define([AC_ENABLE_SHARED], [_m4_defun_pro([$0])_LT_SET_OPTION([LT_INIT], m4_if([$1], [no], [disable-])[shared])
+m4trace:aclocal.m4:8568: -1- m4_define([_LT_OPTION_DEFUN_LT_INIT__SHARED], [_LT_ENABLE_SHARED([yes])])
+m4trace:aclocal.m4:8569: -1- m4_define([_LT_OPTION_DEFUN_LT_INIT__DISABLE_SHARED], [_LT_ENABLE_SHARED([no])])
+m4trace:aclocal.m4:8572: -1- m4_define([m4_location(AC_ENABLE_SHARED)], [aclocal.m4:8572])
+m4trace:aclocal.m4:8572: -1- m4_define([AC_ENABLE_SHARED], [_m4_defun_pro([$0])_LT_SET_OPTION([LT_INIT], m4_if([$1], [no], [disable-])[shared])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9061: -1- m4_define([m4_location(AC_DISABLE_SHARED)], [aclocal.m4:9061])
-m4trace:aclocal.m4:9061: -1- m4_define([AC_DISABLE_SHARED], [_m4_defun_pro([$0])_LT_SET_OPTION([LT_INIT], [disable-shared])
+m4trace:aclocal.m4:8576: -1- m4_define([m4_location(AC_DISABLE_SHARED)], [aclocal.m4:8576])
+m4trace:aclocal.m4:8576: -1- m4_define([AC_DISABLE_SHARED], [_m4_defun_pro([$0])_LT_SET_OPTION([LT_INIT], [disable-shared])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9065: -1- AU_DEFINE([AM_ENABLE_SHARED], [m4_ifval([], [_au_warn_AM_ENABLE_SHARED([])[m4_warn([obsolete],
+m4trace:aclocal.m4:8580: -1- AU_DEFINE([AM_ENABLE_SHARED], [m4_ifval([], [_au_warn_AM_ENABLE_SHARED([])[m4_warn([obsolete],
 [])dnl
 ]])dnl
 AC_ENABLE_SHARED($@)])
-m4trace:aclocal.m4:9065: -1- AU_DEFINE([_au_warn_AM_ENABLE_SHARED], [m4_warning($@)dnl
+m4trace:aclocal.m4:8580: -1- AU_DEFINE([_au_warn_AM_ENABLE_SHARED], [m4_warning($@)dnl
 m4_define([_au_warn_AM_ENABLE_SHARED], [])])
-m4trace:aclocal.m4:9065: -1- m4_define([m4_location(AM_ENABLE_SHARED)], [aclocal.m4:9065])
-m4trace:aclocal.m4:9065: -1- m4_define([AM_ENABLE_SHARED], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AM_ENABLE_SHARED' is obsolete.
+m4trace:aclocal.m4:8580: -1- m4_define([m4_location(AM_ENABLE_SHARED)], [aclocal.m4:8580])
+m4trace:aclocal.m4:8580: -1- m4_define([AM_ENABLE_SHARED], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AM_ENABLE_SHARED' is obsolete.
 You should run autoupdate.])dnl
 AC_ENABLE_SHARED($@)[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9066: -1- AU_DEFINE([AM_DISABLE_SHARED], [m4_ifval([], [_au_warn_AM_DISABLE_SHARED([])[m4_warn([obsolete],
+m4trace:aclocal.m4:8581: -1- AU_DEFINE([AM_DISABLE_SHARED], [m4_ifval([], [_au_warn_AM_DISABLE_SHARED([])[m4_warn([obsolete],
 [])dnl
 ]])dnl
 AC_DISABLE_SHARED($@)])
-m4trace:aclocal.m4:9066: -1- AU_DEFINE([_au_warn_AM_DISABLE_SHARED], [m4_warning($@)dnl
+m4trace:aclocal.m4:8581: -1- AU_DEFINE([_au_warn_AM_DISABLE_SHARED], [m4_warning($@)dnl
 m4_define([_au_warn_AM_DISABLE_SHARED], [])])
-m4trace:aclocal.m4:9066: -1- m4_define([m4_location(AM_DISABLE_SHARED)], [aclocal.m4:9066])
-m4trace:aclocal.m4:9066: -1- m4_define([AM_DISABLE_SHARED], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AM_DISABLE_SHARED' is obsolete.
+m4trace:aclocal.m4:8581: -1- m4_define([m4_location(AM_DISABLE_SHARED)], [aclocal.m4:8581])
+m4trace:aclocal.m4:8581: -1- m4_define([AM_DISABLE_SHARED], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AM_DISABLE_SHARED' is obsolete.
 You should run autoupdate.])dnl
 AC_DISABLE_SHARED($@)[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9079: -1- m4_define([_LT_ENABLE_STATIC], [m4_define([_LT_ENABLE_STATIC_DEFAULT], [m4_if($1, no, no, yes)])dnl
+m4trace:aclocal.m4:8594: -1- m4_define([_LT_ENABLE_STATIC], [m4_define([_LT_ENABLE_STATIC_DEFAULT], [m4_if($1, no, no, yes)])dnl
 AC_ARG_ENABLE([static],
     [AS_HELP_STRING([--enable-static@<:@=PKGS@:>@],
 	[build static libraries @<:@default=]_LT_ENABLE_STATIC_DEFAULT[@:>@])],
@@ -23666,35 +23198,35 @@ AC_ARG_ENABLE([static],
     _LT_DECL([build_old_libs], [enable_static], [0],
 	[Whether or not to build static libraries])
 ])
-m4trace:aclocal.m4:9107: -1- m4_define([_LT_OPTION_DEFUN_LT_INIT__STATIC], [_LT_ENABLE_STATIC([yes])])
-m4trace:aclocal.m4:9108: -1- m4_define([_LT_OPTION_DEFUN_LT_INIT__DISABLE_STATIC], [_LT_ENABLE_STATIC([no])])
-m4trace:aclocal.m4:9111: -1- m4_define([m4_location(AC_ENABLE_STATIC)], [aclocal.m4:9111])
-m4trace:aclocal.m4:9111: -1- m4_define([AC_ENABLE_STATIC], [_m4_defun_pro([$0])_LT_SET_OPTION([LT_INIT], m4_if([$1], [no], [disable-])[static])
+m4trace:aclocal.m4:8622: -1- m4_define([_LT_OPTION_DEFUN_LT_INIT__STATIC], [_LT_ENABLE_STATIC([yes])])
+m4trace:aclocal.m4:8623: -1- m4_define([_LT_OPTION_DEFUN_LT_INIT__DISABLE_STATIC], [_LT_ENABLE_STATIC([no])])
+m4trace:aclocal.m4:8626: -1- m4_define([m4_location(AC_ENABLE_STATIC)], [aclocal.m4:8626])
+m4trace:aclocal.m4:8626: -1- m4_define([AC_ENABLE_STATIC], [_m4_defun_pro([$0])_LT_SET_OPTION([LT_INIT], m4_if([$1], [no], [disable-])[static])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9115: -1- m4_define([m4_location(AC_DISABLE_STATIC)], [aclocal.m4:9115])
-m4trace:aclocal.m4:9115: -1- m4_define([AC_DISABLE_STATIC], [_m4_defun_pro([$0])_LT_SET_OPTION([LT_INIT], [disable-static])
+m4trace:aclocal.m4:8630: -1- m4_define([m4_location(AC_DISABLE_STATIC)], [aclocal.m4:8630])
+m4trace:aclocal.m4:8630: -1- m4_define([AC_DISABLE_STATIC], [_m4_defun_pro([$0])_LT_SET_OPTION([LT_INIT], [disable-static])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9119: -1- AU_DEFINE([AM_ENABLE_STATIC], [m4_ifval([], [_au_warn_AM_ENABLE_STATIC([])[m4_warn([obsolete],
+m4trace:aclocal.m4:8634: -1- AU_DEFINE([AM_ENABLE_STATIC], [m4_ifval([], [_au_warn_AM_ENABLE_STATIC([])[m4_warn([obsolete],
 [])dnl
 ]])dnl
 AC_ENABLE_STATIC($@)])
-m4trace:aclocal.m4:9119: -1- AU_DEFINE([_au_warn_AM_ENABLE_STATIC], [m4_warning($@)dnl
+m4trace:aclocal.m4:8634: -1- AU_DEFINE([_au_warn_AM_ENABLE_STATIC], [m4_warning($@)dnl
 m4_define([_au_warn_AM_ENABLE_STATIC], [])])
-m4trace:aclocal.m4:9119: -1- m4_define([m4_location(AM_ENABLE_STATIC)], [aclocal.m4:9119])
-m4trace:aclocal.m4:9119: -1- m4_define([AM_ENABLE_STATIC], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AM_ENABLE_STATIC' is obsolete.
+m4trace:aclocal.m4:8634: -1- m4_define([m4_location(AM_ENABLE_STATIC)], [aclocal.m4:8634])
+m4trace:aclocal.m4:8634: -1- m4_define([AM_ENABLE_STATIC], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AM_ENABLE_STATIC' is obsolete.
 You should run autoupdate.])dnl
 AC_ENABLE_STATIC($@)[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9120: -1- AU_DEFINE([AM_DISABLE_STATIC], [m4_ifval([], [_au_warn_AM_DISABLE_STATIC([])[m4_warn([obsolete],
+m4trace:aclocal.m4:8635: -1- AU_DEFINE([AM_DISABLE_STATIC], [m4_ifval([], [_au_warn_AM_DISABLE_STATIC([])[m4_warn([obsolete],
 [])dnl
 ]])dnl
 AC_DISABLE_STATIC($@)])
-m4trace:aclocal.m4:9120: -1- AU_DEFINE([_au_warn_AM_DISABLE_STATIC], [m4_warning($@)dnl
+m4trace:aclocal.m4:8635: -1- AU_DEFINE([_au_warn_AM_DISABLE_STATIC], [m4_warning($@)dnl
 m4_define([_au_warn_AM_DISABLE_STATIC], [])])
-m4trace:aclocal.m4:9120: -1- m4_define([m4_location(AM_DISABLE_STATIC)], [aclocal.m4:9120])
-m4trace:aclocal.m4:9120: -1- m4_define([AM_DISABLE_STATIC], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AM_DISABLE_STATIC' is obsolete.
+m4trace:aclocal.m4:8635: -1- m4_define([m4_location(AM_DISABLE_STATIC)], [aclocal.m4:8635])
+m4trace:aclocal.m4:8635: -1- m4_define([AM_DISABLE_STATIC], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AM_DISABLE_STATIC' is obsolete.
 You should run autoupdate.])dnl
 AC_DISABLE_STATIC($@)[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9133: -1- m4_define([_LT_ENABLE_FAST_INSTALL], [m4_define([_LT_ENABLE_FAST_INSTALL_DEFAULT], [m4_if($1, no, no, yes)])dnl
+m4trace:aclocal.m4:8648: -1- m4_define([_LT_ENABLE_FAST_INSTALL], [m4_define([_LT_ENABLE_FAST_INSTALL_DEFAULT], [m4_if($1, no, no, yes)])dnl
 AC_ARG_ENABLE([fast-install],
     [AS_HELP_STRING([--enable-fast-install@<:@=PKGS@:>@],
     [optimize for fast installation @<:@default=]_LT_ENABLE_FAST_INSTALL_DEFAULT[@:>@])],
@@ -23720,9 +23252,9 @@ AC_ARG_ENABLE([fast-install],
 _LT_DECL([fast_install], [enable_fast_install], [0],
 	 [Whether or not to optimize for fast installation])dnl
 ])
-m4trace:aclocal.m4:9161: -1- m4_define([_LT_OPTION_DEFUN_LT_INIT__FAST_INSTALL], [_LT_ENABLE_FAST_INSTALL([yes])])
-m4trace:aclocal.m4:9162: -1- m4_define([_LT_OPTION_DEFUN_LT_INIT__DISABLE_FAST_INSTALL], [_LT_ENABLE_FAST_INSTALL([no])])
-m4trace:aclocal.m4:9165: -1- AU_DEFINE([AC_ENABLE_FAST_INSTALL], [m4_ifval([], [_au_warn_AC_ENABLE_FAST_INSTALL([])[m4_warn([obsolete],
+m4trace:aclocal.m4:8676: -1- m4_define([_LT_OPTION_DEFUN_LT_INIT__FAST_INSTALL], [_LT_ENABLE_FAST_INSTALL([yes])])
+m4trace:aclocal.m4:8677: -1- m4_define([_LT_OPTION_DEFUN_LT_INIT__DISABLE_FAST_INSTALL], [_LT_ENABLE_FAST_INSTALL([no])])
+m4trace:aclocal.m4:8680: -1- AU_DEFINE([AC_ENABLE_FAST_INSTALL], [m4_ifval([], [_au_warn_AC_ENABLE_FAST_INSTALL([])[m4_warn([obsolete],
 [])dnl
 ]])dnl
 _LT_SET_OPTION([LT_INIT], m4_if([$1], [no], [disable-])[fast-install])
@@ -23730,17 +23262,17 @@ AC_DIAGNOSE([obsolete],
 [$0: Remove this warning and the call to _LT_SET_OPTION when you put
 the 'fast-install' option into LT_INIT's first parameter.])
 ])
-m4trace:aclocal.m4:9165: -1- AU_DEFINE([_au_warn_AC_ENABLE_FAST_INSTALL], [m4_warning($@)dnl
+m4trace:aclocal.m4:8680: -1- AU_DEFINE([_au_warn_AC_ENABLE_FAST_INSTALL], [m4_warning($@)dnl
 m4_define([_au_warn_AC_ENABLE_FAST_INSTALL], [])])
-m4trace:aclocal.m4:9165: -1- m4_define([m4_location(AC_ENABLE_FAST_INSTALL)], [aclocal.m4:9165])
-m4trace:aclocal.m4:9165: -1- m4_define([AC_ENABLE_FAST_INSTALL], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AC_ENABLE_FAST_INSTALL' is obsolete.
+m4trace:aclocal.m4:8680: -1- m4_define([m4_location(AC_ENABLE_FAST_INSTALL)], [aclocal.m4:8680])
+m4trace:aclocal.m4:8680: -1- m4_define([AC_ENABLE_FAST_INSTALL], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AC_ENABLE_FAST_INSTALL' is obsolete.
 You should run autoupdate.])dnl
 _LT_SET_OPTION([LT_INIT], m4_if([$1], [no], [disable-])[fast-install])
 AC_DIAGNOSE([obsolete],
 [$0: Remove this warning and the call to _LT_SET_OPTION when you put
 the 'fast-install' option into LT_INIT's first parameter.])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9172: -1- AU_DEFINE([AC_DISABLE_FAST_INSTALL], [m4_ifval([], [_au_warn_AC_DISABLE_FAST_INSTALL([])[m4_warn([obsolete],
+m4trace:aclocal.m4:8687: -1- AU_DEFINE([AC_DISABLE_FAST_INSTALL], [m4_ifval([], [_au_warn_AC_DISABLE_FAST_INSTALL([])[m4_warn([obsolete],
 [])dnl
 ]])dnl
 _LT_SET_OPTION([LT_INIT], [disable-fast-install])
@@ -23748,17 +23280,17 @@ AC_DIAGNOSE([obsolete],
 [$0: Remove this warning and the call to _LT_SET_OPTION when you put
 the 'disable-fast-install' option into LT_INIT's first parameter.])
 ])
-m4trace:aclocal.m4:9172: -1- AU_DEFINE([_au_warn_AC_DISABLE_FAST_INSTALL], [m4_warning($@)dnl
+m4trace:aclocal.m4:8687: -1- AU_DEFINE([_au_warn_AC_DISABLE_FAST_INSTALL], [m4_warning($@)dnl
 m4_define([_au_warn_AC_DISABLE_FAST_INSTALL], [])])
-m4trace:aclocal.m4:9172: -1- m4_define([m4_location(AC_DISABLE_FAST_INSTALL)], [aclocal.m4:9172])
-m4trace:aclocal.m4:9172: -1- m4_define([AC_DISABLE_FAST_INSTALL], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AC_DISABLE_FAST_INSTALL' is obsolete.
+m4trace:aclocal.m4:8687: -1- m4_define([m4_location(AC_DISABLE_FAST_INSTALL)], [aclocal.m4:8687])
+m4trace:aclocal.m4:8687: -1- m4_define([AC_DISABLE_FAST_INSTALL], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AC_DISABLE_FAST_INSTALL' is obsolete.
 You should run autoupdate.])dnl
 _LT_SET_OPTION([LT_INIT], [disable-fast-install])
 AC_DIAGNOSE([obsolete],
 [$0: Remove this warning and the call to _LT_SET_OPTION when you put
 the 'disable-fast-install' option into LT_INIT's first parameter.])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9189: -1- m4_define([_LT_WITH_AIX_SONAME], [m4_define([_LT_WITH_AIX_SONAME_DEFAULT], [m4_if($1, svr4, svr4, m4_if($1, both, both, aix))])dnl
+m4trace:aclocal.m4:8704: -1- m4_define([_LT_WITH_AIX_SONAME], [m4_define([_LT_WITH_AIX_SONAME_DEFAULT], [m4_if($1, svr4, svr4, m4_if($1, both, both, aix))])dnl
 shared_archive_member_spec=
 case $host,$enable_shared in
 power*-*-aix[[5-9]]*,yes)
@@ -23799,10 +23331,10 @@ esac
 _LT_DECL([], [shared_archive_member_spec], [0],
     [Shared archive member basename, for filename based shared library versioning on AIX])dnl
 ])
-m4trace:aclocal.m4:9232: -1- m4_define([_LT_OPTION_DEFUN_LT_INIT__AIX_SONAME_AIX], [_LT_WITH_AIX_SONAME([aix])])
-m4trace:aclocal.m4:9233: -1- m4_define([_LT_OPTION_DEFUN_LT_INIT__AIX_SONAME_BOTH], [_LT_WITH_AIX_SONAME([both])])
-m4trace:aclocal.m4:9234: -1- m4_define([_LT_OPTION_DEFUN_LT_INIT__AIX_SONAME_SVR4], [_LT_WITH_AIX_SONAME([svr4])])
-m4trace:aclocal.m4:9242: -1- m4_define([_LT_WITH_PIC], [AC_ARG_WITH([pic],
+m4trace:aclocal.m4:8747: -1- m4_define([_LT_OPTION_DEFUN_LT_INIT__AIX_SONAME_AIX], [_LT_WITH_AIX_SONAME([aix])])
+m4trace:aclocal.m4:8748: -1- m4_define([_LT_OPTION_DEFUN_LT_INIT__AIX_SONAME_BOTH], [_LT_WITH_AIX_SONAME([both])])
+m4trace:aclocal.m4:8749: -1- m4_define([_LT_OPTION_DEFUN_LT_INIT__AIX_SONAME_SVR4], [_LT_WITH_AIX_SONAME([svr4])])
+m4trace:aclocal.m4:8757: -1- m4_define([_LT_WITH_PIC], [AC_ARG_WITH([pic],
     [AS_HELP_STRING([--with-pic@<:@=PKGS@:>@],
 	[try to use only PIC/non-PIC objects @<:@default=use both@:>@])],
     [lt_p=${PACKAGE-default}
@@ -23825,9 +23357,9 @@ m4trace:aclocal.m4:9242: -1- m4_define([_LT_WITH_PIC], [AC_ARG_WITH([pic],
 
 _LT_DECL([], [pic_mode], [0], [What type of objects to build])dnl
 ])
-m4trace:aclocal.m4:9267: -1- m4_define([_LT_OPTION_DEFUN_LT_INIT__PIC_ONLY], [_LT_WITH_PIC([yes])])
-m4trace:aclocal.m4:9268: -1- m4_define([_LT_OPTION_DEFUN_LT_INIT__NO_PIC], [_LT_WITH_PIC([no])])
-m4trace:aclocal.m4:9271: -1- AU_DEFINE([AC_LIBTOOL_PICMODE], [m4_ifval([], [_au_warn_AC_LIBTOOL_PICMODE([])[m4_warn([obsolete],
+m4trace:aclocal.m4:8782: -1- m4_define([_LT_OPTION_DEFUN_LT_INIT__PIC_ONLY], [_LT_WITH_PIC([yes])])
+m4trace:aclocal.m4:8783: -1- m4_define([_LT_OPTION_DEFUN_LT_INIT__NO_PIC], [_LT_WITH_PIC([no])])
+m4trace:aclocal.m4:8786: -1- AU_DEFINE([AC_LIBTOOL_PICMODE], [m4_ifval([], [_au_warn_AC_LIBTOOL_PICMODE([])[m4_warn([obsolete],
 [])dnl
 ]])dnl
 _LT_SET_OPTION([LT_INIT], [pic-only])
@@ -23835,177 +23367,647 @@ AC_DIAGNOSE([obsolete],
 [$0: Remove this warning and the call to _LT_SET_OPTION when you
 put the 'pic-only' option into LT_INIT's first parameter.])
 ])
-m4trace:aclocal.m4:9271: -1- AU_DEFINE([_au_warn_AC_LIBTOOL_PICMODE], [m4_warning($@)dnl
+m4trace:aclocal.m4:8786: -1- AU_DEFINE([_au_warn_AC_LIBTOOL_PICMODE], [m4_warning($@)dnl
 m4_define([_au_warn_AC_LIBTOOL_PICMODE], [])])
-m4trace:aclocal.m4:9271: -1- m4_define([m4_location(AC_LIBTOOL_PICMODE)], [aclocal.m4:9271])
-m4trace:aclocal.m4:9271: -1- m4_define([AC_LIBTOOL_PICMODE], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AC_LIBTOOL_PICMODE' is obsolete.
+m4trace:aclocal.m4:8786: -1- m4_define([m4_location(AC_LIBTOOL_PICMODE)], [aclocal.m4:8786])
+m4trace:aclocal.m4:8786: -1- m4_define([AC_LIBTOOL_PICMODE], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `AC_LIBTOOL_PICMODE' is obsolete.
 You should run autoupdate.])dnl
 _LT_SET_OPTION([LT_INIT], [pic-only])
 AC_DIAGNOSE([obsolete],
 [$0: Remove this warning and the call to _LT_SET_OPTION when you
 put the 'pic-only' option into LT_INIT's first parameter.])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9282: -1- m4_define([_LTDL_MODE], [])
-m4trace:aclocal.m4:9283: -1- m4_define([_LT_OPTION_DEFUN_LTDL_INIT__NONRECURSIVE], [m4_define([_LTDL_MODE], [nonrecursive])])
-m4trace:aclocal.m4:9285: -1- m4_define([_LT_OPTION_DEFUN_LTDL_INIT__RECURSIVE], [m4_define([_LTDL_MODE], [recursive])])
-m4trace:aclocal.m4:9287: -1- m4_define([_LT_OPTION_DEFUN_LTDL_INIT__SUBPROJECT], [m4_define([_LTDL_MODE], [subproject])])
-m4trace:aclocal.m4:9290: -1- m4_define([_LTDL_TYPE], [])
-m4trace:aclocal.m4:9291: -1- m4_define([_LT_OPTION_DEFUN_LTDL_INIT__INSTALLABLE], [m4_define([_LTDL_TYPE], [installable])])
-m4trace:aclocal.m4:9293: -1- m4_define([_LT_OPTION_DEFUN_LTDL_INIT__CONVENIENCE], [m4_define([_LTDL_TYPE], [convenience])])
-m4trace:aclocal.m4:9309: -1- m4_define([m4_location(LTSUGAR_VERSION)], [aclocal.m4:9309])
-m4trace:aclocal.m4:9309: -1- m4_define([LTSUGAR_VERSION], [_m4_defun_pro([$0])m4_if([0.1])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9318: -1- m4_define([lt_join], [m4_if([$#], [1], [],
+m4trace:aclocal.m4:8797: -1- m4_define([_LTDL_MODE], [])
+m4trace:aclocal.m4:8798: -1- m4_define([_LT_OPTION_DEFUN_LTDL_INIT__NONRECURSIVE], [m4_define([_LTDL_MODE], [nonrecursive])])
+m4trace:aclocal.m4:8800: -1- m4_define([_LT_OPTION_DEFUN_LTDL_INIT__RECURSIVE], [m4_define([_LTDL_MODE], [recursive])])
+m4trace:aclocal.m4:8802: -1- m4_define([_LT_OPTION_DEFUN_LTDL_INIT__SUBPROJECT], [m4_define([_LTDL_MODE], [subproject])])
+m4trace:aclocal.m4:8805: -1- m4_define([_LTDL_TYPE], [])
+m4trace:aclocal.m4:8806: -1- m4_define([_LT_OPTION_DEFUN_LTDL_INIT__INSTALLABLE], [m4_define([_LTDL_TYPE], [installable])])
+m4trace:aclocal.m4:8808: -1- m4_define([_LT_OPTION_DEFUN_LTDL_INIT__CONVENIENCE], [m4_define([_LTDL_TYPE], [convenience])])
+m4trace:aclocal.m4:8824: -1- m4_define([m4_location(LTSUGAR_VERSION)], [aclocal.m4:8824])
+m4trace:aclocal.m4:8824: -1- m4_define([LTSUGAR_VERSION], [_m4_defun_pro([$0])m4_if([0.1])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:8833: -1- m4_define([lt_join], [m4_if([$#], [1], [],
        [$#], [2], [[$2]],
        [m4_if([$2], [], [], [[$2]_])$0([$1], m4_shift(m4_shift($@)))])])
-m4trace:aclocal.m4:9322: -1- m4_define([_lt_join], [m4_if([$#$2], [2], [],
+m4trace:aclocal.m4:8837: -1- m4_define([_lt_join], [m4_if([$#$2], [2], [],
        [m4_if([$2], [], [], [[$1$2]])$0([$1], m4_shift(m4_shift($@)))])])
-m4trace:aclocal.m4:9333: -1- m4_define([lt_car], [[$1]])
-m4trace:aclocal.m4:9334: -1- m4_define([lt_cdr], [m4_if([$#], 0, [m4_fatal([$0: cannot be called without arguments])],
+m4trace:aclocal.m4:8848: -1- m4_define([lt_car], [[$1]])
+m4trace:aclocal.m4:8849: -1- m4_define([lt_cdr], [m4_if([$#], 0, [m4_fatal([$0: cannot be called without arguments])],
        [$#], 1, [],
        [m4_dquote(m4_shift($@))])])
-m4trace:aclocal.m4:9338: -1- m4_define([lt_unquote], [$1])
-m4trace:aclocal.m4:9351: -1- m4_define([lt_append], [m4_define([$1],
+m4trace:aclocal.m4:8853: -1- m4_define([lt_unquote], [$1])
+m4trace:aclocal.m4:8866: -1- m4_define([lt_append], [m4_define([$1],
 	   m4_ifdef([$1], [m4_defn([$1])[$3]])[$2])])
-m4trace:aclocal.m4:9363: -1- m4_define([lt_combine], [m4_if(m4_eval([$# > 3]), [1],
+m4trace:aclocal.m4:8878: -1- m4_define([lt_combine], [m4_if(m4_eval([$# > 3]), [1],
        [m4_pushdef([_Lt_sep], [m4_define([_Lt_sep], m4_defn([lt_car]))])][m4_foreach([_Lt_prefix], [$2],
 	     [m4_foreach([_Lt_suffix],
 		]m4_dquote(m4_dquote(m4_shift(m4_shift(m4_shift($@)))))[,
 	[_Lt_sep([$1])[]m4_defn([_Lt_prefix])[$3]m4_defn([_Lt_suffix])])])])])
-m4trace:aclocal.m4:9376: -1- m4_define([lt_if_append_uniq], [m4_ifdef([$1],
+m4trace:aclocal.m4:8891: -1- m4_define([lt_if_append_uniq], [m4_ifdef([$1],
 	  [m4_if(m4_index([$3]m4_defn([$1])[$3], [$3$2$3]), [-1],
 		 [lt_append([$1], [$2], [$3])$4],
 		 [$5])],
 	  [lt_append([$1], [$2], [$3])$4])])
-m4trace:aclocal.m4:9386: -1- m4_define([lt_dict_add], [m4_define([$1($2)], [$3])])
-m4trace:aclocal.m4:9392: -1- m4_define([lt_dict_add_subkey], [m4_define([$1($2:$3)], [$4])])
-m4trace:aclocal.m4:9398: -1- m4_define([lt_dict_fetch], [m4_ifval([$3],
+m4trace:aclocal.m4:8901: -1- m4_define([lt_dict_add], [m4_define([$1($2)], [$3])])
+m4trace:aclocal.m4:8907: -1- m4_define([lt_dict_add_subkey], [m4_define([$1($2:$3)], [$4])])
+m4trace:aclocal.m4:8913: -1- m4_define([lt_dict_fetch], [m4_ifval([$3],
 	m4_ifdef([$1($2:$3)], [m4_defn([$1($2:$3)])]),
     m4_ifdef([$1($2)], [m4_defn([$1($2)])]))])
-m4trace:aclocal.m4:9406: -1- m4_define([lt_if_dict_fetch], [m4_if(lt_dict_fetch([$1], [$2], [$3]), [$4],
+m4trace:aclocal.m4:8921: -1- m4_define([lt_if_dict_fetch], [m4_if(lt_dict_fetch([$1], [$2], [$3]), [$4],
 	[$5],
     [$6])])
-m4trace:aclocal.m4:9414: -1- m4_define([lt_dict_filter], [m4_if([$5], [], [],
+m4trace:aclocal.m4:8929: -1- m4_define([lt_dict_filter], [m4_if([$5], [], [],
   [lt_join(m4_quote(m4_default([$4], [[, ]])),
            lt_unquote(m4_split(m4_normalize(m4_foreach(_Lt_key, lt_car([m4_shiftn(4, $@)]),
 		      [lt_if_dict_fetch([$1], _Lt_key, [$2], [$3], [_Lt_key ])])))))])[]dnl
 ])
-m4trace:aclocal.m4:9435: -1- m4_define([LT_PACKAGE_VERSION], [2.4.6])
-m4trace:aclocal.m4:9436: -1- m4_define([LT_PACKAGE_REVISION], [2.4.6])
-m4trace:aclocal.m4:9438: -1- m4_define([m4_location(LTVERSION_VERSION)], [aclocal.m4:9438])
-m4trace:aclocal.m4:9438: -1- m4_define([LTVERSION_VERSION], [_m4_defun_pro([$0])macro_version='2.4.6'
+m4trace:aclocal.m4:8950: -1- m4_define([LT_PACKAGE_VERSION], [2.4.6])
+m4trace:aclocal.m4:8951: -1- m4_define([LT_PACKAGE_REVISION], [2.4.6])
+m4trace:aclocal.m4:8953: -1- m4_define([m4_location(LTVERSION_VERSION)], [aclocal.m4:8953])
+m4trace:aclocal.m4:8953: -1- m4_define([LTVERSION_VERSION], [_m4_defun_pro([$0])macro_version='2.4.6'
 macro_revision='2.4.6'
 _LT_DECL(, macro_version, 0, [Which release of libtool.m4 was used?])
 _LT_DECL(, macro_revision, 0)
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9481: -1- m4_define([m4_location(LTOBSOLETE_VERSION)], [aclocal.m4:9481])
-m4trace:aclocal.m4:9481: -1- m4_define([LTOBSOLETE_VERSION], [_m4_defun_pro([$0])m4_if([1])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9485: -1- m4_define([m4_location(_LT_AC_PROG_ECHO_BACKSLASH)], [aclocal.m4:9485])
-m4trace:aclocal.m4:9485: -1- m4_define([_LT_AC_PROG_ECHO_BACKSLASH], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9486: -1- m4_define([m4_location(_LT_AC_SHELL_INIT)], [aclocal.m4:9486])
-m4trace:aclocal.m4:9486: -1- m4_define([_LT_AC_SHELL_INIT], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9487: -1- m4_define([m4_location(_LT_AC_SYS_LIBPATH_AIX)], [aclocal.m4:9487])
-m4trace:aclocal.m4:9487: -1- m4_define([_LT_AC_SYS_LIBPATH_AIX], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9489: -1- m4_define([m4_location(_LT_AC_TAGVAR)], [aclocal.m4:9489])
-m4trace:aclocal.m4:9489: -1- m4_define([_LT_AC_TAGVAR], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9490: -1- m4_define([m4_location(AC_LTDL_ENABLE_INSTALL)], [aclocal.m4:9490])
-m4trace:aclocal.m4:9490: -1- m4_define([AC_LTDL_ENABLE_INSTALL], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9491: -1- m4_define([m4_location(AC_LTDL_PREOPEN)], [aclocal.m4:9491])
-m4trace:aclocal.m4:9491: -1- m4_define([AC_LTDL_PREOPEN], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9492: -1- m4_define([m4_location(_LT_AC_SYS_COMPILER)], [aclocal.m4:9492])
-m4trace:aclocal.m4:9492: -1- m4_define([_LT_AC_SYS_COMPILER], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9493: -1- m4_define([m4_location(_LT_AC_LOCK)], [aclocal.m4:9493])
-m4trace:aclocal.m4:9493: -1- m4_define([_LT_AC_LOCK], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9494: -1- m4_define([m4_location(AC_LIBTOOL_SYS_OLD_ARCHIVE)], [aclocal.m4:9494])
-m4trace:aclocal.m4:9494: -1- m4_define([AC_LIBTOOL_SYS_OLD_ARCHIVE], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9495: -1- m4_define([m4_location(_LT_AC_TRY_DLOPEN_SELF)], [aclocal.m4:9495])
-m4trace:aclocal.m4:9495: -1- m4_define([_LT_AC_TRY_DLOPEN_SELF], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9496: -1- m4_define([m4_location(AC_LIBTOOL_PROG_CC_C_O)], [aclocal.m4:9496])
-m4trace:aclocal.m4:9496: -1- m4_define([AC_LIBTOOL_PROG_CC_C_O], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9497: -1- m4_define([m4_location(AC_LIBTOOL_SYS_HARD_LINK_LOCKS)], [aclocal.m4:9497])
-m4trace:aclocal.m4:9497: -1- m4_define([AC_LIBTOOL_SYS_HARD_LINK_LOCKS], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9498: -1- m4_define([m4_location(AC_LIBTOOL_OBJDIR)], [aclocal.m4:9498])
-m4trace:aclocal.m4:9498: -1- m4_define([AC_LIBTOOL_OBJDIR], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9499: -1- m4_define([m4_location(AC_LTDL_OBJDIR)], [aclocal.m4:9499])
-m4trace:aclocal.m4:9499: -1- m4_define([AC_LTDL_OBJDIR], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9500: -1- m4_define([m4_location(AC_LIBTOOL_PROG_LD_HARDCODE_LIBPATH)], [aclocal.m4:9500])
-m4trace:aclocal.m4:9500: -1- m4_define([AC_LIBTOOL_PROG_LD_HARDCODE_LIBPATH], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9501: -1- m4_define([m4_location(AC_LIBTOOL_SYS_LIB_STRIP)], [aclocal.m4:9501])
-m4trace:aclocal.m4:9501: -1- m4_define([AC_LIBTOOL_SYS_LIB_STRIP], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9502: -1- m4_define([m4_location(AC_PATH_MAGIC)], [aclocal.m4:9502])
-m4trace:aclocal.m4:9502: -1- m4_define([AC_PATH_MAGIC], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9503: -1- m4_define([m4_location(AC_PROG_LD_GNU)], [aclocal.m4:9503])
-m4trace:aclocal.m4:9503: -1- m4_define([AC_PROG_LD_GNU], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9504: -1- m4_define([m4_location(AC_PROG_LD_RELOAD_FLAG)], [aclocal.m4:9504])
-m4trace:aclocal.m4:9504: -1- m4_define([AC_PROG_LD_RELOAD_FLAG], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9505: -1- m4_define([m4_location(AC_DEPLIBS_CHECK_METHOD)], [aclocal.m4:9505])
-m4trace:aclocal.m4:9505: -1- m4_define([AC_DEPLIBS_CHECK_METHOD], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9506: -1- m4_define([m4_location(AC_LIBTOOL_PROG_COMPILER_NO_RTTI)], [aclocal.m4:9506])
-m4trace:aclocal.m4:9506: -1- m4_define([AC_LIBTOOL_PROG_COMPILER_NO_RTTI], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9507: -1- m4_define([m4_location(AC_LIBTOOL_SYS_GLOBAL_SYMBOL_PIPE)], [aclocal.m4:9507])
-m4trace:aclocal.m4:9507: -1- m4_define([AC_LIBTOOL_SYS_GLOBAL_SYMBOL_PIPE], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9508: -1- m4_define([m4_location(AC_LIBTOOL_PROG_COMPILER_PIC)], [aclocal.m4:9508])
-m4trace:aclocal.m4:9508: -1- m4_define([AC_LIBTOOL_PROG_COMPILER_PIC], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9509: -1- m4_define([m4_location(AC_LIBTOOL_PROG_LD_SHLIBS)], [aclocal.m4:9509])
-m4trace:aclocal.m4:9509: -1- m4_define([AC_LIBTOOL_PROG_LD_SHLIBS], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9510: -1- m4_define([m4_location(AC_LIBTOOL_POSTDEP_PREDEP)], [aclocal.m4:9510])
-m4trace:aclocal.m4:9510: -1- m4_define([AC_LIBTOOL_POSTDEP_PREDEP], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9511: -1- m4_define([m4_location(LT_AC_PROG_EGREP)], [aclocal.m4:9511])
-m4trace:aclocal.m4:9511: -1- m4_define([LT_AC_PROG_EGREP], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9516: -1- m4_define([m4_location(_AC_PROG_LIBTOOL)], [aclocal.m4:9516])
-m4trace:aclocal.m4:9516: -1- m4_define([_AC_PROG_LIBTOOL], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9517: -1- m4_define([m4_location(AC_LIBTOOL_SETUP)], [aclocal.m4:9517])
-m4trace:aclocal.m4:9517: -1- m4_define([AC_LIBTOOL_SETUP], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9518: -1- m4_define([m4_location(_LT_AC_CHECK_DLFCN)], [aclocal.m4:9518])
-m4trace:aclocal.m4:9518: -1- m4_define([_LT_AC_CHECK_DLFCN], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9519: -1- m4_define([m4_location(AC_LIBTOOL_SYS_DYNAMIC_LINKER)], [aclocal.m4:9519])
-m4trace:aclocal.m4:9519: -1- m4_define([AC_LIBTOOL_SYS_DYNAMIC_LINKER], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9520: -1- m4_define([m4_location(_LT_AC_TAGCONFIG)], [aclocal.m4:9520])
-m4trace:aclocal.m4:9520: -1- m4_define([_LT_AC_TAGCONFIG], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9522: -1- m4_define([m4_location(_LT_AC_LANG_CXX)], [aclocal.m4:9522])
-m4trace:aclocal.m4:9522: -1- m4_define([_LT_AC_LANG_CXX], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9523: -1- m4_define([m4_location(_LT_AC_LANG_F77)], [aclocal.m4:9523])
-m4trace:aclocal.m4:9523: -1- m4_define([_LT_AC_LANG_F77], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9524: -1- m4_define([m4_location(_LT_AC_LANG_GCJ)], [aclocal.m4:9524])
-m4trace:aclocal.m4:9524: -1- m4_define([_LT_AC_LANG_GCJ], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9525: -1- m4_define([m4_location(AC_LIBTOOL_LANG_C_CONFIG)], [aclocal.m4:9525])
-m4trace:aclocal.m4:9525: -1- m4_define([AC_LIBTOOL_LANG_C_CONFIG], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9526: -1- m4_define([m4_location(_LT_AC_LANG_C_CONFIG)], [aclocal.m4:9526])
-m4trace:aclocal.m4:9526: -1- m4_define([_LT_AC_LANG_C_CONFIG], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9527: -1- m4_define([m4_location(AC_LIBTOOL_LANG_CXX_CONFIG)], [aclocal.m4:9527])
-m4trace:aclocal.m4:9527: -1- m4_define([AC_LIBTOOL_LANG_CXX_CONFIG], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9528: -1- m4_define([m4_location(_LT_AC_LANG_CXX_CONFIG)], [aclocal.m4:9528])
-m4trace:aclocal.m4:9528: -1- m4_define([_LT_AC_LANG_CXX_CONFIG], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9529: -1- m4_define([m4_location(AC_LIBTOOL_LANG_F77_CONFIG)], [aclocal.m4:9529])
-m4trace:aclocal.m4:9529: -1- m4_define([AC_LIBTOOL_LANG_F77_CONFIG], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9530: -1- m4_define([m4_location(_LT_AC_LANG_F77_CONFIG)], [aclocal.m4:9530])
-m4trace:aclocal.m4:9530: -1- m4_define([_LT_AC_LANG_F77_CONFIG], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9531: -1- m4_define([m4_location(AC_LIBTOOL_LANG_GCJ_CONFIG)], [aclocal.m4:9531])
-m4trace:aclocal.m4:9531: -1- m4_define([AC_LIBTOOL_LANG_GCJ_CONFIG], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9532: -1- m4_define([m4_location(_LT_AC_LANG_GCJ_CONFIG)], [aclocal.m4:9532])
-m4trace:aclocal.m4:9532: -1- m4_define([_LT_AC_LANG_GCJ_CONFIG], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9533: -1- m4_define([m4_location(AC_LIBTOOL_LANG_RC_CONFIG)], [aclocal.m4:9533])
-m4trace:aclocal.m4:9533: -1- m4_define([AC_LIBTOOL_LANG_RC_CONFIG], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9534: -1- m4_define([m4_location(_LT_AC_LANG_RC_CONFIG)], [aclocal.m4:9534])
-m4trace:aclocal.m4:9534: -1- m4_define([_LT_AC_LANG_RC_CONFIG], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9535: -1- m4_define([m4_location(AC_LIBTOOL_CONFIG)], [aclocal.m4:9535])
-m4trace:aclocal.m4:9535: -1- m4_define([AC_LIBTOOL_CONFIG], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9536: -1- m4_define([m4_location(_LT_AC_FILE_LTDLL_C)], [aclocal.m4:9536])
-m4trace:aclocal.m4:9536: -1- m4_define([_LT_AC_FILE_LTDLL_C], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9538: -1- m4_define([m4_location(_LT_AC_PROG_CXXCPP)], [aclocal.m4:9538])
-m4trace:aclocal.m4:9538: -1- m4_define([_LT_AC_PROG_CXXCPP], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9541: -1- m4_define([m4_location(_LT_PROG_F77)], [aclocal.m4:9541])
-m4trace:aclocal.m4:9541: -1- m4_define([_LT_PROG_F77], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9542: -1- m4_define([m4_location(_LT_PROG_FC)], [aclocal.m4:9542])
-m4trace:aclocal.m4:9542: -1- m4_define([_LT_PROG_FC], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9543: -1- m4_define([m4_location(_LT_PROG_CXX)], [aclocal.m4:9543])
-m4trace:aclocal.m4:9543: -1- m4_define([_LT_PROG_CXX], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9587: -1- m4_define([m4_location(PKG_PREREQ)], [aclocal.m4:9587])
-m4trace:aclocal.m4:9587: -1- m4_define([PKG_PREREQ], [_m4_defun_pro([$0])m4_define([PKG_MACROS_VERSION], [0.29.1])
+m4trace:aclocal.m4:8996: -1- m4_define([m4_location(LTOBSOLETE_VERSION)], [aclocal.m4:8996])
+m4trace:aclocal.m4:8996: -1- m4_define([LTOBSOLETE_VERSION], [_m4_defun_pro([$0])m4_if([1])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9000: -1- m4_define([m4_location(_LT_AC_PROG_ECHO_BACKSLASH)], [aclocal.m4:9000])
+m4trace:aclocal.m4:9000: -1- m4_define([_LT_AC_PROG_ECHO_BACKSLASH], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9001: -1- m4_define([m4_location(_LT_AC_SHELL_INIT)], [aclocal.m4:9001])
+m4trace:aclocal.m4:9001: -1- m4_define([_LT_AC_SHELL_INIT], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9002: -1- m4_define([m4_location(_LT_AC_SYS_LIBPATH_AIX)], [aclocal.m4:9002])
+m4trace:aclocal.m4:9002: -1- m4_define([_LT_AC_SYS_LIBPATH_AIX], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9004: -1- m4_define([m4_location(_LT_AC_TAGVAR)], [aclocal.m4:9004])
+m4trace:aclocal.m4:9004: -1- m4_define([_LT_AC_TAGVAR], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9005: -1- m4_define([m4_location(AC_LTDL_ENABLE_INSTALL)], [aclocal.m4:9005])
+m4trace:aclocal.m4:9005: -1- m4_define([AC_LTDL_ENABLE_INSTALL], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9006: -1- m4_define([m4_location(AC_LTDL_PREOPEN)], [aclocal.m4:9006])
+m4trace:aclocal.m4:9006: -1- m4_define([AC_LTDL_PREOPEN], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9007: -1- m4_define([m4_location(_LT_AC_SYS_COMPILER)], [aclocal.m4:9007])
+m4trace:aclocal.m4:9007: -1- m4_define([_LT_AC_SYS_COMPILER], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9008: -1- m4_define([m4_location(_LT_AC_LOCK)], [aclocal.m4:9008])
+m4trace:aclocal.m4:9008: -1- m4_define([_LT_AC_LOCK], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9009: -1- m4_define([m4_location(AC_LIBTOOL_SYS_OLD_ARCHIVE)], [aclocal.m4:9009])
+m4trace:aclocal.m4:9009: -1- m4_define([AC_LIBTOOL_SYS_OLD_ARCHIVE], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9010: -1- m4_define([m4_location(_LT_AC_TRY_DLOPEN_SELF)], [aclocal.m4:9010])
+m4trace:aclocal.m4:9010: -1- m4_define([_LT_AC_TRY_DLOPEN_SELF], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9011: -1- m4_define([m4_location(AC_LIBTOOL_PROG_CC_C_O)], [aclocal.m4:9011])
+m4trace:aclocal.m4:9011: -1- m4_define([AC_LIBTOOL_PROG_CC_C_O], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9012: -1- m4_define([m4_location(AC_LIBTOOL_SYS_HARD_LINK_LOCKS)], [aclocal.m4:9012])
+m4trace:aclocal.m4:9012: -1- m4_define([AC_LIBTOOL_SYS_HARD_LINK_LOCKS], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9013: -1- m4_define([m4_location(AC_LIBTOOL_OBJDIR)], [aclocal.m4:9013])
+m4trace:aclocal.m4:9013: -1- m4_define([AC_LIBTOOL_OBJDIR], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9014: -1- m4_define([m4_location(AC_LTDL_OBJDIR)], [aclocal.m4:9014])
+m4trace:aclocal.m4:9014: -1- m4_define([AC_LTDL_OBJDIR], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9015: -1- m4_define([m4_location(AC_LIBTOOL_PROG_LD_HARDCODE_LIBPATH)], [aclocal.m4:9015])
+m4trace:aclocal.m4:9015: -1- m4_define([AC_LIBTOOL_PROG_LD_HARDCODE_LIBPATH], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9016: -1- m4_define([m4_location(AC_LIBTOOL_SYS_LIB_STRIP)], [aclocal.m4:9016])
+m4trace:aclocal.m4:9016: -1- m4_define([AC_LIBTOOL_SYS_LIB_STRIP], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9017: -1- m4_define([m4_location(AC_PATH_MAGIC)], [aclocal.m4:9017])
+m4trace:aclocal.m4:9017: -1- m4_define([AC_PATH_MAGIC], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9018: -1- m4_define([m4_location(AC_PROG_LD_GNU)], [aclocal.m4:9018])
+m4trace:aclocal.m4:9018: -1- m4_define([AC_PROG_LD_GNU], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9019: -1- m4_define([m4_location(AC_PROG_LD_RELOAD_FLAG)], [aclocal.m4:9019])
+m4trace:aclocal.m4:9019: -1- m4_define([AC_PROG_LD_RELOAD_FLAG], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9020: -1- m4_define([m4_location(AC_DEPLIBS_CHECK_METHOD)], [aclocal.m4:9020])
+m4trace:aclocal.m4:9020: -1- m4_define([AC_DEPLIBS_CHECK_METHOD], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9021: -1- m4_define([m4_location(AC_LIBTOOL_PROG_COMPILER_NO_RTTI)], [aclocal.m4:9021])
+m4trace:aclocal.m4:9021: -1- m4_define([AC_LIBTOOL_PROG_COMPILER_NO_RTTI], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9022: -1- m4_define([m4_location(AC_LIBTOOL_SYS_GLOBAL_SYMBOL_PIPE)], [aclocal.m4:9022])
+m4trace:aclocal.m4:9022: -1- m4_define([AC_LIBTOOL_SYS_GLOBAL_SYMBOL_PIPE], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9023: -1- m4_define([m4_location(AC_LIBTOOL_PROG_COMPILER_PIC)], [aclocal.m4:9023])
+m4trace:aclocal.m4:9023: -1- m4_define([AC_LIBTOOL_PROG_COMPILER_PIC], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9024: -1- m4_define([m4_location(AC_LIBTOOL_PROG_LD_SHLIBS)], [aclocal.m4:9024])
+m4trace:aclocal.m4:9024: -1- m4_define([AC_LIBTOOL_PROG_LD_SHLIBS], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9025: -1- m4_define([m4_location(AC_LIBTOOL_POSTDEP_PREDEP)], [aclocal.m4:9025])
+m4trace:aclocal.m4:9025: -1- m4_define([AC_LIBTOOL_POSTDEP_PREDEP], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9026: -1- m4_define([m4_location(LT_AC_PROG_EGREP)], [aclocal.m4:9026])
+m4trace:aclocal.m4:9026: -1- m4_define([LT_AC_PROG_EGREP], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9031: -1- m4_define([m4_location(_AC_PROG_LIBTOOL)], [aclocal.m4:9031])
+m4trace:aclocal.m4:9031: -1- m4_define([_AC_PROG_LIBTOOL], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9032: -1- m4_define([m4_location(AC_LIBTOOL_SETUP)], [aclocal.m4:9032])
+m4trace:aclocal.m4:9032: -1- m4_define([AC_LIBTOOL_SETUP], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9033: -1- m4_define([m4_location(_LT_AC_CHECK_DLFCN)], [aclocal.m4:9033])
+m4trace:aclocal.m4:9033: -1- m4_define([_LT_AC_CHECK_DLFCN], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9034: -1- m4_define([m4_location(AC_LIBTOOL_SYS_DYNAMIC_LINKER)], [aclocal.m4:9034])
+m4trace:aclocal.m4:9034: -1- m4_define([AC_LIBTOOL_SYS_DYNAMIC_LINKER], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9035: -1- m4_define([m4_location(_LT_AC_TAGCONFIG)], [aclocal.m4:9035])
+m4trace:aclocal.m4:9035: -1- m4_define([_LT_AC_TAGCONFIG], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9037: -1- m4_define([m4_location(_LT_AC_LANG_CXX)], [aclocal.m4:9037])
+m4trace:aclocal.m4:9037: -1- m4_define([_LT_AC_LANG_CXX], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9038: -1- m4_define([m4_location(_LT_AC_LANG_F77)], [aclocal.m4:9038])
+m4trace:aclocal.m4:9038: -1- m4_define([_LT_AC_LANG_F77], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9039: -1- m4_define([m4_location(_LT_AC_LANG_GCJ)], [aclocal.m4:9039])
+m4trace:aclocal.m4:9039: -1- m4_define([_LT_AC_LANG_GCJ], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9040: -1- m4_define([m4_location(AC_LIBTOOL_LANG_C_CONFIG)], [aclocal.m4:9040])
+m4trace:aclocal.m4:9040: -1- m4_define([AC_LIBTOOL_LANG_C_CONFIG], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9041: -1- m4_define([m4_location(_LT_AC_LANG_C_CONFIG)], [aclocal.m4:9041])
+m4trace:aclocal.m4:9041: -1- m4_define([_LT_AC_LANG_C_CONFIG], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9042: -1- m4_define([m4_location(AC_LIBTOOL_LANG_CXX_CONFIG)], [aclocal.m4:9042])
+m4trace:aclocal.m4:9042: -1- m4_define([AC_LIBTOOL_LANG_CXX_CONFIG], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9043: -1- m4_define([m4_location(_LT_AC_LANG_CXX_CONFIG)], [aclocal.m4:9043])
+m4trace:aclocal.m4:9043: -1- m4_define([_LT_AC_LANG_CXX_CONFIG], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9044: -1- m4_define([m4_location(AC_LIBTOOL_LANG_F77_CONFIG)], [aclocal.m4:9044])
+m4trace:aclocal.m4:9044: -1- m4_define([AC_LIBTOOL_LANG_F77_CONFIG], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9045: -1- m4_define([m4_location(_LT_AC_LANG_F77_CONFIG)], [aclocal.m4:9045])
+m4trace:aclocal.m4:9045: -1- m4_define([_LT_AC_LANG_F77_CONFIG], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9046: -1- m4_define([m4_location(AC_LIBTOOL_LANG_GCJ_CONFIG)], [aclocal.m4:9046])
+m4trace:aclocal.m4:9046: -1- m4_define([AC_LIBTOOL_LANG_GCJ_CONFIG], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9047: -1- m4_define([m4_location(_LT_AC_LANG_GCJ_CONFIG)], [aclocal.m4:9047])
+m4trace:aclocal.m4:9047: -1- m4_define([_LT_AC_LANG_GCJ_CONFIG], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9048: -1- m4_define([m4_location(AC_LIBTOOL_LANG_RC_CONFIG)], [aclocal.m4:9048])
+m4trace:aclocal.m4:9048: -1- m4_define([AC_LIBTOOL_LANG_RC_CONFIG], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9049: -1- m4_define([m4_location(_LT_AC_LANG_RC_CONFIG)], [aclocal.m4:9049])
+m4trace:aclocal.m4:9049: -1- m4_define([_LT_AC_LANG_RC_CONFIG], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9050: -1- m4_define([m4_location(AC_LIBTOOL_CONFIG)], [aclocal.m4:9050])
+m4trace:aclocal.m4:9050: -1- m4_define([AC_LIBTOOL_CONFIG], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9051: -1- m4_define([m4_location(_LT_AC_FILE_LTDLL_C)], [aclocal.m4:9051])
+m4trace:aclocal.m4:9051: -1- m4_define([_LT_AC_FILE_LTDLL_C], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9053: -1- m4_define([m4_location(_LT_AC_PROG_CXXCPP)], [aclocal.m4:9053])
+m4trace:aclocal.m4:9053: -1- m4_define([_LT_AC_PROG_CXXCPP], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9056: -1- m4_define([m4_location(_LT_PROG_F77)], [aclocal.m4:9056])
+m4trace:aclocal.m4:9056: -1- m4_define([_LT_PROG_F77], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9057: -1- m4_define([m4_location(_LT_PROG_FC)], [aclocal.m4:9057])
+m4trace:aclocal.m4:9057: -1- m4_define([_LT_PROG_FC], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9058: -1- m4_define([m4_location(_LT_PROG_CXX)], [aclocal.m4:9058])
+m4trace:aclocal.m4:9058: -1- m4_define([_LT_PROG_CXX], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9110: -1- m4_define([m4_location(GLIB_LC_MESSAGES)], [aclocal.m4:9110])
+m4trace:aclocal.m4:9110: -1- m4_define([GLIB_LC_MESSAGES], [_m4_defun_pro([$0])AC_CHECK_HEADERS([locale.h])
+    if test $ac_cv_header_locale_h = yes; then
+    AC_CACHE_CHECK([for LC_MESSAGES], am_cv_val_LC_MESSAGES,
+      [AC_TRY_LINK([#include <locale.h>], [return LC_MESSAGES],
+       am_cv_val_LC_MESSAGES=yes, am_cv_val_LC_MESSAGES=no)])
+    if test $am_cv_val_LC_MESSAGES = yes; then
+      AC_DEFINE(HAVE_LC_MESSAGES, 1,
+        [Define if your <locale.h> file defines LC_MESSAGES.])
+    fi
+  fi[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9126: -1- m4_define([m4_location(GLIB_PATH_PROG_WITH_TEST)], [aclocal.m4:9126])
+m4trace:aclocal.m4:9126: -1- m4_define([GLIB_PATH_PROG_WITH_TEST], [_m4_defun_pro([$0])# Extract the first word of "$2", so it can be a program name with args.
+set dummy $2; ac_word=[$]2
+AC_MSG_CHECKING([for $ac_word])
+AC_CACHE_VAL(ac_cv_path_$1,
+[case "[$]$1" in
+  /*)
+  ac_cv_path_$1="[$]$1" # Let the user override the test with a path.
+  ;;
+  *)
+  IFS="${IFS= 	}"; ac_save_ifs="$IFS"; IFS="${IFS}:"
+  for ac_dir in ifelse([$5], , $PATH, [$5]); do
+    test -z "$ac_dir" && ac_dir=.
+    if test -f $ac_dir/$ac_word; then
+      if [$3]; then
+	ac_cv_path_$1="$ac_dir/$ac_word"
+	break
+      fi
+    fi
+  done
+  IFS="$ac_save_ifs"
+dnl If no 4th arg is given, leave the cache variable unset,
+dnl so AC_PATH_PROGS will keep looking.
+ifelse([$4], , , [  test -z "[$]ac_cv_path_$1" && ac_cv_path_$1="$4"
+])dnl
+  ;;
+esac])dnl
+$1="$ac_cv_path_$1"
+if test ifelse([$4], , [-n "[$]$1"], ["[$]$1" != "$4"]); then
+  AC_MSG_RESULT([$]$1)
+else
+  AC_MSG_RESULT(no)
+fi
+AC_SUBST($1)dnl
+[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9167: -1- m4_define([m4_location(glib_gt_INTL_MACOSX)], [aclocal.m4:9167])
+m4trace:aclocal.m4:9167: -1- m4_define([glib_gt_INTL_MACOSX], [_m4_defun_pro([$0])
+  dnl Check for API introduced in Mac OS X 10.2.
+  AC_CACHE_CHECK([for CFPreferencesCopyAppValue],
+    [gt_cv_func_CFPreferencesCopyAppValue],
+    [gt_save_LIBS="$LIBS"
+     LIBS="$LIBS -Wl,-framework -Wl,CoreFoundation"
+     AC_LINK_IFELSE(
+       [AC_LANG_PROGRAM(
+          [[#include <CoreFoundation/CFPreferences.h>]],
+          [[CFPreferencesCopyAppValue(NULL, NULL)]])],
+       [gt_cv_func_CFPreferencesCopyAppValue=yes],
+       [gt_cv_func_CFPreferencesCopyAppValue=no])
+     LIBS="$gt_save_LIBS"])
+  if test $gt_cv_func_CFPreferencesCopyAppValue = yes; then
+    AC_DEFINE([HAVE_CFPREFERENCESCOPYAPPVALUE], [1],
+      [Define to 1 if you have the Mac OS X function CFPreferencesCopyAppValue in the CoreFoundation framework.])
+  fi
+  dnl Check for API introduced in Mac OS X 10.3.
+  AC_CACHE_CHECK([for CFLocaleCopyCurrent], [gt_cv_func_CFLocaleCopyCurrent],
+    [gt_save_LIBS="$LIBS"
+     LIBS="$LIBS -Wl,-framework -Wl,CoreFoundation"
+     AC_LINK_IFELSE(
+       [AC_LANG_PROGRAM(
+          [[#include <CoreFoundation/CFLocale.h>]],
+          [[CFLocaleCopyCurrent();]])],
+       [gt_cv_func_CFLocaleCopyCurrent=yes],
+       [gt_cv_func_CFLocaleCopyCurrent=no])
+     LIBS="$gt_save_LIBS"])
+  if test $gt_cv_func_CFLocaleCopyCurrent = yes; then
+    AC_DEFINE([HAVE_CFLOCALECOPYCURRENT], [1],
+      [Define to 1 if you have the Mac OS X function CFLocaleCopyCurrent in the CoreFoundation framework.])
+  fi
+  INTL_MACOSX_LIBS=
+  if test $gt_cv_func_CFPreferencesCopyAppValue = yes || test $gt_cv_func_CFLocaleCopyCurrent = yes; then
+    INTL_MACOSX_LIBS="-Wl,-framework -Wl,CoreFoundation"
+  fi
+  AC_SUBST([INTL_MACOSX_LIBS])
+[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9209: -1- m4_define([m4_location(GLIB_WITH_NLS)], [aclocal.m4:9209])
+m4trace:aclocal.m4:9209: -1- m4_define([GLIB_WITH_NLS], [_m4_defun_pro([$0])  USE_NLS=yes
+    AC_SUBST(USE_NLS)
+
+    gt_cv_have_gettext=no
+
+    CATOBJEXT=NONE
+    XGETTEXT=:
+    INTLLIBS=
+
+    glib_gt_INTL_MACOSX
+
+    AC_CHECK_HEADER(libintl.h,
+     [gt_cv_func_dgettext_libintl="no"
+      libintl_extra_libs=""
+
+      #
+      # First check in libc
+      #
+      AC_CACHE_CHECK([for ngettext in libc], gt_cv_func_ngettext_libc,
+        [AC_TRY_LINK([
+#include <libintl.h>
+],
+         [return !ngettext ("","", 1)],
+	  gt_cv_func_ngettext_libc=yes,
+          gt_cv_func_ngettext_libc=no)
+        ])
+  
+      if test "$gt_cv_func_ngettext_libc" = "yes" ; then
+	      AC_CACHE_CHECK([for dgettext in libc], gt_cv_func_dgettext_libc,
+        	[AC_TRY_LINK([
+#include <libintl.h>
+],
+	          [return !dgettext ("","")],
+		  gt_cv_func_dgettext_libc=yes,
+	          gt_cv_func_dgettext_libc=no)
+        	])
+      fi
+  
+      if test "$gt_cv_func_ngettext_libc" = "yes" ; then
+        AC_CHECK_FUNCS(bind_textdomain_codeset)
+      fi
+
+      #
+      # If we don't have everything we want, check in libintl
+      #
+      if test "$gt_cv_func_dgettext_libc" != "yes" \
+	 || test "$gt_cv_func_ngettext_libc" != "yes" \
+         || test "$ac_cv_func_bind_textdomain_codeset" != "yes" ; then
+        
+        AC_CHECK_LIB(intl, bindtextdomain,
+	    [AC_CHECK_LIB(intl, ngettext,
+		    [AC_CHECK_LIB(intl, dgettext,
+			          gt_cv_func_dgettext_libintl=yes)])])
+
+	if test "$gt_cv_func_dgettext_libintl" != "yes" ; then
+	  AC_MSG_CHECKING([if -liconv is needed to use gettext])
+	  AC_MSG_RESULT([])
+  	  AC_CHECK_LIB(intl, ngettext,
+          	[AC_CHECK_LIB(intl, dcgettext,
+		       [gt_cv_func_dgettext_libintl=yes
+			libintl_extra_libs=-liconv],
+			:,-liconv)],
+		:,-liconv)
+        fi
+
+        #
+        # If we found libintl, then check in it for bind_textdomain_codeset();
+        # we'll prefer libc if neither have bind_textdomain_codeset(),
+        # and both have dgettext and ngettext
+        #
+        if test "$gt_cv_func_dgettext_libintl" = "yes" ; then
+          glib_save_LIBS="$LIBS"
+          LIBS="$LIBS -lintl $libintl_extra_libs"
+          unset ac_cv_func_bind_textdomain_codeset
+          AC_CHECK_FUNCS(bind_textdomain_codeset)
+          LIBS="$glib_save_LIBS"
+
+          if test "$ac_cv_func_bind_textdomain_codeset" = "yes" ; then
+            gt_cv_func_dgettext_libc=no
+          else
+            if test "$gt_cv_func_dgettext_libc" = "yes" \
+		&& test "$gt_cv_func_ngettext_libc" = "yes"; then
+              gt_cv_func_dgettext_libintl=no
+            fi
+          fi
+        fi
+      fi
+
+      if test "$gt_cv_func_dgettext_libc" = "yes" \
+	|| test "$gt_cv_func_dgettext_libintl" = "yes"; then
+        gt_cv_have_gettext=yes
+      fi
+  
+      if test "$gt_cv_func_dgettext_libintl" = "yes"; then
+        INTLLIBS="-lintl $libintl_extra_libs $INTL_MACOSX_LIBS"
+      fi
+  
+      if test "$gt_cv_have_gettext" = "yes"; then
+	AC_DEFINE(HAVE_GETTEXT,1,
+	  [Define if the GNU gettext() function is already present or preinstalled.])
+	GLIB_PATH_PROG_WITH_TEST(MSGFMT, msgfmt,
+	  [test -z "`$ac_dir/$ac_word -h 2>&1 | grep 'dv '`"], no)dnl
+	if test "$MSGFMT" != "no"; then
+          glib_save_LIBS="$LIBS"
+          LIBS="$LIBS $INTLLIBS"
+	  AC_CHECK_FUNCS(dcgettext)
+	  MSGFMT_OPTS=
+	  AC_MSG_CHECKING([if msgfmt accepts -c])
+	  GLIB_RUN_PROG([$MSGFMT -c -o /dev/null],[
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Project-Id-Version: test 1.0\n"
+"PO-Revision-Date: 2007-02-15 12:01+0100\n"
+"Last-Translator: test <foo@bar.xx>\n"
+"Language-Team: C <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Transfer-Encoding: 8bit\n"
+], [MSGFMT_OPTS=-c; AC_MSG_RESULT([yes])], [AC_MSG_RESULT([no])])
+	  AC_SUBST(MSGFMT_OPTS)
+	  AC_PATH_PROG(GMSGFMT, gmsgfmt, $MSGFMT)
+	  GLIB_PATH_PROG_WITH_TEST(XGETTEXT, xgettext,
+	    [test -z "`$ac_dir/$ac_word -h 2>&1 | grep '(HELP)'`"], :)
+	  AC_TRY_LINK(, [extern int _nl_msg_cat_cntr;
+			 return _nl_msg_cat_cntr],
+	    [CATOBJEXT=.gmo 
+             DATADIRNAME=share],
+	    [case $host in
+	    *-*-solaris*)
+	    dnl On Solaris, if bind_textdomain_codeset is in libc,
+	    dnl GNU format message catalog is always supported,
+            dnl since both are added to the libc all together.
+	    dnl Hence, we'd like to go with DATADIRNAME=share and
+	    dnl and CATOBJEXT=.gmo in this case.
+            AC_CHECK_FUNC(bind_textdomain_codeset,
+	      [CATOBJEXT=.gmo 
+               DATADIRNAME=share],
+	      [CATOBJEXT=.mo
+               DATADIRNAME=lib])
+	    ;;
+	    *-*-openbsd*)
+	    CATOBJEXT=.mo
+            DATADIRNAME=share
+	    ;;
+	    *)
+	    CATOBJEXT=.mo
+            DATADIRNAME=lib
+	    ;;
+	    esac])
+          LIBS="$glib_save_LIBS"
+	  INSTOBJEXT=.mo
+	else
+	  gt_cv_have_gettext=no
+	fi
+      fi
+    ])
+
+    if test "$gt_cv_have_gettext" = "yes" ; then
+      AC_DEFINE(ENABLE_NLS, 1,
+        [always defined to indicate that i18n is enabled])
+    fi
+
+    dnl Test whether we really found GNU xgettext.
+    if test "$XGETTEXT" != ":"; then
+      dnl If it is not GNU xgettext we define it as : so that the
+      dnl Makefiles still can work.
+      if $XGETTEXT --omit-header /dev/null 2> /dev/null; then
+        : ;
+      else
+        AC_MSG_RESULT(
+	  [found xgettext program is not GNU xgettext; ignore it])
+        XGETTEXT=":"
+      fi
+    fi
+
+    # We need to process the po/ directory.
+    POSUB=po
+
+    AC_OUTPUT_COMMANDS(
+      [case "$CONFIG_FILES" in *po/Makefile.in*)
+        sed -e "/POTFILES =/r po/POTFILES" po/Makefile.in > po/Makefile
+      esac])
+
+    dnl These rules are solely for the distribution goal.  While doing this
+    dnl we only have to keep exactly one list of the available catalogs
+    dnl in configure.ac.
+    for lang in $ALL_LINGUAS; do
+      GMOFILES="$GMOFILES $lang.gmo"
+      POFILES="$POFILES $lang.po"
+    done
+
+    dnl Make all variables we use known to autoconf.
+    AC_SUBST(CATALOGS)
+    AC_SUBST(CATOBJEXT)
+    AC_SUBST(DATADIRNAME)
+    AC_SUBST(GMOFILES)
+    AC_SUBST(INSTOBJEXT)
+    AC_SUBST(INTLLIBS)
+    AC_SUBST(PO_IN_DATADIR_TRUE)
+    AC_SUBST(PO_IN_DATADIR_FALSE)
+    AC_SUBST(POFILES)
+    AC_SUBST(POSUB)
+  []_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9425: -1- AU_DEFINE([GLIB_GNU_GETTEXT], [m4_ifval([[$0: This macro is deprecated. You should use upstream gettext instead.]], [_au_warn_GLIB_GNU_GETTEXT([[$0: This macro is deprecated. You should use upstream gettext instead.]])[m4_warn([obsolete],
+[[$0: This macro is deprecated. You should use upstream gettext instead.]])dnl
+]])dnl
+AC_REQUIRE([AC_PROG_CC])dnl
+   
+   GLIB_LC_MESSAGES
+   GLIB_WITH_NLS
+
+   if test "$gt_cv_have_gettext" = "yes"; then
+     if test "x$ALL_LINGUAS" = "x"; then
+       LINGUAS=
+     else
+       AC_MSG_CHECKING(for catalogs to be installed)
+       NEW_LINGUAS=
+       for presentlang in $ALL_LINGUAS; do
+         useit=no
+         if test "%UNSET%" != "${LINGUAS-%UNSET%}"; then
+           desiredlanguages="$LINGUAS"
+         else
+           desiredlanguages="$ALL_LINGUAS"
+         fi
+         for desiredlang in $desiredlanguages; do
+ 	   # Use the presentlang catalog if desiredlang is
+           #   a. equal to presentlang, or
+           #   b. a variant of presentlang (because in this case,
+           #      presentlang can be used as a fallback for messages
+           #      which are not translated in the desiredlang catalog).
+           case "$desiredlang" in
+             "$presentlang"*) useit=yes;;
+           esac
+         done
+         if test $useit = yes; then
+           NEW_LINGUAS="$NEW_LINGUAS $presentlang"
+         fi
+       done
+       LINGUAS=$NEW_LINGUAS
+       AC_MSG_RESULT($LINGUAS)
+     fi
+
+     dnl Construct list of names of catalog files to be constructed.
+     if test -n "$LINGUAS"; then
+       for lang in $LINGUAS; do CATALOGS="$CATALOGS $lang$CATOBJEXT"; done
+     fi
+   fi
+
+   dnl If the AC_CONFIG_AUX_DIR macro for autoconf is used we possibly
+   dnl find the mkinstalldirs script in another subdir but ($top_srcdir).
+   dnl Try to locate is.
+   MKINSTALLDIRS=
+   if test -n "$ac_aux_dir"; then
+     MKINSTALLDIRS="$ac_aux_dir/mkinstalldirs"
+   fi
+   if test -z "$MKINSTALLDIRS"; then
+     MKINSTALLDIRS="\$(top_srcdir)/mkinstalldirs"
+   fi
+   AC_SUBST(MKINSTALLDIRS)
+
+   dnl Generate list of files to be processed by xgettext which will
+   dnl be included in po/Makefile.
+   test -d po || mkdir po
+   if test "x$srcdir" != "x."; then
+     if test "x`echo $srcdir | sed 's@/.*@@'`" = "x"; then
+       posrcprefix="$srcdir/"
+     else
+       posrcprefix="../$srcdir/"
+     fi
+   else
+     posrcprefix="../"
+   fi
+   rm -f po/POTFILES
+   sed -e "/^#/d" -e "/^\$/d" -e "s,.*,	$posrcprefix& \\\\," -e "\$s/\(.*\) \\\\/\1/" \
+	< $srcdir/po/POTFILES.in > po/POTFILES
+  ])
+m4trace:aclocal.m4:9425: -1- AU_DEFINE([_au_warn_GLIB_GNU_GETTEXT], [m4_warning($@)dnl
+m4_define([_au_warn_GLIB_GNU_GETTEXT], [])])
+m4trace:aclocal.m4:9425: -1- m4_define([m4_location(GLIB_GNU_GETTEXT)], [aclocal.m4:9425])
+m4trace:aclocal.m4:9425: -1- m4_define([GLIB_GNU_GETTEXT], [_m4_defun_pro([$0])m4_warn([obsolete], [The macro `GLIB_GNU_GETTEXT' is obsolete.
+You should run autoupdate.])dnl
+AC_REQUIRE([AC_PROG_CC])dnl
+   
+   GLIB_LC_MESSAGES
+   GLIB_WITH_NLS
+
+   if test "$gt_cv_have_gettext" = "yes"; then
+     if test "x$ALL_LINGUAS" = "x"; then
+       LINGUAS=
+     else
+       AC_MSG_CHECKING(for catalogs to be installed)
+       NEW_LINGUAS=
+       for presentlang in $ALL_LINGUAS; do
+         useit=no
+         if test "%UNSET%" != "${LINGUAS-%UNSET%}"; then
+           desiredlanguages="$LINGUAS"
+         else
+           desiredlanguages="$ALL_LINGUAS"
+         fi
+         for desiredlang in $desiredlanguages; do
+ 	   # Use the presentlang catalog if desiredlang is
+           #   a. equal to presentlang, or
+           #   b. a variant of presentlang (because in this case,
+           #      presentlang can be used as a fallback for messages
+           #      which are not translated in the desiredlang catalog).
+           case "$desiredlang" in
+             "$presentlang"*) useit=yes;;
+           esac
+         done
+         if test $useit = yes; then
+           NEW_LINGUAS="$NEW_LINGUAS $presentlang"
+         fi
+       done
+       LINGUAS=$NEW_LINGUAS
+       AC_MSG_RESULT($LINGUAS)
+     fi
+
+     dnl Construct list of names of catalog files to be constructed.
+     if test -n "$LINGUAS"; then
+       for lang in $LINGUAS; do CATALOGS="$CATALOGS $lang$CATOBJEXT"; done
+     fi
+   fi
+
+   dnl If the AC_CONFIG_AUX_DIR macro for autoconf is used we possibly
+   dnl find the mkinstalldirs script in another subdir but ($top_srcdir).
+   dnl Try to locate is.
+   MKINSTALLDIRS=
+   if test -n "$ac_aux_dir"; then
+     MKINSTALLDIRS="$ac_aux_dir/mkinstalldirs"
+   fi
+   if test -z "$MKINSTALLDIRS"; then
+     MKINSTALLDIRS="\$(top_srcdir)/mkinstalldirs"
+   fi
+   AC_SUBST(MKINSTALLDIRS)
+
+   dnl Generate list of files to be processed by xgettext which will
+   dnl be included in po/Makefile.
+   test -d po || mkdir po
+   if test "x$srcdir" != "x."; then
+     if test "x`echo $srcdir | sed 's@/.*@@'`" = "x"; then
+       posrcprefix="$srcdir/"
+     else
+       posrcprefix="../$srcdir/"
+     fi
+   else
+     posrcprefix="../"
+   fi
+   rm -f po/POTFILES
+   sed -e "/^#/d" -e "/^\$/d" -e "s,.*,	$posrcprefix& \\\\," -e "\$s/\(.*\) \\\\/\1/" \
+	< $srcdir/po/POTFILES.in > po/POTFILES
+  []_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9502: -1- m4_define([m4_location(GLIB_DEFINE_LOCALEDIR)], [aclocal.m4:9502])
+m4trace:aclocal.m4:9502: -1- m4_define([GLIB_DEFINE_LOCALEDIR], [_m4_defun_pro([$0])glib_REQUIRE([GLIB_GNU_GETTEXT])dnl
+glib_save_prefix="$prefix"
+glib_save_exec_prefix="$exec_prefix"
+glib_save_datarootdir="$datarootdir"
+test "x$prefix" = xNONE && prefix=$ac_default_prefix
+test "x$exec_prefix" = xNONE && exec_prefix=$prefix
+datarootdir=`eval echo "${datarootdir}"`
+if test "x$CATOBJEXT" = "x.mo" ; then
+  localedir=`eval echo "${libdir}/locale"`
+else
+  localedir=`eval echo "${datadir}/locale"`
+fi
+prefix="$glib_save_prefix"
+exec_prefix="$glib_save_exec_prefix"
+datarootdir="$glib_save_datarootdir"
+AC_DEFINE_UNQUOTED($1, "$localedir",
+  [Define the location where the catalogs will be installed])
+[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9525: -1- m4_define([m4_location(AM_GLIB_GNU_GETTEXT)], [aclocal.m4:9525])
+m4trace:aclocal.m4:9525: -1- m4_define([AM_GLIB_GNU_GETTEXT], [_m4_defun_pro([$0])GLIB_GNU_GETTEXT($@)[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9525: -1- m4_define([m4_location(AM_GLIB_DEFINE_LOCALEDIR)], [aclocal.m4:9525])
+m4trace:aclocal.m4:9525: -1- m4_define([AM_GLIB_DEFINE_LOCALEDIR], [_m4_defun_pro([$0])GLIB_DEFINE_LOCALEDIR($@)[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9535: -1- m4_define([m4_location(GLIB_RUN_PROG)], [aclocal.m4:9535])
+m4trace:aclocal.m4:9535: -1- m4_define([GLIB_RUN_PROG], [_m4_defun_pro([$0])cat >conftest.foo <<_ACEOF
+$2
+_ACEOF
+if AC_RUN_LOG([$1 conftest.foo]); then
+  m4_ifval([$3], [$3], [:])
+m4_ifvaln([$4], [else $4])dnl
+echo "$as_me: failed input was:" >&AS_MESSAGE_LOG_FD
+sed 's/^/| /' conftest.foo >&AS_MESSAGE_LOG_FD
+fi[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:9589: -1- m4_define([m4_location(PKG_PREREQ)], [aclocal.m4:9589])
+m4trace:aclocal.m4:9589: -1- m4_define([PKG_PREREQ], [_m4_defun_pro([$0])m4_define([PKG_MACROS_VERSION], [0.29.1])
 m4_if(m4_version_compare(PKG_MACROS_VERSION, [$1]), -1,
     [m4_fatal([pkg.m4 version $1 or higher is required but ]PKG_MACROS_VERSION[ found])])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9602: -1- m4_define([m4_location(PKG_PROG_PKG_CONFIG)], [aclocal.m4:9602])
-m4trace:aclocal.m4:9602: -1- m4_define([PKG_PROG_PKG_CONFIG], [_m4_defun_pro([$0])m4_pattern_forbid([^_?PKG_[A-Z_]+$])
+m4trace:aclocal.m4:9604: -1- m4_define([m4_location(PKG_PROG_PKG_CONFIG)], [aclocal.m4:9604])
+m4trace:aclocal.m4:9604: -1- m4_define([PKG_PROG_PKG_CONFIG], [_m4_defun_pro([$0])m4_pattern_forbid([^_?PKG_[A-Z_]+$])
 m4_pattern_allow([^PKG_CONFIG(_(PATH|LIBDIR|SYSROOT_DIR|ALLOW_SYSTEM_(CFLAGS|LIBS)))?$])
 m4_pattern_allow([^PKG_CONFIG_(DISABLE_UNINSTALLED|TOP_BUILD_DIR|DEBUG_SPEW)$])
 AC_ARG_VAR([PKG_CONFIG], [path to pkg-config utility])
@@ -24026,15 +24028,15 @@ if test -n "$PKG_CONFIG"; then
 	fi
 fi[]dnl
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9636: -1- m4_define([m4_location(PKG_CHECK_EXISTS)], [aclocal.m4:9636])
-m4trace:aclocal.m4:9636: -1- m4_define([PKG_CHECK_EXISTS], [_m4_defun_pro([$0])AC_REQUIRE([PKG_PROG_PKG_CONFIG])dnl
+m4trace:aclocal.m4:9638: -1- m4_define([m4_location(PKG_CHECK_EXISTS)], [aclocal.m4:9638])
+m4trace:aclocal.m4:9638: -1- m4_define([PKG_CHECK_EXISTS], [_m4_defun_pro([$0])AC_REQUIRE([PKG_PROG_PKG_CONFIG])dnl
 if test -n "$PKG_CONFIG" && \
     AC_RUN_LOG([$PKG_CONFIG --exists --print-errors "$1"]); then
   m4_default([$2], [:])
 m4_ifvaln([$3], [else
   $3])dnl
 fi[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9649: -1- m4_define([_PKG_CONFIG], [if test -n "$$1"; then
+m4trace:aclocal.m4:9651: -1- m4_define([_PKG_CONFIG], [if test -n "$$1"; then
     pkg_cv_[]$1="$$1"
  elif test -n "$PKG_CONFIG"; then
     PKG_CHECK_EXISTS([$3],
@@ -24045,16 +24047,16 @@ m4trace:aclocal.m4:9649: -1- m4_define([_PKG_CONFIG], [if test -n "$$1"; then
     pkg_failed=untried
 fi[]dnl
 ])
-m4trace:aclocal.m4:9665: -1- m4_define([m4_location(_PKG_SHORT_ERRORS_SUPPORTED)], [aclocal.m4:9665])
-m4trace:aclocal.m4:9665: -1- m4_define([_PKG_SHORT_ERRORS_SUPPORTED], [_m4_defun_pro([$0])AC_REQUIRE([PKG_PROG_PKG_CONFIG])
+m4trace:aclocal.m4:9667: -1- m4_define([m4_location(_PKG_SHORT_ERRORS_SUPPORTED)], [aclocal.m4:9667])
+m4trace:aclocal.m4:9667: -1- m4_define([_PKG_SHORT_ERRORS_SUPPORTED], [_m4_defun_pro([$0])AC_REQUIRE([PKG_PROG_PKG_CONFIG])
 if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
         _pkg_short_errors_supported=yes
 else
         _pkg_short_errors_supported=no
 fi[]dnl
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9683: -1- m4_define([m4_location(PKG_CHECK_MODULES)], [aclocal.m4:9683])
-m4trace:aclocal.m4:9683: -1- m4_define([PKG_CHECK_MODULES], [_m4_defun_pro([$0])AC_REQUIRE([PKG_PROG_PKG_CONFIG])dnl
+m4trace:aclocal.m4:9685: -1- m4_define([m4_location(PKG_CHECK_MODULES)], [aclocal.m4:9685])
+m4trace:aclocal.m4:9685: -1- m4_define([PKG_CHECK_MODULES], [_m4_defun_pro([$0])AC_REQUIRE([PKG_PROG_PKG_CONFIG])dnl
 AC_ARG_VAR([$1][_CFLAGS], [C compiler flags for $1, overriding pkg-config])dnl
 AC_ARG_VAR([$1][_LIBS], [linker flags for $1, overriding pkg-config])dnl
 
@@ -24107,15 +24109,15 @@ else
 	$3
 fi[]dnl
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9752: -1- m4_define([m4_location(PKG_CHECK_MODULES_STATIC)], [aclocal.m4:9752])
-m4trace:aclocal.m4:9752: -1- m4_define([PKG_CHECK_MODULES_STATIC], [_m4_defun_pro([$0])AC_REQUIRE([PKG_PROG_PKG_CONFIG])dnl
+m4trace:aclocal.m4:9754: -1- m4_define([m4_location(PKG_CHECK_MODULES_STATIC)], [aclocal.m4:9754])
+m4trace:aclocal.m4:9754: -1- m4_define([PKG_CHECK_MODULES_STATIC], [_m4_defun_pro([$0])AC_REQUIRE([PKG_PROG_PKG_CONFIG])dnl
 _save_PKG_CONFIG=$PKG_CONFIG
 PKG_CONFIG="$PKG_CONFIG --static"
 PKG_CHECK_MODULES($@)
 PKG_CONFIG=$_save_PKG_CONFIG[]dnl
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9770: -1- m4_define([m4_location(PKG_INSTALLDIR)], [aclocal.m4:9770])
-m4trace:aclocal.m4:9770: -1- m4_define([PKG_INSTALLDIR], [_m4_defun_pro([$0])m4_pushdef([pkg_default], [m4_default([$1], ['${libdir}/pkgconfig'])])
+m4trace:aclocal.m4:9772: -1- m4_define([m4_location(PKG_INSTALLDIR)], [aclocal.m4:9772])
+m4trace:aclocal.m4:9772: -1- m4_define([PKG_INSTALLDIR], [_m4_defun_pro([$0])m4_pushdef([pkg_default], [m4_default([$1], ['${libdir}/pkgconfig'])])
 m4_pushdef([pkg_description],
     [pkg-config installation directory @<:@]pkg_default[@:>@])
 AC_ARG_WITH([pkgconfigdir],
@@ -24125,8 +24127,8 @@ AC_SUBST([pkgconfigdir], [$with_pkgconfigdir])
 m4_popdef([pkg_default])
 m4_popdef([pkg_description])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9792: -1- m4_define([m4_location(PKG_NOARCH_INSTALLDIR)], [aclocal.m4:9792])
-m4trace:aclocal.m4:9792: -1- m4_define([PKG_NOARCH_INSTALLDIR], [_m4_defun_pro([$0])m4_pushdef([pkg_default], [m4_default([$1], ['${datadir}/pkgconfig'])])
+m4trace:aclocal.m4:9794: -1- m4_define([m4_location(PKG_NOARCH_INSTALLDIR)], [aclocal.m4:9794])
+m4trace:aclocal.m4:9794: -1- m4_define([PKG_NOARCH_INSTALLDIR], [_m4_defun_pro([$0])m4_pushdef([pkg_default], [m4_default([$1], ['${datadir}/pkgconfig'])])
 m4_pushdef([pkg_description],
     [pkg-config arch-independent installation directory @<:@]pkg_default[@:>@])
 AC_ARG_WITH([noarch-pkgconfigdir],
@@ -24136,8 +24138,8 @@ AC_SUBST([noarch_pkgconfigdir], [$with_noarch_pkgconfigdir])
 m4_popdef([pkg_default])
 m4_popdef([pkg_description])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9811: -1- m4_define([m4_location(PKG_CHECK_VAR)], [aclocal.m4:9811])
-m4trace:aclocal.m4:9811: -1- m4_define([PKG_CHECK_VAR], [_m4_defun_pro([$0])AC_REQUIRE([PKG_PROG_PKG_CONFIG])dnl
+m4trace:aclocal.m4:9813: -1- m4_define([m4_location(PKG_CHECK_VAR)], [aclocal.m4:9813])
+m4trace:aclocal.m4:9813: -1- m4_define([PKG_CHECK_VAR], [_m4_defun_pro([$0])AC_REQUIRE([PKG_PROG_PKG_CONFIG])dnl
 AC_ARG_VAR([$1], [value of $3 for $2, overriding pkg-config])dnl
 
 _PKG_CONFIG([$1], [variable="][$3]["], [$2])
@@ -24145,8 +24147,8 @@ AS_VAR_COPY([$1], [pkg_cv_][$1])
 
 AS_VAR_IF([$1], [""], [$5], [$4])dnl
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9829: -1- m4_define([m4_location(PKG_WITH_MODULES)], [aclocal.m4:9829])
-m4trace:aclocal.m4:9829: -1- m4_define([PKG_WITH_MODULES], [_m4_defun_pro([$0])
+m4trace:aclocal.m4:9831: -1- m4_define([m4_location(PKG_WITH_MODULES)], [aclocal.m4:9831])
+m4trace:aclocal.m4:9831: -1- m4_define([PKG_WITH_MODULES], [_m4_defun_pro([$0])
 m4_pushdef([with_arg], m4_tolower([$1]))
 
 m4_pushdef([description],
@@ -24175,40 +24177,40 @@ m4_popdef([description])
 m4_popdef([def_arg])
 
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9866: -1- m4_define([m4_location(PKG_HAVE_WITH_MODULES)], [aclocal.m4:9866])
-m4trace:aclocal.m4:9866: -1- m4_define([PKG_HAVE_WITH_MODULES], [_m4_defun_pro([$0])
+m4trace:aclocal.m4:9868: -1- m4_define([m4_location(PKG_HAVE_WITH_MODULES)], [aclocal.m4:9868])
+m4trace:aclocal.m4:9868: -1- m4_define([PKG_HAVE_WITH_MODULES], [_m4_defun_pro([$0])
 PKG_WITH_MODULES([$1],[$2],,,[$3],[$4])
 
 AM_CONDITIONAL([HAVE_][$1],
                [test "$AS_TR_SH([with_]m4_tolower([$1]))" = "yes"])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9881: -1- m4_define([m4_location(PKG_HAVE_DEFINE_WITH_MODULES)], [aclocal.m4:9881])
-m4trace:aclocal.m4:9881: -1- m4_define([PKG_HAVE_DEFINE_WITH_MODULES], [_m4_defun_pro([$0])
+m4trace:aclocal.m4:9883: -1- m4_define([m4_location(PKG_HAVE_DEFINE_WITH_MODULES)], [aclocal.m4:9883])
+m4trace:aclocal.m4:9883: -1- m4_define([PKG_HAVE_DEFINE_WITH_MODULES], [_m4_defun_pro([$0])
 PKG_HAVE_WITH_MODULES([$1],[$2],[$3],[$4])
 
 AS_IF([test "$AS_TR_SH([with_]m4_tolower([$1]))" = "yes"],
         [AC_DEFINE([HAVE_][$1], 1, [Enable ]m4_tolower([$1])[ support])])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9900: -1- m4_define([m4_location(AM_AUTOMAKE_VERSION)], [aclocal.m4:9900])
-m4trace:aclocal.m4:9900: -1- m4_define([AM_AUTOMAKE_VERSION], [_m4_defun_pro([$0])am__api_version='1.16'
+m4trace:aclocal.m4:9902: -1- m4_define([m4_location(AM_AUTOMAKE_VERSION)], [aclocal.m4:9902])
+m4trace:aclocal.m4:9902: -1- m4_define([AM_AUTOMAKE_VERSION], [_m4_defun_pro([$0])am__api_version='1.16'
 dnl Some users find AM_AUTOMAKE_VERSION and mistake it for a way to
 dnl require some minimum version.  Point them to the right macro.
 m4_if([$1], [1.16.3], [],
       [AC_FATAL([Do not call $0, use AM_INIT_AUTOMAKE([$1]).])])dnl
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9913: -1- m4_define([_AM_AUTOCONF_VERSION], [])
-m4trace:aclocal.m4:9919: -1- m4_define([m4_location(AM_SET_CURRENT_AUTOMAKE_VERSION)], [aclocal.m4:9919])
-m4trace:aclocal.m4:9919: -1- m4_define([AM_SET_CURRENT_AUTOMAKE_VERSION], [_m4_defun_pro([$0])AM_AUTOMAKE_VERSION([1.16.3])dnl
+m4trace:aclocal.m4:9915: -1- m4_define([_AM_AUTOCONF_VERSION], [])
+m4trace:aclocal.m4:9921: -1- m4_define([m4_location(AM_SET_CURRENT_AUTOMAKE_VERSION)], [aclocal.m4:9921])
+m4trace:aclocal.m4:9921: -1- m4_define([AM_SET_CURRENT_AUTOMAKE_VERSION], [_m4_defun_pro([$0])AM_AUTOMAKE_VERSION([1.16.3])dnl
 m4_ifndef([AC_AUTOCONF_VERSION],
   [m4_copy([m4_PACKAGE_VERSION], [AC_AUTOCONF_VERSION])])dnl
 _AM_AUTOCONF_VERSION(m4_defn([AC_AUTOCONF_VERSION]))[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9971: -1- m4_define([m4_location(AM_AUX_DIR_EXPAND)], [aclocal.m4:9971])
-m4trace:aclocal.m4:9971: -1- m4_define([AM_AUX_DIR_EXPAND], [_m4_defun_pro([$0])AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
+m4trace:aclocal.m4:9973: -1- m4_define([m4_location(AM_AUX_DIR_EXPAND)], [aclocal.m4:9973])
+m4trace:aclocal.m4:9973: -1- m4_define([AM_AUX_DIR_EXPAND], [_m4_defun_pro([$0])AC_REQUIRE([AC_CONFIG_AUX_DIR_DEFAULT])dnl
 # Expand $ac_aux_dir to an absolute path.
 am_aux_dir=`cd "$ac_aux_dir" && pwd`
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:9988: -1- m4_define([m4_location(AM_CONDITIONAL)], [aclocal.m4:9988])
-m4trace:aclocal.m4:9988: -1- m4_define([AM_CONDITIONAL], [_m4_defun_pro([$0])AC_PREREQ([2.52])dnl
+m4trace:aclocal.m4:9990: -1- m4_define([m4_location(AM_CONDITIONAL)], [aclocal.m4:9990])
+m4trace:aclocal.m4:9990: -1- m4_define([AM_CONDITIONAL], [_m4_defun_pro([$0])AC_PREREQ([2.52])dnl
  m4_if([$1], [TRUE],  [AC_FATAL([$0: invalid condition: $1])],
        [$1], [FALSE], [AC_FATAL([$0: invalid condition: $1])])dnl
 AC_SUBST([$1_TRUE])dnl
@@ -24228,8 +24230,8 @@ AC_CONFIG_COMMANDS_PRE(
   AC_MSG_ERROR([[conditional "$1" was never defined.
 Usually this means the macro was only invoked conditionally.]])
 fi])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:10034: -1- m4_define([m4_location(_AM_DEPENDENCIES)], [aclocal.m4:10034])
-m4trace:aclocal.m4:10034: -1- m4_define([_AM_DEPENDENCIES], [_m4_defun_pro([$0])AC_REQUIRE([AM_SET_DEPDIR])dnl
+m4trace:aclocal.m4:10036: -1- m4_define([m4_location(_AM_DEPENDENCIES)], [aclocal.m4:10036])
+m4trace:aclocal.m4:10036: -1- m4_define([_AM_DEPENDENCIES], [_m4_defun_pro([$0])AC_REQUIRE([AM_SET_DEPDIR])dnl
 AC_REQUIRE([AM_OUTPUT_DEPENDENCY_COMMANDS])dnl
 AC_REQUIRE([AM_MAKE_INCLUDE])dnl
 AC_REQUIRE([AM_DEP_TRACK])dnl
@@ -24359,12 +24361,12 @@ AM_CONDITIONAL([am__fastdep$1], [
   test "x$enable_dependency_tracking" != xno \
   && test "$am_cv_$1_dependencies_compiler_type" = gcc3])
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:10171: -1- m4_define([m4_location(AM_SET_DEPDIR)], [aclocal.m4:10171])
-m4trace:aclocal.m4:10171: -1- m4_define([AM_SET_DEPDIR], [_m4_defun_pro([$0])AC_REQUIRE([AM_SET_LEADING_DOT])dnl
+m4trace:aclocal.m4:10173: -1- m4_define([m4_location(AM_SET_DEPDIR)], [aclocal.m4:10173])
+m4trace:aclocal.m4:10173: -1- m4_define([AM_SET_DEPDIR], [_m4_defun_pro([$0])AC_REQUIRE([AM_SET_LEADING_DOT])dnl
 AC_SUBST([DEPDIR], ["${am__leading_dot}deps"])dnl
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:10179: -1- m4_define([m4_location(AM_DEP_TRACK)], [aclocal.m4:10179])
-m4trace:aclocal.m4:10179: -1- m4_define([AM_DEP_TRACK], [_m4_defun_pro([$0])AC_ARG_ENABLE([dependency-tracking], [dnl
+m4trace:aclocal.m4:10181: -1- m4_define([m4_location(AM_DEP_TRACK)], [aclocal.m4:10181])
+m4trace:aclocal.m4:10181: -1- m4_define([AM_DEP_TRACK], [_m4_defun_pro([$0])AC_ARG_ENABLE([dependency-tracking], [dnl
 AS_HELP_STRING(
   [--enable-dependency-tracking],
   [do not reject slow dependency extractors])
@@ -24382,8 +24384,8 @@ _AM_SUBST_NOTMAKE([AMDEPBACKSLASH])dnl
 AC_SUBST([am__nodep])dnl
 _AM_SUBST_NOTMAKE([am__nodep])dnl
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:10209: -1- m4_define([m4_location(_AM_OUTPUT_DEPENDENCY_COMMANDS)], [aclocal.m4:10209])
-m4trace:aclocal.m4:10209: -1- m4_define([_AM_OUTPUT_DEPENDENCY_COMMANDS], [_m4_defun_pro([$0]){
+m4trace:aclocal.m4:10211: -1- m4_define([m4_location(_AM_OUTPUT_DEPENDENCY_COMMANDS)], [aclocal.m4:10211])
+m4trace:aclocal.m4:10211: -1- m4_define([_AM_OUTPUT_DEPENDENCY_COMMANDS], [_m4_defun_pro([$0]){
   # Older Autoconf quotes --file arguments for eval, but not when files
   # are listed without --file.  Let's play safe and only enable the eval
   # if we detect the quoting.
@@ -24426,11 +24428,11 @@ m4trace:aclocal.m4:10209: -1- m4_define([_AM_OUTPUT_DEPENDENCY_COMMANDS], [_m4_d
   rm -f conftest-deps.mk
 }
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:10262: -1- m4_define([m4_location(AM_OUTPUT_DEPENDENCY_COMMANDS)], [aclocal.m4:10262])
-m4trace:aclocal.m4:10262: -1- m4_define([AM_OUTPUT_DEPENDENCY_COMMANDS], [_m4_defun_pro([$0])AC_CONFIG_COMMANDS([depfiles],
+m4trace:aclocal.m4:10264: -1- m4_define([m4_location(AM_OUTPUT_DEPENDENCY_COMMANDS)], [aclocal.m4:10264])
+m4trace:aclocal.m4:10264: -1- m4_define([AM_OUTPUT_DEPENDENCY_COMMANDS], [_m4_defun_pro([$0])AC_CONFIG_COMMANDS([depfiles],
      [test x"$AMDEP_TRUE" != x"" || _AM_OUTPUT_DEPENDENCY_COMMANDS],
      [AMDEP_TRUE="$AMDEP_TRUE" MAKE="${MAKE-make}"])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:10279: -1- m4_define([AC_PROG_CC], [_m4_defun_pro([$0])AC_LANG_PUSH(C)dnl
+m4trace:aclocal.m4:10281: -1- m4_define([AC_PROG_CC], [_m4_defun_pro([$0])AC_LANG_PUSH(C)dnl
 AC_ARG_VAR([CC],     [C compiler command])dnl
 AC_ARG_VAR([CFLAGS], [C compiler flags])dnl
 _AC_ARG_VAR_LDFLAGS()dnl
@@ -24483,8 +24485,8 @@ AC_LANG_POP(C)dnl
 []_m4_defun_epi([$0])
 _AM_PROG_CC_C_O
 ])
-m4trace:aclocal.m4:10295: -1- m4_define([m4_location(AM_INIT_AUTOMAKE)], [aclocal.m4:10295])
-m4trace:aclocal.m4:10295: -1- m4_define([AM_INIT_AUTOMAKE], [_m4_defun_pro([$0])AC_PREREQ([2.65])dnl
+m4trace:aclocal.m4:10297: -1- m4_define([m4_location(AM_INIT_AUTOMAKE)], [aclocal.m4:10297])
+m4trace:aclocal.m4:10297: -1- m4_define([AM_INIT_AUTOMAKE], [_m4_defun_pro([$0])AC_PREREQ([2.65])dnl
 dnl Autoconf wants to disallow AM_ names.  We explicitly allow
 dnl the ones we care about.
 m4_pattern_allow([^AM_[A-Z]+FLAGS$])dnl
@@ -24626,7 +24628,7 @@ dnl The trailing newline in this macro's definition is deliberate, for
 dnl backward compatibility and to allow trailing 'dnl'-style comments
 dnl after the AM_INIT_AUTOMAKE invocation. See automake bug#16841.
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:10442: -1- m4_define([_AC_COMPILER_EXEEXT], [_m4_defun_pro([$0])AC_LANG_CONFTEST([_AC_LANG_NULL_PROGRAM])
+m4trace:aclocal.m4:10444: -1- m4_define([_AC_COMPILER_EXEEXT], [_m4_defun_pro([$0])AC_LANG_CONFTEST([_AC_LANG_NULL_PROGRAM])
 ac_clean_files_save=$ac_clean_files
 ac_clean_files="$ac_clean_files a.out a.out.dSYM a.exe b.out"
 _AC_COMPILER_EXEEXT_DEFAULT
@@ -24642,8 +24644,8 @@ _AC_COMPILER_EXEEXT_CROSS
 rm -f conftest.$ac_ext conftest$ac_cv_exeext conftest.out
 ac_clean_files=$ac_clean_files_save
 []_m4_defun_epi([$0])m4_provide([_AM_COMPILER_EXEEXT])])
-m4trace:aclocal.m4:10452: -1- m4_define([m4_location(_AC_AM_CONFIG_HEADER_HOOK)], [aclocal.m4:10452])
-m4trace:aclocal.m4:10452: -1- m4_define([_AC_AM_CONFIG_HEADER_HOOK], [_m4_defun_pro([$0])# Compute $1's index in $config_headers.
+m4trace:aclocal.m4:10454: -1- m4_define([m4_location(_AC_AM_CONFIG_HEADER_HOOK)], [aclocal.m4:10454])
+m4trace:aclocal.m4:10454: -1- m4_define([_AC_AM_CONFIG_HEADER_HOOK], [_m4_defun_pro([$0])# Compute $1's index in $config_headers.
 _am_arg=$1
 _am_stamp_count=1
 for _am_header in $config_headers :; do
@@ -24655,8 +24657,8 @@ for _am_header in $config_headers :; do
   esac
 done
 echo "timestamp for $_am_arg" >`AS_DIRNAME(["$_am_arg"])`/stamp-h[]$_am_stamp_count[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:10475: -1- m4_define([m4_location(AM_PROG_INSTALL_SH)], [aclocal.m4:10475])
-m4trace:aclocal.m4:10475: -1- m4_define([AM_PROG_INSTALL_SH], [_m4_defun_pro([$0])AC_REQUIRE([AM_AUX_DIR_EXPAND])dnl
+m4trace:aclocal.m4:10477: -1- m4_define([m4_location(AM_PROG_INSTALL_SH)], [aclocal.m4:10477])
+m4trace:aclocal.m4:10477: -1- m4_define([AM_PROG_INSTALL_SH], [_m4_defun_pro([$0])AC_REQUIRE([AM_AUX_DIR_EXPAND])dnl
 if test x"${install_sh+set}" != xset; then
   case $am_aux_dir in
   *\ * | *\	*)
@@ -24666,8 +24668,8 @@ if test x"${install_sh+set}" != xset; then
   esac
 fi
 AC_SUBST([install_sh])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:10495: -1- m4_define([m4_location(AM_SET_LEADING_DOT)], [aclocal.m4:10495])
-m4trace:aclocal.m4:10495: -1- m4_define([AM_SET_LEADING_DOT], [_m4_defun_pro([$0])rm -rf .tst 2>/dev/null
+m4trace:aclocal.m4:10497: -1- m4_define([m4_location(AM_SET_LEADING_DOT)], [aclocal.m4:10497])
+m4trace:aclocal.m4:10497: -1- m4_define([AM_SET_LEADING_DOT], [_m4_defun_pro([$0])rm -rf .tst 2>/dev/null
 mkdir .tst 2>/dev/null
 if test -d .tst; then
   am__leading_dot=.
@@ -24676,8 +24678,8 @@ else
 fi
 rmdir .tst 2>/dev/null
 AC_SUBST([am__leading_dot])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:10518: -1- m4_define([m4_location(AM_MAKE_INCLUDE)], [aclocal.m4:10518])
-m4trace:aclocal.m4:10518: -1- m4_define([AM_MAKE_INCLUDE], [_m4_defun_pro([$0])AC_MSG_CHECKING([whether ${MAKE-make} supports the include directive])
+m4trace:aclocal.m4:10520: -1- m4_define([m4_location(AM_MAKE_INCLUDE)], [aclocal.m4:10520])
+m4trace:aclocal.m4:10520: -1- m4_define([AM_MAKE_INCLUDE], [_m4_defun_pro([$0])AC_MSG_CHECKING([whether ${MAKE-make} supports the include directive])
 cat > confinc.mk << 'END'
 am__doit:
 	@echo this is the am__doit target >confinc.out
@@ -24705,17 +24707,17 @@ done
 rm -f confinc.* confmf.*
 AC_MSG_RESULT([${_am_result}])
 AC_SUBST([am__include])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:10547: -1- AC_SUBST([am__quote])
-m4trace:aclocal.m4:10547: -1- AC_SUBST_TRACE([am__quote])
-m4trace:aclocal.m4:10547: -1- m4_pattern_allow([^am__quote$])
-m4trace:aclocal.m4:10547: -1- m4_define([_m4_set([_AC_SUBST_VARS],am__quote)], [1])
-m4trace:aclocal.m4:10547: -1- m4_define([_m4_set_size(_AC_SUBST_VARS)], [1])
-m4trace:aclocal.m4:10559: -1- m4_define([m4_location(AM_MISSING_PROG)], [aclocal.m4:10559])
-m4trace:aclocal.m4:10559: -1- m4_define([AM_MISSING_PROG], [_m4_defun_pro([$0])AC_REQUIRE([AM_MISSING_HAS_RUN])
+m4trace:aclocal.m4:10549: -1- AC_SUBST([am__quote])
+m4trace:aclocal.m4:10549: -1- AC_SUBST_TRACE([am__quote])
+m4trace:aclocal.m4:10549: -1- m4_pattern_allow([^am__quote$])
+m4trace:aclocal.m4:10549: -1- m4_define([_m4_set([_AC_SUBST_VARS],am__quote)], [1])
+m4trace:aclocal.m4:10549: -1- m4_define([_m4_set_size(_AC_SUBST_VARS)], [1])
+m4trace:aclocal.m4:10561: -1- m4_define([m4_location(AM_MISSING_PROG)], [aclocal.m4:10561])
+m4trace:aclocal.m4:10561: -1- m4_define([AM_MISSING_PROG], [_m4_defun_pro([$0])AC_REQUIRE([AM_MISSING_HAS_RUN])
 $1=${$1-"${am_missing_run}$2"}
 AC_SUBST($1)[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:10568: -1- m4_define([m4_location(AM_MISSING_HAS_RUN)], [aclocal.m4:10568])
-m4trace:aclocal.m4:10568: -1- m4_define([AM_MISSING_HAS_RUN], [_m4_defun_pro([$0])AC_REQUIRE([AM_AUX_DIR_EXPAND])dnl
+m4trace:aclocal.m4:10570: -1- m4_define([m4_location(AM_MISSING_HAS_RUN)], [aclocal.m4:10570])
+m4trace:aclocal.m4:10570: -1- m4_define([AM_MISSING_HAS_RUN], [_m4_defun_pro([$0])AC_REQUIRE([AM_AUX_DIR_EXPAND])dnl
 AC_REQUIRE_AUX_FILE([missing])dnl
 if test x"${MISSING+set}" != xset; then
   MISSING="\${SHELL} '$am_aux_dir/missing'"
@@ -24728,16 +24730,16 @@ else
   AC_MSG_WARN(['missing' script is too old or missing])
 fi
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:10593: -1- m4_define([m4_location(_AM_MANGLE_OPTION)], [aclocal.m4:10593])
-m4trace:aclocal.m4:10593: -1- m4_define([_AM_MANGLE_OPTION], [_m4_defun_pro([$0])[_AM_OPTION_]m4_bpatsubst($1, [[^a-zA-Z0-9_]], [_])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:10599: -1- m4_define([m4_location(_AM_SET_OPTION)], [aclocal.m4:10599])
-m4trace:aclocal.m4:10599: -1- m4_define([_AM_SET_OPTION], [_m4_defun_pro([$0])m4_define(_AM_MANGLE_OPTION([$1]), [1])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:10605: -1- m4_define([m4_location(_AM_SET_OPTIONS)], [aclocal.m4:10605])
-m4trace:aclocal.m4:10605: -1- m4_define([_AM_SET_OPTIONS], [_m4_defun_pro([$0])m4_foreach_w([_AM_Option], [$1], [_AM_SET_OPTION(_AM_Option)])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:10611: -1- m4_define([m4_location(_AM_IF_OPTION)], [aclocal.m4:10611])
-m4trace:aclocal.m4:10611: -1- m4_define([_AM_IF_OPTION], [_m4_defun_pro([$0])m4_ifset(_AM_MANGLE_OPTION([$1]), [$2], [$3])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:10624: -1- m4_define([m4_location(_AM_PROG_CC_C_O)], [aclocal.m4:10624])
-m4trace:aclocal.m4:10624: -1- m4_define([_AM_PROG_CC_C_O], [_m4_defun_pro([$0])AC_REQUIRE([AM_AUX_DIR_EXPAND])dnl
+m4trace:aclocal.m4:10595: -1- m4_define([m4_location(_AM_MANGLE_OPTION)], [aclocal.m4:10595])
+m4trace:aclocal.m4:10595: -1- m4_define([_AM_MANGLE_OPTION], [_m4_defun_pro([$0])[_AM_OPTION_]m4_bpatsubst($1, [[^a-zA-Z0-9_]], [_])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:10601: -1- m4_define([m4_location(_AM_SET_OPTION)], [aclocal.m4:10601])
+m4trace:aclocal.m4:10601: -1- m4_define([_AM_SET_OPTION], [_m4_defun_pro([$0])m4_define(_AM_MANGLE_OPTION([$1]), [1])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:10607: -1- m4_define([m4_location(_AM_SET_OPTIONS)], [aclocal.m4:10607])
+m4trace:aclocal.m4:10607: -1- m4_define([_AM_SET_OPTIONS], [_m4_defun_pro([$0])m4_foreach_w([_AM_Option], [$1], [_AM_SET_OPTION(_AM_Option)])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:10613: -1- m4_define([m4_location(_AM_IF_OPTION)], [aclocal.m4:10613])
+m4trace:aclocal.m4:10613: -1- m4_define([_AM_IF_OPTION], [_m4_defun_pro([$0])m4_ifset(_AM_MANGLE_OPTION([$1]), [$2], [$3])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:10626: -1- m4_define([m4_location(_AM_PROG_CC_C_O)], [aclocal.m4:10626])
+m4trace:aclocal.m4:10626: -1- m4_define([_AM_PROG_CC_C_O], [_m4_defun_pro([$0])AC_REQUIRE([AM_AUX_DIR_EXPAND])dnl
 AC_REQUIRE_AUX_FILE([compile])dnl
 AC_LANG_PUSH([C])dnl
 AC_CACHE_CHECK(
@@ -24769,19 +24771,19 @@ if test "$am_cv_prog_cc_c_o" != yes; then
    CC="$am_aux_dir/compile $CC"
 fi
 AC_LANG_POP([C])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:10659: -1- m4_define([m4_location(AM_PROG_CC_C_O)], [aclocal.m4:10659])
-m4trace:aclocal.m4:10659: -1- m4_define([AM_PROG_CC_C_O], [_m4_defun_once([AM_PROG_CC_C_O], [AC_REQUIRE([AC_PROG_CC])], m4_if(_m4_divert_dump, [],
+m4trace:aclocal.m4:10661: -1- m4_define([m4_location(AM_PROG_CC_C_O)], [aclocal.m4:10661])
+m4trace:aclocal.m4:10661: -1- m4_define([AM_PROG_CC_C_O], [_m4_defun_once([AM_PROG_CC_C_O], [AC_REQUIRE([AC_PROG_CC])], m4_if(_m4_divert_dump, [],
   [[_m4_defun_pro([AM_PROG_CC_C_O])m4_unquote(], [)_m4_defun_epi([AM_PROG_CC_C_O])]],
 m4_ifdef([_m4_diverting([AM_PROG_CC_C_O])], [-]), [-], [[m4_unquote(], [)]],
   [[_m4_require_call([AM_PROG_CC_C_O],], [, _m4_divert_dump)]]))])
-m4trace:aclocal.m4:10671: -1- m4_define([m4_location(AM_RUN_LOG)], [aclocal.m4:10671])
-m4trace:aclocal.m4:10671: -1- m4_define([AM_RUN_LOG], [_m4_defun_pro([$0]){ echo "$as_me:$LINENO: $1" >&AS_MESSAGE_LOG_FD
+m4trace:aclocal.m4:10673: -1- m4_define([m4_location(AM_RUN_LOG)], [aclocal.m4:10673])
+m4trace:aclocal.m4:10673: -1- m4_define([AM_RUN_LOG], [_m4_defun_pro([$0]){ echo "$as_me:$LINENO: $1" >&AS_MESSAGE_LOG_FD
    ($1) >&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD
    ac_status=$?
    echo "$as_me:$LINENO: \$? = $ac_status" >&AS_MESSAGE_LOG_FD
    (exit $ac_status); }[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:10688: -1- m4_define([m4_location(AM_SANITY_CHECK)], [aclocal.m4:10688])
-m4trace:aclocal.m4:10688: -1- m4_define([AM_SANITY_CHECK], [_m4_defun_pro([$0])AC_MSG_CHECKING([whether build environment is sane])
+m4trace:aclocal.m4:10690: -1- m4_define([m4_location(AM_SANITY_CHECK)], [aclocal.m4:10690])
+m4trace:aclocal.m4:10690: -1- m4_define([AM_SANITY_CHECK], [_m4_defun_pro([$0])AC_MSG_CHECKING([whether build environment is sane])
 # Reject unsafe characters in $srcdir or the absolute working directory
 # name.  Accept space and tab only in the latter.
 am_lf='
@@ -24852,8 +24854,8 @@ AC_CONFIG_COMMANDS_PRE(
    AC_MSG_RESULT([done])])
 rm -f conftest.file
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:10771: -1- m4_define([m4_location(AM_SILENT_RULES)], [aclocal.m4:10771])
-m4trace:aclocal.m4:10771: -1- m4_define([AM_SILENT_RULES], [_m4_defun_pro([$0])AC_ARG_ENABLE([silent-rules], [dnl
+m4trace:aclocal.m4:10773: -1- m4_define([m4_location(AM_SILENT_RULES)], [aclocal.m4:10773])
+m4trace:aclocal.m4:10773: -1- m4_define([AM_SILENT_RULES], [_m4_defun_pro([$0])AC_ARG_ENABLE([silent-rules], [dnl
 AS_HELP_STRING(
   [--enable-silent-rules],
   [less verbose build output (undo: "make V=1")])
@@ -24901,8 +24903,8 @@ AM_BACKSLASH='\'
 AC_SUBST([AM_BACKSLASH])dnl
 _AM_SUBST_NOTMAKE([AM_BACKSLASH])dnl
 []_m4_defun_epi([$0])])
-m4trace:aclocal.m4:10836: -1- m4_define([m4_location(AM_PROG_INSTALL_STRIP)], [aclocal.m4:10836])
-m4trace:aclocal.m4:10836: -1- m4_define([AM_PROG_INSTALL_STRIP], [_m4_defun_pro([$0])AC_REQUIRE([AM_PROG_INSTALL_SH])dnl
+m4trace:aclocal.m4:10838: -1- m4_define([m4_location(AM_PROG_INSTALL_STRIP)], [aclocal.m4:10838])
+m4trace:aclocal.m4:10838: -1- m4_define([AM_PROG_INSTALL_STRIP], [_m4_defun_pro([$0])AC_REQUIRE([AM_PROG_INSTALL_SH])dnl
 # Installed binaries are usually stripped using 'strip' when the user
 # run "make install-strip".  However 'strip' might not be the right
 # tool to use in cross-compilation environments, therefore Automake
@@ -24913,12 +24915,12 @@ if test "$cross_compiling" != no; then
 fi
 INSTALL_STRIP_PROGRAM="\$(install_sh) -c -s"
 AC_SUBST([INSTALL_STRIP_PROGRAM])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:10859: -1- m4_define([m4_location(_AM_SUBST_NOTMAKE)], [aclocal.m4:10859])
-m4trace:aclocal.m4:10859: -1- m4_define([_AM_SUBST_NOTMAKE], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:10864: -1- m4_define([m4_location(AM_SUBST_NOTMAKE)], [aclocal.m4:10864])
-m4trace:aclocal.m4:10864: -1- m4_define([AM_SUBST_NOTMAKE], [_m4_defun_pro([$0])_AM_SUBST_NOTMAKE($@)[]_m4_defun_epi([$0])])
-m4trace:aclocal.m4:10888: -1- m4_define([m4_location(_AM_PROG_TAR)], [aclocal.m4:10888])
-m4trace:aclocal.m4:10888: -1- m4_define([_AM_PROG_TAR], [_m4_defun_pro([$0])# Always define AMTAR for backward compatibility.  Yes, it's still used
+m4trace:aclocal.m4:10861: -1- m4_define([m4_location(_AM_SUBST_NOTMAKE)], [aclocal.m4:10861])
+m4trace:aclocal.m4:10861: -1- m4_define([_AM_SUBST_NOTMAKE], [_m4_defun_pro([$0])[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:10866: -1- m4_define([m4_location(AM_SUBST_NOTMAKE)], [aclocal.m4:10866])
+m4trace:aclocal.m4:10866: -1- m4_define([AM_SUBST_NOTMAKE], [_m4_defun_pro([$0])_AM_SUBST_NOTMAKE($@)[]_m4_defun_epi([$0])])
+m4trace:aclocal.m4:10890: -1- m4_define([m4_location(_AM_PROG_TAR)], [aclocal.m4:10890])
+m4trace:aclocal.m4:10890: -1- m4_define([_AM_PROG_TAR], [_m4_defun_pro([$0])# Always define AMTAR for backward compatibility.  Yes, it's still used
 # in the wild :-(  We should find a proper way to deprecate it ...
 AC_SUBST([AMTAR], ['$${TAR-tar}'])
 

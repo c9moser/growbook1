@@ -659,10 +659,6 @@ ac_subst_vars='am__EXEEXT_FALSE
 am__EXEEXT_TRUE
 LTLIBOBJS
 LIB@&t@OBJS
-MARIADB_LIBS
-MARIADB_CFLAGS
-PGSQL_LIBS
-PGSQL_CFLAGS
 GROWBOOK_LIBS
 GROWBOOK_CFLAGS
 PKG_CONFIG_LIBDIR
@@ -842,11 +838,7 @@ PKG_CONFIG
 PKG_CONFIG_PATH
 PKG_CONFIG_LIBDIR
 GROWBOOK_CFLAGS
-GROWBOOK_LIBS
-PGSQL_CFLAGS
-PGSQL_LIBS
-MARIADB_CFLAGS
-MARIADB_LIBS'
+GROWBOOK_LIBS'
 
 
 # Initialize some variables set by options.
@@ -1520,13 +1512,6 @@ Some influential environment variables:
               C compiler flags for GROWBOOK, overriding pkg-config
   GROWBOOK_LIBS 
               linker flags for GROWBOOK, overriding pkg-config
-  PGSQL_CFLAGS 
-              C compiler flags for PGSQL, overriding pkg-config
-  PGSQL_LIBS  linker flags for PGSQL, overriding pkg-config
-  MARIADB_CFLAGS 
-              C compiler flags for MARIADB, overriding pkg-config
-  MARIADB_LIBS 
-              linker flags for MARIADB, overriding pkg-config
 
 Use these variables to override the choices made by `configure' or to help
 it to find libraries and programs with nonstandard names/locations.
@@ -7041,7 +7026,7 @@ else $as_nop
     lt_cv_sys_max_cmd_len=-1;
     ;;
 
-  cygwin* | mingw* | cegcc*)
+  cygwin* | msys* | mingw* | cegcc*)
     # On Win9x/ME, this test blows up -- it succeeds, but takes
     # about 5 minutes as the teststring grows exponentially.
     # Worse, since 9x/ME are not pre-emptively multitasking,
@@ -7208,7 +7193,7 @@ else $as_nop
       *-*-mingw* ) # actually msys
         lt_cv_to_host_file_cmd=func_convert_file_msys_to_w32
         ;;
-      *-*-cygwin* )
+      *-*-cygwin* | *-*-msys* )
         lt_cv_to_host_file_cmd=func_convert_file_cygwin_to_w32
         ;;
       * ) # otherwise, assume *nix
@@ -7216,12 +7201,12 @@ else $as_nop
         ;;
     esac
     ;;
-  *-*-cygwin* )
+  *-*-cygwin* | *-*-msys* )
     case $build in
       *-*-mingw* ) # actually msys
         lt_cv_to_host_file_cmd=func_convert_file_msys_to_cygwin
         ;;
-      *-*-cygwin* )
+      *-*-cygwin* | *-*-msys* )
         lt_cv_to_host_file_cmd=func_convert_file_noop
         ;;
       * ) # otherwise, assume *nix
@@ -7289,7 +7274,7 @@ case $reload_flag in
 esac
 reload_cmds='$LD$reload_flag -o $output$reload_objs'
 case $host_os in
-  cygwin* | mingw* | pw32* | cegcc*)
+  cygwin* | msys* | mingw* | pw32* | cegcc*)
     if test yes != "$GCC"; then
       reload_cmds=false
     fi
@@ -7455,7 +7440,7 @@ bsdi[45]*)
   lt_cv_file_magic_test_file=/shlib/libc.so
   ;;
 
-cygwin*)
+cygwin* | msys*)
   # func_win32_libid is a shell function defined in ltmain.sh
   lt_cv_deplibs_check_method='file_magic ^x86 archive import|^x86 DLL'
   lt_cv_file_magic_cmd='func_win32_libid'
@@ -7782,7 +7767,7 @@ else $as_nop
   lt_cv_sharedlib_from_linklib_cmd='unknown'
 
 case $host_os in
-cygwin* | mingw* | pw32* | cegcc*)
+cygwin* | msys* | mingw* | pw32* | cegcc*)
   # two different shell functions defined in ltmain.sh;
   # decide which one to use based on capabilities of $DLLTOOL
   case `$DLLTOOL --help 2>&1` in
@@ -8307,7 +8292,7 @@ case $host_os in
 aix*)
   symcode='[BCDT]'
   ;;
-cygwin* | mingw* | pw32* | cegcc*)
+cygwin* | msys* | mingw* | pw32* | cegcc*)
   symcode='[ABCDGISTW]'
   ;;
 hpux*)
@@ -9866,7 +9851,7 @@ func_stripname_cnf ()
 enable_win32_dll=yes
 
 case $host in
-*-*-cygwin* | *-*-mingw* | *-*-pw32* | *-*-cegcc*)
+*-*-cygwin* | *-*-msys* | *-*-mingw* | *-*-pw32* | *-*-cegcc*)
   if test -n "$ac_tool_prefix"; then
   # Extract the first word of "${ac_tool_prefix}as", so it can be a program name with args.
 set dummy ${ac_tool_prefix}as; ac_word=$2
@@ -10206,12 +10191,7 @@ then :
   enableval=$enable_shared; p=${PACKAGE-default}
     case $enableval in
     yes) enable_shared=yes ;;
-    no)
-      enable_shared=no
-      
-printf "%s\n" "@%:@define LT_MINGW_STATIC_TESTSUITE_HACK 1" >>confdefs.h
-
-      ;;
+    no) enable_shared=no ;;
     *)
       enable_shared=no
       # Look at the argument we got.  We use all the common list separators.
@@ -10808,7 +10788,7 @@ lt_prog_compiler_static=
       # PIC is the default for these OSes.
       ;;
 
-    mingw* | cygwin* | pw32* | os2* | cegcc*)
+    mingw* | cygwin* | msys* | pw32* | os2* | cegcc*)
       # This hack is so that the source file can tell whether it is being
       # built for inclusion in a dll (and should export symbols for example).
       # Although the cygwin gcc ignores -fPIC, still need this for old-style
@@ -10911,7 +10891,7 @@ lt_prog_compiler_static=
       esac
       ;;
 
-    mingw* | cygwin* | pw32* | os2* | cegcc*)
+    mingw* | cygwin* | msys* | pw32* | os2* | cegcc*)
       # This hack is so that the source file can tell whether it is being
       # built for inclusion in a dll (and should export symbols for example).
       lt_prog_compiler_pic='-DDLL_EXPORT'
@@ -11418,7 +11398,7 @@ printf %s "checking whether the $compiler linker ($LD) supports shared libraries
   extract_expsyms_cmds=
 
   case $host_os in
-  cygwin* | mingw* | pw32* | cegcc*)
+  cygwin* | msys* | mingw* | pw32* | cegcc*)
     # FIXME: the MSVC++ port hasn't been tested in a loooong time
     # When not using gcc, we currently assume that we are using
     # Microsoft Visual C++.
@@ -11533,7 +11513,7 @@ _LT_EOF
       fi
       ;;
 
-    cygwin* | mingw* | pw32* | cegcc*)
+    cygwin* | msys* | mingw* | pw32* | cegcc*)
       # _LT_TAGVAR(hardcode_libdir_flag_spec, ) is actually meaningless,
       # as there is no search path for DLLs.
       hardcode_libdir_flag_spec='-L$libdir'
@@ -12078,7 +12058,7 @@ fi
       export_dynamic_flag_spec=-rdynamic
       ;;
 
-    cygwin* | mingw* | pw32* | cegcc*)
+    cygwin* | msys* | mingw* | pw32* | cegcc*)
       # When not using gcc, we currently assume that we are using
       # Microsoft Visual C++.
       # hardcode_libdir_flag_spec is actually meaningless, as there is
@@ -13117,7 +13097,7 @@ bsdi[45]*)
   # libtool to hard-code these into programs
   ;;
 
-cygwin* | mingw* | pw32* | cegcc*)
+cygwin* | msys* | mingw* | pw32* | cegcc*)
   version_type=windows
   shrext_cmds=.dll
   need_version=no
@@ -13146,6 +13126,12 @@ cygwin* | mingw* | pw32* | cegcc*)
     cygwin*)
       # Cygwin DLLs use 'cyg' prefix rather than 'lib'
       soname_spec='`echo $libname | sed -e 's/^lib/cyg/'``echo $release | $SED -e 's/[.]/-/g'`$versuffix$shared_ext'
+
+      sys_lib_search_path_spec="$sys_lib_search_path_spec /usr/lib/w32api"
+      ;;
+    msys*)
+      # MSYS DLLs use 'msys-' prefix rather than 'lib'
+      soname_spec='`echo $libname | sed -e 's/^lib/msys-/'``echo $release | $SED -e 's/[.]/-/g'`$versuffix$shared_ext'
 
       sys_lib_search_path_spec="$sys_lib_search_path_spec /usr/lib/w32api"
       ;;
@@ -13183,7 +13169,7 @@ cygwin* | mingw* | pw32* | cegcc*)
       # Convert to MSYS style.
       sys_lib_search_path_spec=`$ECHO "$sys_lib_search_path_spec" | sed -e 's|\\\\|/|g' -e 's| \\([a-zA-Z]\\):| /\\1|g' -e 's|^ ||'`
       ;;
-    cygwin*)
+    cygwin* | msys*)
       # Convert to unix form, then to dos form, then back to unix form
       # but this time dos style (no spaces!) so that the unix form looks
       # like /cygdrive/c/PROGRA~1:/cygdr...
@@ -13888,7 +13874,7 @@ else
     lt_cv_dlopen_libs=
     ;;
 
-  cygwin*)
+  cygwin* | msys*)
     lt_cv_dlopen=dlopen
     lt_cv_dlopen_libs=
     ;;
@@ -15195,7 +15181,7 @@ fi
         esac
         ;;
 
-      cygwin* | mingw* | pw32* | cegcc*)
+      cygwin* | msys* | mingw* | pw32* | cegcc*)
 	case $GXX,$cc_basename in
 	,cl* | no,cl*)
 	  # Native MSVC
@@ -16206,7 +16192,7 @@ lt_prog_compiler_static_CXX=
     beos* | irix5* | irix6* | nonstopux* | osf3* | osf4* | osf5*)
       # PIC is the default for these OSes.
       ;;
-    mingw* | cygwin* | os2* | pw32* | cegcc*)
+    mingw* | cygwin* | msys* | os2* | pw32* | cegcc*)
       # This hack is so that the source file can tell whether it is being
       # built for inclusion in a dll (and should export symbols for example).
       # Although the cygwin gcc ignores -fPIC, still need this for old-style
@@ -16281,7 +16267,7 @@ lt_prog_compiler_static_CXX=
 	  ;;
 	esac
 	;;
-      mingw* | cygwin* | os2* | pw32* | cegcc*)
+      mingw* | cygwin* | msys* | os2* | pw32* | cegcc*)
 	# This hack is so that the source file can tell whether it is being
 	# built for inclusion in a dll (and should export symbols for example).
 	lt_prog_compiler_pic_CXX='-DDLL_EXPORT'
@@ -16775,7 +16761,7 @@ printf %s "checking whether the $compiler linker ($LD) supports shared libraries
   pw32*)
     export_symbols_cmds_CXX=$ltdll_cmds
     ;;
-  cygwin* | mingw* | cegcc*)
+  cygwin* | msys* | mingw* | cegcc*)
     case $cc_basename in
     cl*)
       exclude_expsyms_CXX='_NULL_IMPORT_DESCRIPTOR|_IMPORT_DESCRIPTOR_.*'
@@ -17097,7 +17083,7 @@ bsdi[45]*)
   # libtool to hard-code these into programs
   ;;
 
-cygwin* | mingw* | pw32* | cegcc*)
+cygwin* | msys* | mingw* | pw32* | cegcc*)
   version_type=windows
   shrext_cmds=.dll
   need_version=no
@@ -17126,6 +17112,11 @@ cygwin* | mingw* | pw32* | cegcc*)
     cygwin*)
       # Cygwin DLLs use 'cyg' prefix rather than 'lib'
       soname_spec='`echo $libname | sed -e 's/^lib/cyg/'``echo $release | $SED -e 's/[.]/-/g'`$versuffix$shared_ext'
+
+      ;;
+    msys*)
+      # MSYS DLLs use 'msys-' prefix rather than 'lib'
+      soname_spec='`echo $libname | sed -e 's/^lib/msys-/'``echo $release | $SED -e 's/[.]/-/g'`$versuffix$shared_ext'
 
       ;;
     mingw* | cegcc*)
@@ -17162,7 +17153,7 @@ cygwin* | mingw* | pw32* | cegcc*)
       # Convert to MSYS style.
       sys_lib_search_path_spec=`$ECHO "$sys_lib_search_path_spec" | sed -e 's|\\\\|/|g' -e 's| \\([a-zA-Z]\\):| /\\1|g' -e 's|^ ||'`
       ;;
-    cygwin*)
+    cygwin* | msys*)
       # Convert to unix form, then to dos form, then back to unix form
       # but this time dos style (no spaces!) so that the unix form looks
       # like /cygdrive/c/PROGRA~1:/cygdr...
@@ -17834,6 +17825,8 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
+DEPENDS="gtkmm-3.0 >= 3.24"
+
 
 
 
@@ -17964,6 +17957,28 @@ printf "%s\n" "no" >&6; }
 		PKG_CONFIG=""
 	fi
 fi
+if test -n "$PKG_CONFIG" && \
+    { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libpq\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libpq") 2>&5
+  ac_status=$?
+  printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  
+printf "%s\n" "@%:@define HAVE_LIBPQ 1" >>confdefs.h
+
+				  DEPENDS="$DEPENDS libpq"
+fi
+if test -n "$PKG_CONFIG" && \
+    { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libmariadb\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "libmariadb") 2>&5
+  ac_status=$?
+  printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; then
+  
+printf "%s\n" "@%:@define HAVE_MARIADB 1" >>confdefs.h
+
+fi
+
 
 pkg_failed=no
 { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for GROWBOOK" >&5
@@ -17973,12 +17988,12 @@ if test -n "$GROWBOOK_CFLAGS"; then
     pkg_cv_GROWBOOK_CFLAGS="$GROWBOOK_CFLAGS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
-    { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gtkmm-3.0 >= 3.24\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "gtkmm-3.0 >= 3.24") 2>&5
+    { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$DEPENDS\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "$DEPENDS") 2>&5
   ac_status=$?
   printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_GROWBOOK_CFLAGS=`$PKG_CONFIG --cflags "gtkmm-3.0 >= 3.24" 2>/dev/null`
+  pkg_cv_GROWBOOK_CFLAGS=`$PKG_CONFIG --cflags "$DEPENDS" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes 
 else
   pkg_failed=yes
@@ -17990,12 +18005,12 @@ if test -n "$GROWBOOK_LIBS"; then
     pkg_cv_GROWBOOK_LIBS="$GROWBOOK_LIBS"
  elif test -n "$PKG_CONFIG"; then
     if test -n "$PKG_CONFIG" && \
-    { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"gtkmm-3.0 >= 3.24\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "gtkmm-3.0 >= 3.24") 2>&5
+    { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"\$DEPENDS\""; } >&5
+  ($PKG_CONFIG --exists --print-errors "$DEPENDS") 2>&5
   ac_status=$?
   printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
   test $ac_status = 0; }; then
-  pkg_cv_GROWBOOK_LIBS=`$PKG_CONFIG --libs "gtkmm-3.0 >= 3.24" 2>/dev/null`
+  pkg_cv_GROWBOOK_LIBS=`$PKG_CONFIG --libs "$DEPENDS" 2>/dev/null`
 		      test "x$?" != "x0" && pkg_failed=yes 
 else
   pkg_failed=yes
@@ -18016,14 +18031,14 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        GROWBOOK_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "gtkmm-3.0 >= 3.24" 2>&1`
+	        GROWBOOK_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "$DEPENDS" 2>&1`
         else 
-	        GROWBOOK_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "gtkmm-3.0 >= 3.24" 2>&1`
+	        GROWBOOK_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "$DEPENDS" 2>&1`
         fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$GROWBOOK_PKG_ERRORS" >&5
 
-	as_fn_error $? "Package requirements (gtkmm-3.0 >= 3.24) were not met:
+	as_fn_error $? "Package requirements ($DEPENDS) were not met:
 
 $GROWBOOK_PKG_ERRORS
 
@@ -18154,198 +18169,6 @@ then :
 
 fi
 
-
-PSQL_CFLAGS=""
-PSQL_LIBS=""
-
-pkg_failed=no
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for PGSQL" >&5
-printf %s "checking for PGSQL... " >&6; }
-
-if test -n "$PGSQL_CFLAGS"; then
-    pkg_cv_PGSQL_CFLAGS="$PGSQL_CFLAGS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libpq\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "libpq") 2>&5
-  ac_status=$?
-  printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_PGSQL_CFLAGS=`$PKG_CONFIG --cflags "libpq" 2>/dev/null`
-		      test "x$?" != "x0" && pkg_failed=yes 
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-if test -n "$PGSQL_LIBS"; then
-    pkg_cv_PGSQL_LIBS="$PGSQL_LIBS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libpq\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "libpq") 2>&5
-  ac_status=$?
-  printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_PGSQL_LIBS=`$PKG_CONFIG --libs "libpq" 2>/dev/null`
-		      test "x$?" != "x0" && pkg_failed=yes 
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-   	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
-printf "%s\n" "no" >&6; }
-        
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        PGSQL_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libpq" 2>&1`
-        else 
-	        PGSQL_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libpq" 2>&1`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$PGSQL_PKG_ERRORS" >&5
-
-	as_fn_error $? "Package requirements (libpq) were not met:
-
-$PGSQL_PKG_ERRORS
-
-Consider adjusting the PKG_CONFIG_PATH environment variable if you
-installed software in a non-standard prefix.
-
-Alternatively, you may set the environment variables PGSQL_CFLAGS
-and PGSQL_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details." "$LINENO" 5        
-elif test $pkg_failed = untried; then
-     	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
-printf "%s\n" "no" >&6; }
-	{ { printf "%s\n" "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
-printf "%s\n" "$as_me: error: in \`$ac_pwd':" >&2;}
-as_fn_error $? "The pkg-config script could not be found or is too old.  Make sure it
-is in your PATH or set the PKG_CONFIG environment variable to the full
-path to pkg-config.
-
-Alternatively, you may set the environment variables PGSQL_CFLAGS
-and PGSQL_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details.
-
-To get pkg-config, see <http://pkg-config.freedesktop.org/>.
-See \`config.log' for more details" "$LINENO" 5; }        
-else
-	PGSQL_CFLAGS=$pkg_cv_PGSQL_CFLAGS
-	PGSQL_LIBS=$pkg_cv_PGSQL_LIBS
-        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-printf "%s\n" "yes" >&6; }
-	
-printf "%s\n" "@%:@define HAVE_LIBPQ 1" >>confdefs.h
-
-fi
-
-MARIADB_CFLAGS=""
-MARIADB_LIBS=""
-
-pkg_failed=no
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for MARIADB" >&5
-printf %s "checking for MARIADB... " >&6; }
-
-if test -n "$MARIADB_CFLAGS"; then
-    pkg_cv_MARIADB_CFLAGS="$MARIADB_CFLAGS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libmariadb\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "libmariadb") 2>&5
-  ac_status=$?
-  printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_MARIADB_CFLAGS=`$PKG_CONFIG --cflags "libmariadb" 2>/dev/null`
-		      test "x$?" != "x0" && pkg_failed=yes 
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-if test -n "$MARIADB_LIBS"; then
-    pkg_cv_MARIADB_LIBS="$MARIADB_LIBS"
- elif test -n "$PKG_CONFIG"; then
-    if test -n "$PKG_CONFIG" && \
-    { { printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$PKG_CONFIG --exists --print-errors \"libmariadb\""; } >&5
-  ($PKG_CONFIG --exists --print-errors "libmariadb") 2>&5
-  ac_status=$?
-  printf "%s\n" "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
-  test $ac_status = 0; }; then
-  pkg_cv_MARIADB_LIBS=`$PKG_CONFIG --libs "libmariadb" 2>/dev/null`
-		      test "x$?" != "x0" && pkg_failed=yes 
-else
-  pkg_failed=yes
-fi
- else
-    pkg_failed=untried
-fi
-
-
-
-if test $pkg_failed = yes; then
-   	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
-printf "%s\n" "no" >&6; }
-        
-if $PKG_CONFIG --atleast-pkgconfig-version 0.20; then
-        _pkg_short_errors_supported=yes
-else
-        _pkg_short_errors_supported=no
-fi
-        if test $_pkg_short_errors_supported = yes; then
-	        MARIADB_PKG_ERRORS=`$PKG_CONFIG --short-errors --print-errors --cflags --libs "libmariadb" 2>&1`
-        else 
-	        MARIADB_PKG_ERRORS=`$PKG_CONFIG --print-errors --cflags --libs "libmariadb" 2>&1`
-        fi
-	# Put the nasty error message in config.log where it belongs
-	echo "$MARIADB_PKG_ERRORS" >&5
-
-	as_fn_error $? "Package requirements (libmariadb) were not met:
-
-$MARIADB_PKG_ERRORS
-
-Consider adjusting the PKG_CONFIG_PATH environment variable if you
-installed software in a non-standard prefix.
-
-Alternatively, you may set the environment variables MARIADB_CFLAGS
-and MARIADB_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details." "$LINENO" 5        
-elif test $pkg_failed = untried; then
-     	{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
-printf "%s\n" "no" >&6; }
-	{ { printf "%s\n" "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
-printf "%s\n" "$as_me: error: in \`$ac_pwd':" >&2;}
-as_fn_error $? "The pkg-config script could not be found or is too old.  Make sure it
-is in your PATH or set the PKG_CONFIG environment variable to the full
-path to pkg-config.
-
-Alternatively, you may set the environment variables MARIADB_CFLAGS
-and MARIADB_LIBS to avoid the need to call pkg-config.
-See the pkg-config man page for more details.
-
-To get pkg-config, see <http://pkg-config.freedesktop.org/>.
-See \`config.log' for more details" "$LINENO" 5; }        
-else
-	MARIADB_CFLAGS=$pkg_cv_MARIADB_CFLAGS
-	MARIADB_LIBS=$pkg_cv_MARIADB_LIBS
-        { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
-printf "%s\n" "yes" >&6; }
-	
-printf "%s\n" "@%:@define HAVE_MARIADB 1" >>confdefs.h
-
-fi
 
 ac_config_files="$ac_config_files Makefile src/Makefile po/Makefile.in"
 
