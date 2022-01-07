@@ -520,12 +520,13 @@ ExportDialog::get_exporter()
 		return exporter;
 
 	if (Glib::file_test(filename, Glib::FILE_TEST_EXISTS)) {
-#ifdef NATIVE_WINDOWS
 		Glib::ustring msg = _("File already exists!");
-#else
-		Glib::ustring msg = Glib::ustring::sprintf(_("File \"%s\" already exists!"),filename);
-#endif // NATIVE_WINDOWS
-		Gtk::MessageDialog dialog(*this,msg,false,Gtk::MESSAGE_QUESTION,Gtk::BUTTONS_YES_NO,true);
+		Gtk::MessageDialog dialog(*this,
+		                          msg,
+		                          false,
+		                          Gtk::MESSAGE_QUESTION,
+		                          Gtk::BUTTONS_YES_NO,
+		                          true);
 		dialog.set_secondary_text(_("Do you want to overwrite the file?"));
 		if (dialog.run() == Gtk::RESPONSE_YES) {
 #ifdef NATIVE_WINDOWS
