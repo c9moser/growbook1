@@ -47,38 +47,86 @@ enum ImportResponseID {
 class Importer:
 	public RefClass
 {
-	 private:
-		 Glib::RefPtr<Database> m_database_;
-		 std::string m_filename_;
+	private:
+		Glib::RefPtr<Database> m_database_;
+		std::string m_filename_;
 
+	private:
+		Importer(const Importer &src) = delete;
+		Importer& operator=(const Importer &src) = delete;
+		
+	protected:
+		Importer(const Glib::RefPtr<Database> &database,
+		         const std::string &filename = std::string());
+
+	public:
+		virtual ~Importer();
+
+	public:
+		Glib::RefPtr<Database> get_database();
+		Glib::RefPtr<const Database> get_database() const;
+		
+		std::string get_filename() const;
+		void set_filename(const std::string &filename);
+
+		void import_db();
+		void import_db(Gtk::Window &parent);
+
+		bool file_exists() const;
+		
+	protected:
+		virtual void import_vfunc(Gtk::Window &parent) = 0; 
+};
+
+/******************************************************************************/
+
+enum XmlNode {
+	XML_NONE,
+	XML_GROWBOOK,
+	XML_BREEDER,
+	XML_STRAIN,
+	XML_GROWLOG,
+	XML_GROWLOG_ENTRY		
+};
+
+/******************************************************************************/
+
+class DB_Importer:
+	public Importer
+{
+	 private:
 		std::map<uint64_t,Glib::RefPtr<Breeder> > m_breeder_map_;
 		std::map<uint64_t,Glib::RefPtr<Strain> > m_strain_map_;
 		std::map<uint64_t,Glib::RefPtr<Growlog> > m_growlog_map_;
 		
 
 	private:
-		 Importer(const Importer &src) = delete;
-		 Importer& operator = (const Importer &src) = delete;
+		 DB_Importer(const DB_Importer &src) = delete;
+		 DB_Importer& operator = (const DB_Importer &src) = delete;
 		 
 	protected:
-		 Importer(const Glib::RefPtr<Database> &database,
-		          const std::string &filename);
+		 DB_Importer(const Glib::RefPtr<Database> &database,
+		             const std::string &filename);
 
 	public:
-		 virtual ~Importer();
+		 virtual ~DB_Importer();
 
 	public:
-		 static Glib::RefPtr<Importer> create(const Glib::RefPtr<Database> & database,
-		                                      const std::string &filename);
-	public:
-		 void import_db();
-		 void import_db(Gtk::Window &parent);
+		 static Glib::RefPtr<DB_Importer> create(const Glib::RefPtr<Database> & database,
+		                                         const std::string &filename);
 
-		 void import_strains(Gtk::Window &parent,
-		                     const Glib::RefPtr<Database> &import_from);
-		 void import_growlogs(Gtk::Window &parent,
+	protected:
+		 virtual void import_vfunc(Gtk::Window &parent);
+		
+	private:
+		 void _import_strains(Gtk::Window &parent,
 		                      const Glib::RefPtr<Database> &import_from);
+		 void _import_growlogs(Gtk::Window &parent,
+		                       const Glib::RefPtr<Database> &import_from);
+		
 };
+
+/******************************************************************************/
 
 class ImportDialog:
 	public Gtk::FileChooserDialog
@@ -87,6 +135,7 @@ class ImportDialog:
 		static const char TITLE[];
 
 	private:
+		Gtk::Window *m_parent_;
 		Glib::RefPtr<Database> m_database_;
 		
 	public:

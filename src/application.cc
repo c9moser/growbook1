@@ -117,7 +117,13 @@ Application::on_activate()
 		}
 		dialog.hide();
 		if (!m_database_->is_connected ()) {
-			fprintf(stderr, _("Could not connect to database!"));
+			Gtk::MessageDialog dialog(_("Could not connect to database!"),
+			                   		  false,
+			                          Gtk::MESSAGE_ERROR,
+			                          Gtk::BUTTONS_OK,
+			                          false);
+			dialog.run();
+			dialog.hide();
 			exit(EXIT_FAILURE);
 		}
 	}  else {
@@ -137,7 +143,34 @@ Application::on_activate()
 			dialog.set_secondary_text (ex.get_message());
 			dialog.run();
 			dialog.hide();
-			exit(EXIT_FAILURE);
+
+			DatabaseSettingsDialog db_dialog(m_settings_->get_database_settings());
+			if (db_dialog.run() == Gtk::RESPONSE_APPLY) {
+				Glib::RefPtr<DatabaseSettings> db_settings;
+				Glib::RefPtr<DatabaseModule> db_module = db_get_module(db_settings->get_engine());
+
+				assert(module);
+
+				m_settings_->set_database_settings (db_settings);
+				m_database_ = db_module->create_database(db_settings);
+				assert(m_database_);
+				try {
+					m_database_->connect();
+				} catch (DatabaseError ex) {
+					Gtk::MessageDialog dlg(_("Could not connect to database!"),
+					                       false,
+					                       Gtk::MESSAGE_ERROR,
+					                       Gtk::BUTTONS_OK,
+					                       false);
+					dlg.set_secondary_text (ex.get_message());
+					dlg.run();
+					dlg.hide();
+					exit(EXIT_FAILURE);
+				}
+				
+			} else {
+				exit(EXIT_SUCCESS);
+			}
 		}
 	}
 	if (create_db)

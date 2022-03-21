@@ -1,7 +1,7 @@
 dnl Process this file with autoconf to produce a configure script.
 dnl Created by Anjuta application wizard.
 
-AC_INIT(growbook, 0.1.2)
+AC_INIT([growbook],[0.1.4])
 
 AC_CONFIG_HEADERS([config.h])
 
@@ -15,7 +15,7 @@ AC_PROG_CXX
 dnl ***************************************************************************
 dnl Internationalization
 dnl ***************************************************************************
-IT_PROG_INTLTOOL([0.35.0])
+#IT_PROG_INTLTOOL([0.35.0])
 
 GETTEXT_PACKAGE=growbook
 AC_SUBST(GETTEXT_PACKAGE)
@@ -55,7 +55,20 @@ dnl ***************************************************************************
 dnl Check for Packages
 dnl ***************************************************************************
 
-PKG_CHECK_MODULES(GROWBOOK, [gtkmm-3.0 ])
+DEPENDS="gtkmm-3.0 >= 3.24"
+
+PKG_CHECK_EXISTS([libpq], 
+				 [AC_DEFINE(HAVE_LIBPQ,1,
+							[define 1 if we have libpq installed])
+				  DEPENDS="$DEPENDS libpq"],
+				 [])
+PKG_CHECK_EXISTS([libmariadb],
+				 [AC_DEFINE(HAVE_MARIADB,1,
+							[define 1 if we have MariaDB client installed]
+				  DEPENDS="$DEPENDS libmariadb")],
+				 [])
+
+PKG_CHECK_MODULES(GROWBOOK, [$DEPENDS])
 AC_CHECK_HEADER(sqlite3.h, 
 				[AC_DEFINE(HAVE_SQLITE3_H,1,[define 1 if we have sqlite3])],
 				AC_MSG_ERROR([No sqlite3 header found!],1))
@@ -64,16 +77,9 @@ AC_CHECK_LIB([sqlite3],[sqlite3_open],[],
 
 AC_CHECK_LIB(sqlite3,sqlite3_open)
 
-PKG_CHECK_MODULES(PGSQL, [libpq],
-				  AC_DEFINE(HAVE_LIBPQ,1,[define 1 if we have libpq (PostgreSQL) installed.]),
-				  [])
-
-PKG_CHECK_MODULES(MARIADB, [libmariadb],
-				  AC_DEFINE(HAVE_MARIADB,1,[define 1 if we have MariaDB client installed.]),
-				  [])
-
-AC_OUTPUT([
+AC_CONFIG_FILES([
 Makefile
 src/Makefile
 po/Makefile.in
 ])
+AC_OUTPUT

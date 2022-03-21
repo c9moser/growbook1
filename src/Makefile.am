@@ -15,9 +15,7 @@ AM_CPPFLAGS = \
 	-DPACKAGE_LOCALE_DIR=\""$(localedir)"\" \
 	-DPACKAGE_SRC_DIR=\""$(srcdir)"\" \
 	-DPACKAGE_DATA_DIR=\""$(pkgdatadir)"\" \
-	$(GROWBOOK_CFLAGS) \
-	$(PGSQL_CFLAGS) \
- 	$(MARIADB_CFLAGS)
+	$(GROWBOOK_CFLAGS) 
 
 AM_CFLAGS =\
 	 -Wall\
@@ -78,11 +76,14 @@ growbook_SOURCES = \
 	export.cc \
 	export.h \
 	import.cc \
-	import.h 
+	import.h \
+	xml_importer.cc \
+	xml_importer.h \
+	debug.h 
 
 growbook_LDFLAGS = 
 
-growbook_LDADD = $(GROWBOOK_LIBS) $(PGSQL_LIBS) $(MARIADB_LIBS)
+growbook_LDADD = $(GROWBOOK_LIBS)
 
 
 if NATIVE_WIN32

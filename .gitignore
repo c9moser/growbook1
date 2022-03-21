@@ -7,3 +7,6 @@ Debug/*
 *.swp
 .anjuta
 .anjuta*
+build
+build/*
+*.o
